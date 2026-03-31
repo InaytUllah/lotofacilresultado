@@ -21,8 +21,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
-
 function WarningBox({ children }: { children: React.ReactNode }) {
   return (
     <div className="rounded-lg border-l-4 border-amber-400 bg-amber-50 p-4 sm:p-6">

@@ -6,7 +6,7 @@ import { BlogPost } from '@/lib/types';
 import GameBadge from '@/components/ui/GameBadge';
 import SEOContent from '@/components/ui/SEOContent';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // ISR: revalidate every hour
 
 export const metadata: Metadata = {
   title: 'Blog - Previsões e Análises das Loterias',

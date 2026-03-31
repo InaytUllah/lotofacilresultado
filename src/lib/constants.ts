@@ -241,7 +241,7 @@ export const GAMES: Record<string, GameConfig> = {
     totalNumbers: 50,
     selectNumbers: 6,
     maxNumber: 50,
-    drawDays: [2, 4, 6],
+    drawDays: [1, 3, 5], // Seg, Qua, Sex
     drawTime: '21:00',
     emoji: '🎲',
     description: 'Duas chances de ganhar em um único concurso.',

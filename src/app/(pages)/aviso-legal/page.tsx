@@ -22,8 +22,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
-
 export default function AvisoLegalPage() {
   const breadcrumbSchema = {
     '@context': 'https://schema.org',

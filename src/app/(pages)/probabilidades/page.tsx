@@ -21,8 +21,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
-
 interface OddsRow {
   category: string;
   odds: string;

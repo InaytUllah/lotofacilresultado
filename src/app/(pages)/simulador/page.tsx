@@ -28,8 +28,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
-
 export default function SimuladorPage() {
   const breadcrumbSchema = {
     '@context': 'https://schema.org',

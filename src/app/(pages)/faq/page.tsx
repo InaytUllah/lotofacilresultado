@@ -21,8 +21,6 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
-
 const faqItems: { question: string; answer: string }[] = [
   {
     question: 'Como jogar nas loterias da Caixa?',

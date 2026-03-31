@@ -1,5 +1,3 @@
-'use client';
-
 interface LotteryBallProps {
   number: string;
   color?: string;

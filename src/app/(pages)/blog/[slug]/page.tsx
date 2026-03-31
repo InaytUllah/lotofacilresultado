@@ -7,7 +7,7 @@ import LotteryBall from '@/components/ui/LotteryBall';
 import GameBadge from '@/components/ui/GameBadge';
 import WarningBox from '@/components/ui/WarningBox';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // ISR: revalidate every hour
 export const dynamicParams = true;
 
 export function generateStaticParams() {

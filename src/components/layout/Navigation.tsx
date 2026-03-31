@@ -58,7 +58,11 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="text-emerald-600 font-bold text-xl flex-shrink-0">
+          <Link
+            href="/"
+            className="text-emerald-600 font-bold text-xl flex-shrink-0"
+            aria-current={pathname === '/' ? 'page' : undefined}
+          >
             🍀 Lotofácil Resultado
           </Link>
 
@@ -82,19 +86,23 @@ export default function Navigation() {
                 {openDropdown === catIndex && (
                   <div className="absolute top-full left-0 mt-1 bg-white shadow-xl rounded-xl border border-gray-200 p-4 min-w-[280px] z-50 animate-fadeInDown">
                     <div className="space-y-1">
-                      {category.items.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          <span className="text-xl leading-none mt-0.5">{item.emoji}</span>
-                          <div>
-                            <div className="font-medium text-gray-900">{item.title}</div>
-                            <div className="text-sm text-gray-500">{item.description}</div>
-                          </div>
-                        </Link>
-                      ))}
+                      {category.items.map((item) => {
+                        const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className={`flex gap-3 items-start p-2 rounded-lg transition-colors ${isActive ? 'bg-emerald-50 text-emerald-700' : 'hover:bg-gray-50'}`}
+                            aria-current={isActive ? 'page' : undefined}
+                          >
+                            <span className="text-xl leading-none mt-0.5">{item.emoji}</span>
+                            <div>
+                              <div className={`font-medium ${isActive ? 'text-emerald-700' : 'text-gray-900'}`}>{item.title}</div>
+                              <div className="text-sm text-gray-500">{item.description}</div>
+                            </div>
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -146,19 +154,23 @@ export default function Navigation() {
 
                 {openAccordion === catIndex && (
                   <div className="pb-3 pl-2 space-y-1">
-                    {category.items.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-50 transition-colors"
-                      >
-                        <span className="text-xl leading-none mt-0.5">{item.emoji}</span>
-                        <div>
-                          <div className="font-medium text-gray-900">{item.title}</div>
-                          <div className="text-sm text-gray-500">{item.description}</div>
-                        </div>
-                      </Link>
-                    ))}
+                    {category.items.map((item) => {
+                      const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className={`flex gap-3 items-start p-2 rounded-lg transition-colors ${isActive ? 'bg-emerald-50 text-emerald-700' : 'hover:bg-gray-50'}`}
+                          aria-current={isActive ? 'page' : undefined}
+                        >
+                          <span className="text-xl leading-none mt-0.5">{item.emoji}</span>
+                          <div>
+                            <div className={`font-medium ${isActive ? 'text-emerald-700' : 'text-gray-900'}`}>{item.title}</div>
+                            <div className="text-sm text-gray-500">{item.description}</div>
+                          </div>
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>
