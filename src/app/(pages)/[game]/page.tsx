@@ -102,6 +102,9 @@ export default async function GamePage({
     year: 'numeric',
   });
 
+  // Use last result date for H1 accuracy; fall back to today if no result
+  const lastResultDate = latestResult?.data || todayFormatted;
+
   const nextDrawDate = getNextDrawDate(game.drawDays, game.drawTime);
   const drawDaysText = game.drawDays.map((d) => DAYS_SHORT_PT[d]).join(', ');
 
@@ -159,7 +162,7 @@ export default async function GamePage({
         </nav>
 
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-          Resultado {game.name} Hoje - {todayFormatted}
+          Resultado {game.name} - {lastResultDate}
         </h1>
         <p className="text-white/90 text-lg">{game.description}</p>
 

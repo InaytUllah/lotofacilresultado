@@ -348,29 +348,6 @@ export default async function HomePage() {
         </SEOContent>
       </section>
 
-      {/* Schema.org WebSite JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: SITE_NAME,
-            url: SITE_URL,
-            description:
-              'Resultados atualizados de todas as loterias da Caixa Econômica Federal.',
-            inLanguage: 'pt-BR',
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: {
-                '@type': 'EntryPoint',
-                urlTemplate: `${SITE_URL}/busca?q={search_term_string}`,
-              },
-              'query-input': 'required name=search_term_string',
-            },
-          }),
-        }}
-      />
     </>
   );
 }

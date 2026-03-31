@@ -233,7 +233,7 @@ export default function Simulator() {
               <h2 className="text-xl font-bold text-gray-900">{game.name}</h2>
             </div>
             <p className="text-sm text-gray-500 mt-1">
-              Selecione {game.selectNumbers} numeros de{' '}
+              Selecione {game.selectNumbers} números de{' '}
               {String(startNumber).padStart(2, '0')} a{' '}
               {String(endNumber).padStart(2, '0')}
             </p>
@@ -262,7 +262,7 @@ export default function Simulator() {
         {/* Selected Numbers Display */}
         {selectedNumbers.length > 0 && (
           <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-            <p className="text-xs text-gray-500 mb-2">Seus numeros:</p>
+            <p className="text-xs text-gray-500 mb-2">Seus números:</p>
             <div className="flex flex-wrap gap-1.5">
               {selectedNumbers.map((num) => (
                 <LotteryBall
@@ -298,7 +298,7 @@ export default function Simulator() {
                       : 'bg-gray-50 text-gray-700 hover:bg-gray-200 border border-gray-200 hover:scale-105'
                 }`}
                 style={isSelected ? { backgroundColor: game.color } : undefined}
-                aria-label={`Numero ${String(num).padStart(2, '0')}${isSelected ? ' selecionado' : ''}`}
+                aria-label={`Número ${String(num).padStart(2, '0')}${isSelected ? ' selecionado' : ''}`}
               >
                 {String(num).padStart(2, '0')}
               </button>
@@ -363,7 +363,7 @@ export default function Simulator() {
           {/* Summary Cards */}
           <div className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
             <h2 className="text-lg font-bold text-gray-900 mb-4">
-              Resultado da Simulacao
+              Resultado da Simulação
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="bg-gray-50 rounded-lg p-4 text-center">
@@ -382,13 +382,13 @@ export default function Simulator() {
                 <p className="text-3xl font-bold" style={{ color: game.color }}>
                   {bestResult?.matchCount || 0}
                 </p>
-                <p className="text-sm text-gray-500">Maximo de acertos</p>
+                <p className="text-sm text-gray-500">Máximo de acertos</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-4 text-center">
                 <p className="text-3xl font-bold" style={{ color: game.color }}>
                   {averageMatches}
                 </p>
-                <p className="text-sm text-gray-500">Media de acertos</p>
+                <p className="text-sm text-gray-500">Média de acertos</p>
               </div>
             </div>
           </div>
@@ -397,7 +397,7 @@ export default function Simulator() {
           {prizeSummary.length > 0 && (
             <div className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
               <h2 className="text-lg font-bold text-gray-900 mb-4">
-                Premiacoes Encontradas
+                Premiações Encontradas
               </h2>
               <div className="space-y-2">
                 {prizeSummary.map((p) => (

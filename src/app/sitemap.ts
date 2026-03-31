@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { GAME_SLUGS, GAMES, SITE_URL } from '@/lib/constants';
+import { fetchLatestResult } from '@/lib/api/lottery';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date().toISOString();
@@ -65,7 +66,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Generate prediction blog post URLs for recent dates (no result blog posts, no number pages)
+  // Dynamic result pages — last 100 concursos per lottery
+  // Fetch latest concurso number for each lottery (9 API calls, cached)
+  const latestResults = await Promise.allSettled(
+    GAME_SLUGS.map((slug) => fetchLatestResult(slug)),
+  );
+
+  for (let i = 0; i < GAME_SLUGS.length; i++) {
+    const slug = GAME_SLUGS[i];
+    const settled = latestResults[i];
+    if (settled.status !== 'fulfilled' || !settled.value) continue;
+
+    const latestConcurso = settled.value.concurso;
+    const startConcurso = Math.max(1, latestConcurso - 99);
+
+    for (let c = latestConcurso; c >= startConcurso; c--) {
+      entries.push({
+        url: `${SITE_URL}/${slug}/resultado/${c}`,
+        lastModified: c === latestConcurso ? now : undefined,
+        changeFrequency: 'never',
+        priority: 0.5,
+      });
+    }
+  }
+
+  // Generate prediction blog post URLs for recent dates
   const today = new Date();
   for (let d = 0; d < 7; d++) {
     const date = new Date(today);
@@ -73,7 +98,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const dateStr = date.toISOString().split('T')[0];
 
     for (const slug of GAME_SLUGS) {
-      // Prediction posts only
       entries.push({
         url: `${SITE_URL}/blog/previsoes-${slug}-${dateStr}`,
         lastModified: now,

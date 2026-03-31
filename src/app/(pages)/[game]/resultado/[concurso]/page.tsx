@@ -343,10 +343,10 @@ export default async function ConcursoPage({
       {/* YouTube Draw Video */}
       <div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 p-5">
         <h2 className="text-lg font-semibold text-gray-700 mb-3">
-          Transmissao Oficial do Sorteio
+          Transmissão Oficial do Sorteio
         </h2>
         <p className="text-sm text-gray-600 mb-3">
-          Assista a transmissao oficial do sorteio do Concurso {concurso} da {game.name} no canal da Caixa Economica Federal.
+          Assista à transmissão oficial do sorteio do Concurso {concurso} da {game.name} no canal da Caixa Econômica Federal.
         </p>
         <a
           href={`https://www.youtube.com/results?search_query=resultado+${game.apiName}+concurso+${concurso}+caixa`}

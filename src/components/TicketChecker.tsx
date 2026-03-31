@@ -230,7 +230,7 @@ export default function TicketChecker() {
               <h2 className="text-xl font-bold text-gray-900">{game.name}</h2>
             </div>
             <p className="text-sm text-gray-500 mt-1">
-              Selecione {game.selectNumbers} numeros de{' '}
+              Selecione {game.selectNumbers} números de{' '}
               {String(startNumber).padStart(2, '0')} a{' '}
               {String(endNumber).padStart(2, '0')}
             </p>
@@ -259,7 +259,7 @@ export default function TicketChecker() {
         {/* Selected Numbers Display */}
         {selectedNumbers.length > 0 && (
           <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-            <p className="text-xs text-gray-500 mb-2">Seus numeros:</p>
+            <p className="text-xs text-gray-500 mb-2">Seus números:</p>
             <div className="flex flex-wrap gap-1.5">
               {selectedNumbers.map((num) => (
                 <LotteryBall
@@ -295,7 +295,7 @@ export default function TicketChecker() {
                       : 'bg-gray-50 text-gray-700 hover:bg-gray-200 border border-gray-200 hover:scale-105'
                 }`}
                 style={isSelected ? { backgroundColor: game.color } : undefined}
-                aria-label={`Numero ${String(num).padStart(2, '0')}${isSelected ? ' selecionado' : ''}`}
+                aria-label={`Número ${String(num).padStart(2, '0')}${isSelected ? ' selecionado' : ''}`}
               >
                 {String(num).padStart(2, '0')}
               </button>
@@ -321,7 +321,7 @@ export default function TicketChecker() {
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
             />
             <p className="text-xs text-gray-400 mt-1">
-              Deixe vazio para conferir os 10 ultimos sorteios
+              Deixe vazio para conferir os 10 últimos sorteios
             </p>
           </div>
           <button
