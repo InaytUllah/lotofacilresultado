@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const TOAST_TITLE = 'Jogo Respons\u00E1vel';
-const TOAST_TEXT = 'Loterias s\u00E3o jogos de azar. Jogue com modera\u00E7\u00E3o e nunca aposte mais do que pode perder.';
+const TOAST_TITLE = 'Jogo Responsável';
+const TOAST_TEXT = 'Loterias são jogos de azar. Jogue com moderação e nunca aposte mais do que pode perder.';
 
 export default function ResponsibleGamingToast() {
   const [visible, setVisible] = useState(false);
@@ -47,7 +47,7 @@ export default function ResponsibleGamingToast() {
         </button>
 
         <p className="font-bold text-gray-800 mb-1">
-          {'\uD83C\uDFB0'} {TOAST_TITLE}
+          🎰 {TOAST_TITLE}
         </p>
         <p className="text-sm text-gray-600 mb-2">
           {TOAST_TEXT}

@@ -1,7 +1,7 @@
 import { GameConfig } from './types';
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://resultadosmegasena.com.br';
-export const SITE_NAME = 'Resultados Mega Sena';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lotofacilresultado.com';
+export const SITE_NAME = 'Lotofácil Resultado';
 export const SITE_DESCRIPTION = 'Resultados atualizados de todas as loterias da Caixa: Mega-Sena, Lotofácil, Quina, Lotomania, +Milionária, Dia de Sorte, Super Sete, Dupla Sena e Timemania.';
 
 export const GAMES: Record<string, GameConfig> = {
@@ -21,13 +21,18 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 6,
     maxNumber: 60,
     drawDays: [2, 4, 6], // Ter, Qui, Sáb
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '🍀',
     description: 'A loteria mais popular do Brasil com prêmios milionários.',
     metaDescription: 'Resultado Mega-Sena de hoje atualizado. Confira os números sorteados, premiação e próximo concurso da Mega-Sena.',
     odds: '1 em 50.063.860',
     minBet: 'R$ 5,00',
     prizeCategories: ['Sena (6 acertos)', 'Quina (5 acertos)', 'Quadra (4 acertos)'],
+    prizeTiers: [
+      { faixa: 'Sena', acertos: '6 acertos', probabilidade: '1 em 50.063.860', premio: '35% do prêmio bruto' },
+      { faixa: 'Quina', acertos: '5 acertos', probabilidade: '1 em 154.518', premio: '19% do prêmio bruto' },
+      { faixa: 'Quadra', acertos: '4 acertos', probabilidade: '1 em 2.332', premio: '19% do prêmio bruto' },
+    ],
   },
   'lotofacil': {
     slug: 'lotofacil',
@@ -45,13 +50,20 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 15,
     maxNumber: 25,
     drawDays: [1, 2, 3, 4, 5, 6], // Seg a Sáb
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '🎯',
     description: 'A loteria mais fácil de ganhar do Brasil.',
     metaDescription: 'Resultado Lotofácil de hoje atualizado. Confira os 15 números sorteados, ganhadores e premiação da Lotofácil.',
     odds: '1 em 3.268.760',
     minBet: 'R$ 3,00',
     prizeCategories: ['15 acertos', '14 acertos', '13 acertos', '12 acertos', '11 acertos'],
+    prizeTiers: [
+      { faixa: '1ª Faixa', acertos: '15 acertos', probabilidade: '1 em 3.268.760', premio: '35% do prêmio bruto' },
+      { faixa: '2ª Faixa', acertos: '14 acertos', probabilidade: '1 em 21.792', premio: '15% do prêmio bruto' },
+      { faixa: '3ª Faixa', acertos: '13 acertos', probabilidade: '1 em 692', premio: '20% do prêmio bruto' },
+      { faixa: '4ª Faixa', acertos: '12 acertos', probabilidade: '1 em 60', premio: '15% do prêmio bruto' },
+      { faixa: '5ª Faixa', acertos: '11 acertos', probabilidade: '1 em 11', premio: '15% do prêmio bruto' },
+    ],
   },
   'quina': {
     slug: 'quina',
@@ -69,13 +81,19 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 5,
     maxNumber: 80,
     drawDays: [1, 2, 3, 4, 5, 6],
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '⭐',
     description: 'Cinco números que podem mudar sua vida.',
     metaDescription: 'Resultado Quina de hoje atualizado. Confira os 5 números sorteados, premiação e acumulação da Quina.',
     odds: '1 em 24.040.016',
     minBet: 'R$ 2,50',
     prizeCategories: ['Quina (5 acertos)', 'Quadra (4 acertos)', 'Terno (3 acertos)', 'Duque (2 acertos)'],
+    prizeTiers: [
+      { faixa: 'Quina', acertos: '5 acertos', probabilidade: '1 em 24.040.016', premio: '35% do prêmio bruto' },
+      { faixa: 'Quadra', acertos: '4 acertos', probabilidade: '1 em 64.106', premio: '15% do prêmio bruto' },
+      { faixa: 'Terno', acertos: '3 acertos', probabilidade: '1 em 866', premio: '20% do prêmio bruto' },
+      { faixa: 'Duque', acertos: '2 acertos', probabilidade: '1 em 36', premio: '30% do prêmio bruto' },
+    ],
   },
   'lotomania': {
     slug: 'lotomania',
@@ -93,13 +111,22 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 50,
     maxNumber: 100,
     drawDays: [1, 3, 5], // Seg, Qua, Sex
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '🎪',
     description: 'Escolha 50 números de 00 a 99 e concorra a prêmios incríveis.',
     metaDescription: 'Resultado Lotomania de hoje atualizado. Confira os 20 números sorteados e premiação da Lotomania.',
     odds: '1 em 11.372.635',
     minBet: 'R$ 3,00',
     prizeCategories: ['20 acertos', '19 acertos', '18 acertos', '17 acertos', '16 acertos', '15 acertos', '0 acertos'],
+    prizeTiers: [
+      { faixa: '1ª Faixa', acertos: '20 acertos', probabilidade: '1 em 11.372.635', premio: '37,5% do prêmio' },
+      { faixa: '2ª Faixa', acertos: '19 acertos', probabilidade: '1 em 244.140', premio: '10% do prêmio' },
+      { faixa: '3ª Faixa', acertos: '18 acertos', probabilidade: '1 em 15.504', premio: '10% do prêmio' },
+      { faixa: '4ª Faixa', acertos: '17 acertos', probabilidade: '1 em 2.016', premio: '10% do prêmio' },
+      { faixa: '5ª Faixa', acertos: '16 acertos', probabilidade: '1 em 457', premio: '10% do prêmio' },
+      { faixa: '6ª Faixa', acertos: '15 acertos', probabilidade: '1 em 152', premio: '10% do prêmio' },
+      { faixa: '7ª Faixa', acertos: '0 acertos', probabilidade: '1 em 11.372.635', premio: '12,5% do prêmio' },
+    ],
   },
   'mais-milionaria': {
     slug: 'mais-milionaria',
@@ -117,13 +144,25 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 6,
     maxNumber: 50,
     drawDays: [3, 6], // Qua, Sáb
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '💎',
     description: 'A loteria com os maiores prêmios do Brasil.',
     metaDescription: 'Resultado +Milionária de hoje atualizado. Confira os números sorteados e os trevos da +Milionária.',
     odds: '1 em 238.360.500',
     minBet: 'R$ 6,00',
     prizeCategories: ['6+2 acertos', '6+1', '6+0', '5+2', '5+1', '5+0', '4+2', '4+1', '4+0', '3+2'],
+    prizeTiers: [
+      { faixa: '1ª Faixa', acertos: '6+2', probabilidade: '1 em 238.360.500', premio: 'Prêmio principal' },
+      { faixa: '2ª Faixa', acertos: '6+1', probabilidade: '1 em 17.025.750', premio: '2ª faixa' },
+      { faixa: '3ª Faixa', acertos: '6+0', probabilidade: '1 em 34.051.500', premio: '3ª faixa' },
+      { faixa: '4ª Faixa', acertos: '5+2', probabilidade: '1 em 1.108.890', premio: '4ª faixa' },
+      { faixa: '5ª Faixa', acertos: '5+1', probabilidade: '1 em 79.206', premio: '5ª faixa' },
+      { faixa: '6ª Faixa', acertos: '5+0', probabilidade: '1 em 158.412', premio: '6ª faixa' },
+      { faixa: '7ª Faixa', acertos: '4+2', probabilidade: '1 em 33.106', premio: '7ª faixa' },
+      { faixa: '8ª Faixa', acertos: '4+1', probabilidade: '1 em 2.365', premio: '8ª faixa' },
+      { faixa: '9ª Faixa', acertos: '4+0', probabilidade: '1 em 4.730', premio: '9ª faixa' },
+      { faixa: '10ª Faixa', acertos: '3+2', probabilidade: '1 em 1.774', premio: '10ª faixa' },
+    ],
   },
   'dia-de-sorte': {
     slug: 'dia-de-sorte',
@@ -141,13 +180,20 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 7,
     maxNumber: 31,
     drawDays: [2, 4, 6],
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '☘️',
     description: 'Escolha seu mês da sorte e concorra a prêmios.',
     metaDescription: 'Resultado Dia de Sorte de hoje atualizado. Confira os 7 números e o mês da sorte sorteados.',
     odds: '1 em 2.629.575',
     minBet: 'R$ 3,00',
     prizeCategories: ['7 acertos', '6 acertos', '5 acertos', '4 acertos', 'Mês da Sorte'],
+    prizeTiers: [
+      { faixa: '1ª Faixa', acertos: '7 acertos', probabilidade: '1 em 2.629.575', premio: '30% do prêmio' },
+      { faixa: '2ª Faixa', acertos: '6 acertos', probabilidade: '1 em 14.478', premio: '15% do prêmio' },
+      { faixa: '3ª Faixa', acertos: '5 acertos', probabilidade: '1 em 368', premio: '20% do prêmio' },
+      { faixa: '4ª Faixa', acertos: '4 acertos', probabilidade: '1 em 26', premio: '35% do prêmio' },
+      { faixa: 'Mês da Sorte', acertos: 'Mês da Sorte', probabilidade: '1 em 12', premio: 'Valor fixo' },
+    ],
   },
   'super-sete': {
     slug: 'super-sete',
@@ -165,13 +211,20 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 7,
     maxNumber: 9,
     drawDays: [1, 3, 5],
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '7️⃣',
     description: 'Escolha um número de 0 a 9 para cada uma das 7 colunas.',
     metaDescription: 'Resultado Super Sete de hoje atualizado. Confira os números sorteados em cada coluna do Super Sete.',
     odds: '1 em 10.000.000',
     minBet: 'R$ 2,50',
     prizeCategories: ['7 acertos', '6 acertos', '5 acertos', '4 acertos', '3 acertos'],
+    prizeTiers: [
+      { faixa: '1ª Faixa', acertos: '7 acertos', probabilidade: '1 em 10.000.000', premio: '40% do prêmio' },
+      { faixa: '2ª Faixa', acertos: '6 acertos', probabilidade: '1 em 476.190', premio: '15% do prêmio' },
+      { faixa: '3ª Faixa', acertos: '5 acertos', probabilidade: '1 em 14.286', premio: '15% do prêmio' },
+      { faixa: '4ª Faixa', acertos: '4 acertos', probabilidade: '1 em 357', premio: '15% do prêmio' },
+      { faixa: '5ª Faixa', acertos: '3 acertos', probabilidade: '1 em 16', premio: '15% do prêmio' },
+    ],
   },
   'dupla-sena': {
     slug: 'dupla-sena',
@@ -189,13 +242,19 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 6,
     maxNumber: 50,
     drawDays: [2, 4, 6],
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '🎲',
     description: 'Duas chances de ganhar em um único concurso.',
     metaDescription: 'Resultado Dupla Sena de hoje atualizado. Confira os números dos dois sorteios da Dupla Sena.',
     odds: '1 em 15.890.700',
     minBet: 'R$ 2,50',
     prizeCategories: ['Sena (6)', 'Quina (5)', 'Quadra (4)', 'Terno (3)'],
+    prizeTiers: [
+      { faixa: 'Sena', acertos: '6 acertos', probabilidade: '1 em 15.890.700', premio: '30% do prêmio' },
+      { faixa: 'Quina', acertos: '5 acertos', probabilidade: '1 em 60.192', premio: '10% do prêmio' },
+      { faixa: 'Quadra', acertos: '4 acertos', probabilidade: '1 em 1.120', premio: '10% do prêmio' },
+      { faixa: 'Terno', acertos: '3 acertos', probabilidade: '1 em 60', premio: '50% do prêmio' },
+    ],
   },
   'timemania': {
     slug: 'timemania',
@@ -213,13 +272,21 @@ export const GAMES: Record<string, GameConfig> = {
     selectNumbers: 10,
     maxNumber: 80,
     drawDays: [2, 4, 6],
-    drawTime: '20:00',
+    drawTime: '21:00',
     emoji: '⚽',
     description: 'Torça pelo seu time do coração e concorra a prêmios.',
     metaDescription: 'Resultado Timemania de hoje atualizado. Confira os 7 números e o time do coração sorteados.',
     odds: '1 em 26.472.637',
     minBet: 'R$ 3,50',
     prizeCategories: ['7 acertos', '6 acertos', '5 acertos', '4 acertos', '3 acertos', 'Time do Coração'],
+    prizeTiers: [
+      { faixa: '1ª Faixa', acertos: '7 acertos', probabilidade: '1 em 26.472.637', premio: '30% do prêmio' },
+      { faixa: '2ª Faixa', acertos: '6 acertos', probabilidade: '1 em 216.040', premio: '10% do prêmio' },
+      { faixa: '3ª Faixa', acertos: '5 acertos', probabilidade: '1 em 5.765', premio: '15% do prêmio' },
+      { faixa: '4ª Faixa', acertos: '4 acertos', probabilidade: '1 em 282', premio: '15% do prêmio' },
+      { faixa: '5ª Faixa', acertos: '3 acertos', probabilidade: '1 em 24', premio: '20% do prêmio' },
+      { faixa: 'Time do Coração', acertos: 'Time do Coração', probabilidade: '1 em 80', premio: '10% do prêmio' },
+    ],
   },
 };
 
@@ -248,9 +315,9 @@ export const NAV_CATEGORIES = [
     })),
   },
   {
-    title: 'Previsões',
+    title: 'Análise Estatística',
     items: [
-      { href: '/previsoes', emoji: '🔮', title: 'Previsões', description: 'Análise estatística para próximos sorteios' },
+      { href: '/previsoes', emoji: '🔮', title: 'Análise Estatística', description: 'Análise estatística para próximos sorteios' },
       { href: '/numeros-quentes-frios', emoji: '🔥', title: 'Números Quentes e Frios', description: 'Frequência dos números sorteados' },
       { href: '/numeros/1', emoji: '🔢', title: 'Estatísticas por Número', description: 'Análise detalhada de cada número' },
     ],
@@ -258,10 +325,12 @@ export const NAV_CATEGORIES = [
   {
     title: 'Ferramentas & Info',
     items: [
+      { href: '/conferidor', emoji: '✅', title: 'Conferidor de Apostas', description: 'Confira se seus números foram sorteados' },
+      { href: '/simulador', emoji: '🧪', title: 'Simulador', description: 'Teste seus números nos sorteios anteriores' },
       { href: '/gerador', emoji: '🎰', title: 'Gerador de Números', description: 'Gere combinações aleatórias' },
       { href: '/como-jogar', emoji: '📖', title: 'Como Jogar', description: 'Regras e dicas para cada loteria' },
       { href: '/probabilidades', emoji: '📊', title: 'Probabilidades', description: 'Chances de ganhar em cada loteria' },
-      { href: '/historico', emoji: '📅', title: 'Histórico', description: 'Resultados anteriores' },
+      { href: '/historico', emoji: '📅', title: 'Histórico', description: 'Resultados anteriores e download CSV' },
       { href: '/faq', emoji: '❓', title: 'Perguntas Frequentes', description: 'Dúvidas sobre loterias' },
       { href: '/blog', emoji: '📝', title: 'Blog', description: 'Artigos e análises' },
     ],

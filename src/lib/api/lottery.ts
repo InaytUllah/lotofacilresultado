@@ -91,7 +91,7 @@ function normalizeResult(raw: any): LotteryResult | null {
 
 async function fetchWithTimeout(
   url: string,
-  timeoutMs = 2000,
+  timeoutMs = 10000,
 ): Promise<Response> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -100,7 +100,7 @@ async function fetchWithTimeout(
     const res = await fetch(url, {
       headers: HEADERS,
       signal: controller.signal,
-      next: { revalidate: 0 },
+      cache: 'no-store',
     });
     return res;
   } finally {
@@ -131,17 +131,20 @@ async function fetchRaw(
 }
 
 function buildUrls(apiName: string, concurso?: number): string[] {
+  // Primary: public mirror API (works globally, no geo-blocking)
   const primary = concurso
+    ? `https://loteriascaixa-api.herokuapp.com/api/${apiName}/${concurso}`
+    : `https://loteriascaixa-api.herokuapp.com/api/${apiName}/latest`;
+
+  // Fallback 1: Caixa direct API (may be geo-blocked outside Brazil)
+  const fallback1 = concurso
     ? `https://servicebus2.caixa.gov.br/portaldeloterias/api/${apiName}/${concurso}`
     : `https://servicebus2.caixa.gov.br/portaldeloterias/api/${apiName}/`;
 
-  const fallback1 = concurso
+  // Fallback 2: Caixa alternate endpoint
+  const fallback2 = concurso
     ? `https://loterias.caixa.gov.br/Servicos/Geral/Resultado?loteria=${apiName}&concurso=${concurso}`
     : `https://loterias.caixa.gov.br/Servicos/Geral/Resultado?loteria=${apiName}&concurso=`;
-
-  const fallback2 = concurso
-    ? `https://loteriasonline.caixa.gov.br/Servicos/Geral/Resultado?loteria=${apiName}&concurso=${concurso}`
-    : `https://loteriasonline.caixa.gov.br/Servicos/Geral/Resultado?loteria=${apiName}&concurso=`;
 
   return [primary, fallback1, fallback2];
 }

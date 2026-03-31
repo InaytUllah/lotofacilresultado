@@ -2,13 +2,26 @@ import { Metadata } from 'next';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Contato - Resultados Mega Sena',
+  title: 'Contato - Lotofácil Resultado',
   description:
-    'Entre em contato com o Resultados Mega Sena. Envie suas duvidas, sugestoes ou reportes sobre resultados de loterias da Caixa.',
+    'Entre em contato com a equipe do Lotofácil Resultado. Envie dúvidas, sugestões ou reporte erros nos resultados das loterias da Caixa. Respondemos em até 48h.',
   alternates: {
     canonical: `${SITE_URL}/contato`,
+    languages: {
+      'pt-BR': `${SITE_URL}/contato`,
+    },
+  },
+  openGraph: {
+    title: 'Contato - Lotofácil Resultado',
+    description: 'Entre em contato com a equipe do Lotofácil Resultado. Envie dúvidas, sugestões ou reporte erros nos resultados das loterias da Caixa. Respondemos em até 48h.',
+    url: `${SITE_URL}/contato`,
+    siteName: SITE_NAME,
+    locale: 'pt_BR',
+    type: 'website',
   },
 };
+
+export const dynamic = 'force-dynamic';
 
 export default function ContatoPage() {
   const breadcrumbSchema = {
@@ -18,7 +31,7 @@ export default function ContatoPage() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Inicio',
+        name: 'Início',
         item: SITE_URL,
       },
       {
@@ -42,7 +55,7 @@ export default function ContatoPage() {
           <ol className="flex items-center gap-1">
             <li>
               <a href="/" className="hover:text-emerald-600">
-                Inicio
+                Início
               </a>
             </li>
             <li>/</li>
@@ -54,7 +67,7 @@ export default function ContatoPage() {
           Entre em Contato
         </h1>
         <p className="mb-10 text-lg text-gray-600">
-          Tem duvidas, sugestoes ou encontrou algum problema? Estamos aqui para ajudar.
+          Tem dúvidas, sugestões ou encontrou algum problema? Estamos aqui para ajudar.
         </p>
 
         <div className="grid gap-8 md:grid-cols-2">
@@ -62,7 +75,7 @@ export default function ContatoPage() {
           <div className="space-y-6">
             <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
               <h2 className="mb-4 text-xl font-bold text-gray-900">
-                Informacoes de Contato
+                Informações de Contato
               </h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
@@ -82,10 +95,10 @@ export default function ContatoPage() {
                   <div>
                     <p className="font-semibold text-gray-900">E-mail</p>
                     <a
-                      href="mailto:contato@resultadosmegasena.com.br"
+                      href="mailto:contato@lotofacilresultado.com"
                       className="text-emerald-600 hover:underline font-medium"
                     >
-                      contato@resultadosmegasena.com.br
+                      contato@lotofacilresultado.com
                     </a>
                   </div>
                 </div>
@@ -95,20 +108,20 @@ export default function ContatoPage() {
             <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
               <h2 className="mb-4 text-xl font-bold text-gray-900">Redes Sociais</h2>
               <p className="mb-4 text-gray-600">
-                Siga-nos nas redes sociais para receber atualizacoes dos resultados:
+                Siga-nos nas redes sociais para receber atualizações dos resultados:
               </p>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-gray-700">
                   <span className="text-lg">𝕏</span>
-                  <span>@resultadosmegasena</span>
+                  <span>@lotofacilresultado</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <span className="text-lg">📘</span>
-                  <span>facebook.com/resultadosmegasena</span>
+                  <span>facebook.com/lotofacilresultado</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-700">
                   <span className="text-lg">📸</span>
-                  <span>@resultadosmegasena</span>
+                  <span>@lotofacilresultado</span>
                 </div>
               </div>
             </section>
@@ -118,8 +131,8 @@ export default function ContatoPage() {
                 Tempo de Resposta
               </h2>
               <p className="text-gray-700">
-                Respondemos todos os e-mails em ate 48 horas uteis. Para assuntos
-                urgentes relacionados a correcao de resultados, indicamos no assunto do
+                Respondemos todos os e-mails em até 48 horas úteis. Para assuntos
+                urgentes relacionados a correção de resultados, indicamos no assunto do
                 e-mail a palavra &quot;URGENTE&quot;.
               </p>
             </section>
@@ -132,13 +145,13 @@ export default function ContatoPage() {
                 Envie sua Mensagem
               </h2>
               <p className="mb-6 text-sm text-gray-500">
-                Este formulario e apenas ilustrativo. Para entrar em contato, envie um
+                Este formulário é apenas ilustrativo. Para entrar em contato, envie um
                 e-mail para{' '}
                 <a
-                  href="mailto:contato@resultadosmegasena.com.br"
+                  href="mailto:contato@lotofacilresultado.com"
                   className="text-emerald-600 hover:underline font-medium"
                 >
-                  contato@resultadosmegasena.com.br
+                  contato@lotofacilresultado.com
                 </a>
                 .
               </p>
@@ -187,8 +200,8 @@ export default function ContatoPage() {
                     className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-gray-400"
                   >
                     <option>Selecione um assunto</option>
-                    <option>Duvida sobre resultados</option>
-                    <option>Sugestao</option>
+                    <option>Dúvida sobre resultados</option>
+                    <option>Sugestão</option>
                     <option>Reportar erro</option>
                     <option>Parcerias</option>
                     <option>Outro</option>
@@ -217,7 +230,7 @@ export default function ContatoPage() {
                   Enviar Mensagem
                 </button>
                 <p className="text-center text-xs text-gray-400">
-                  Formulario indisponivel. Envie um e-mail diretamente.
+                  Formulário indisponível. Envie um e-mail diretamente.
                 </p>
               </div>
             </section>

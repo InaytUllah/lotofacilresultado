@@ -1,14 +1,27 @@
 import { Metadata } from 'next';
-import { GAMES, GAME_SLUGS, SITE_URL, DAYS_SHORT_PT } from '@/lib/constants';
+import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME, DAYS_SHORT_PT } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Como Jogar nas Loterias da Caixa - Guia Completo',
   description:
-    'Aprenda como jogar em todas as loterias da Caixa: Mega-Sena, Lotofacil, Quina, Lotomania, +Milionaria, Dia de Sorte, Super Sete, Dupla Sena e Timemania. Regras, dicas e probabilidades.',
+    'Aprenda como jogar em todas as loterias da Caixa: Mega-Sena, Lotofácil, Quina, Lotomania, +Milionária, Dia de Sorte, Super Sete, Dupla Sena e Timemania. Regras, dicas e probabilidades.',
   alternates: {
     canonical: `${SITE_URL}/como-jogar`,
+    languages: {
+      'pt-BR': `${SITE_URL}/como-jogar`,
+    },
+  },
+  openGraph: {
+    title: 'Como Jogar nas Loterias da Caixa - Guia Completo',
+    description: 'Aprenda como jogar em todas as loterias da Caixa: Mega-Sena, Lotofácil, Quina, Lotomania, +Milionária, Dia de Sorte, Super Sete, Dupla Sena e Timemania. Regras, dicas e probabilidades.',
+    url: `${SITE_URL}/como-jogar`,
+    siteName: SITE_NAME,
+    locale: 'pt_BR',
+    type: 'website',
   },
 };
+
+export const dynamic = 'force-dynamic';
 
 const gameDetails: Record<
   string,
@@ -19,11 +32,11 @@ const gameDetails: Record<
 > = {
   'mega-sena': {
     howTo: [
-      'Escolha de 6 a 20 numeros entre 1 e 60.',
-      'Marque os numeros no volante ou faca uma Surpresinha (numeros aleatorios).',
-      'A aposta minima (6 numeros) custa R$ 5,00.',
-      'Voce pode fazer a Teimosinha para concorrer com a mesma aposta por 2, 3, 4, 5, 6, 9, 12 ou 18 concursos.',
-      'Os sorteios acontecem as terca, quinta e sabado, as 20h.',
+      'Escolha de 6 a 20 números entre 1 e 60.',
+      'Marque os números no volante ou faça uma Surpresinha (números aleatórios).',
+      'A aposta mínima (6 números) custa R$ 5,00.',
+      'Você pode fazer a Teimosinha para concorrer com a mesma aposta por 2, 3, 4, 5, 6, 9, 12 ou 18 concursos.',
+      'Os sorteios acontecem às terça, quinta e sábado, às 21h.',
     ],
     odds: [
       { category: 'Sena (6 acertos)', odds: '1 em 50.063.860' },
@@ -33,11 +46,11 @@ const gameDetails: Record<
   },
   lotofacil: {
     howTo: [
-      'Escolha de 15 a 20 numeros entre 1 e 25.',
-      'Marque os numeros no volante ou utilize a Surpresinha.',
-      'A aposta minima (15 numeros) custa R$ 3,00.',
-      'Ganha quem acertar 11, 12, 13, 14 ou 15 numeros.',
-      'Sorteios de segunda a sabado, as 20h.',
+      'Escolha de 15 a 20 números entre 1 e 25.',
+      'Marque os números no volante ou utilize a Surpresinha.',
+      'A aposta mínima (15 números) custa R$ 3,00.',
+      'Ganha quem acertar 11, 12, 13, 14 ou 15 números.',
+      'Sorteios de segunda a sábado, às 21h.',
     ],
     odds: [
       { category: '15 acertos', odds: '1 em 3.268.760' },
@@ -49,11 +62,11 @@ const gameDetails: Record<
   },
   quina: {
     howTo: [
-      'Escolha de 5 a 15 numeros entre 1 e 80.',
-      'Marque os numeros no volante ou faca uma Surpresinha.',
-      'A aposta minima (5 numeros) custa R$ 2,50.',
-      'Ganha quem acertar 2, 3, 4 ou 5 numeros.',
-      'Sorteios de segunda a sabado, as 20h.',
+      'Escolha de 5 a 15 números entre 1 e 80.',
+      'Marque os números no volante ou faça uma Surpresinha.',
+      'A aposta mínima (5 números) custa R$ 2,50.',
+      'Ganha quem acertar 2, 3, 4 ou 5 números.',
+      'Sorteios de segunda a sábado, às 21h.',
     ],
     odds: [
       { category: 'Quina (5 acertos)', odds: '1 em 24.040.016' },
@@ -64,12 +77,12 @@ const gameDetails: Record<
   },
   lotomania: {
     howTo: [
-      'Escolha 50 numeros entre 00 e 99 (total de 100 numeros).',
-      'Voce pode marcar no volante ou usar a Surpresinha.',
-      'A aposta unica custa R$ 3,00.',
-      'Sao sorteados 20 numeros por concurso.',
-      'Ganha quem acertar 20, 19, 18, 17, 16, 15 ou 0 numeros.',
-      'Sorteios na segunda, quarta e sexta, as 20h.',
+      'Escolha 50 números entre 00 e 99 (total de 100 números).',
+      'Você pode marcar no volante ou usar a Surpresinha.',
+      'A aposta única custa R$ 3,00.',
+      'São sorteados 20 números por concurso.',
+      'Ganha quem acertar 20, 19, 18, 17, 16, 15 ou 0 números.',
+      'Sorteios na segunda, quarta e sexta, às 21h.',
     ],
     odds: [
       { category: '20 acertos', odds: '1 em 11.372.635' },
@@ -83,11 +96,11 @@ const gameDetails: Record<
   },
   'mais-milionaria': {
     howTo: [
-      'Escolha de 6 a 12 numeros entre 1 e 50 (numeros da sorte).',
+      'Escolha de 6 a 12 números entre 1 e 50 (números da sorte).',
       'Escolha de 2 a 6 trevos entre 1 e 6.',
-      'A aposta minima (6 numeros + 2 trevos) custa R$ 6,00.',
-      'Sao sorteados 6 numeros e 2 trevos.',
-      'Sorteios na quarta e sabado, as 20h.',
+      'A aposta mínima (6 números + 2 trevos) custa R$ 6,00.',
+      'São sorteados 6 números e 2 trevos.',
+      'Sorteios na quarta e sábado, às 21h.',
     ],
     odds: [
       { category: '6 acertos + 2 trevos', odds: '1 em 238.360.500' },
@@ -104,29 +117,29 @@ const gameDetails: Record<
   },
   'dia-de-sorte': {
     howTo: [
-      'Escolha de 7 a 15 numeros entre 1 e 31.',
-      'Escolha 1 mes da sorte (janeiro a dezembro).',
-      'A aposta minima (7 numeros) custa R$ 3,00.',
-      'Sao sorteados 7 numeros e 1 mes da sorte.',
-      'Ganha quem acertar 4, 5, 6, 7 numeros ou o mes da sorte.',
-      'Sorteios na terca, quinta e sabado, as 20h.',
+      'Escolha de 7 a 15 números entre 1 e 31.',
+      'Escolha 1 mês da sorte (janeiro a dezembro).',
+      'A aposta mínima (7 números) custa R$ 3,00.',
+      'São sorteados 7 números e 1 mês da sorte.',
+      'Ganha quem acertar 4, 5, 6, 7 números ou o mês da sorte.',
+      'Sorteios na terça, quinta e sábado, às 21h.',
     ],
     odds: [
       { category: '7 acertos', odds: '1 em 2.629.575' },
       { category: '6 acertos', odds: '1 em 15.415' },
       { category: '5 acertos', odds: '1 em 453' },
       { category: '4 acertos', odds: '1 em 30' },
-      { category: 'Mes da Sorte', odds: '1 em 12' },
+      { category: 'Mês da Sorte', odds: '1 em 12' },
     ],
   },
   'super-sete': {
     howTo: [
-      'O volante possui 7 colunas com numeros de 0 a 9.',
-      'Escolha 1 numero para cada coluna (7 numeros no total).',
-      'Voce pode marcar de 1 a 3 numeros por coluna.',
-      'A aposta minima (1 numero por coluna) custa R$ 2,50.',
-      'Sao sorteados 7 numeros, um para cada coluna.',
-      'Sorteios na segunda, quarta e sexta, as 20h.',
+      'O volante possui 7 colunas com números de 0 a 9.',
+      'Escolha 1 número para cada coluna (7 números no total).',
+      'Você pode marcar de 1 a 3 números por coluna.',
+      'A aposta mínima (1 número por coluna) custa R$ 2,50.',
+      'São sorteados 7 números, um para cada coluna.',
+      'Sorteios na segunda, quarta e sexta, às 21h.',
     ],
     odds: [
       { category: '7 acertos', odds: '1 em 10.000.000' },
@@ -138,11 +151,11 @@ const gameDetails: Record<
   },
   'dupla-sena': {
     howTo: [
-      'Escolha de 6 a 15 numeros entre 1 e 50.',
-      'A aposta minima (6 numeros) custa R$ 2,50.',
-      'Cada aposta da direito a dois sorteios (Sorteio 1 e Sorteio 2).',
-      'Ganha quem acertar 3, 4, 5 ou 6 numeros em qualquer sorteio.',
-      'Sorteios na terca, quinta e sabado, as 20h.',
+      'Escolha de 6 a 15 números entre 1 e 50.',
+      'A aposta mínima (6 números) custa R$ 2,50.',
+      'Cada aposta dá direito a dois sorteios (Sorteio 1 e Sorteio 2).',
+      'Ganha quem acertar 3, 4, 5 ou 6 números em qualquer sorteio.',
+      'Sorteios na terça, quinta e sábado, às 21h.',
     ],
     odds: [
       { category: 'Sena (6 acertos)', odds: '1 em 15.890.700' },
@@ -153,12 +166,12 @@ const gameDetails: Record<
   },
   timemania: {
     howTo: [
-      'Escolha 10 numeros entre 1 e 80.',
-      'Escolha 1 time do coracao entre os participantes.',
-      'A aposta unica custa R$ 3,50.',
-      'Sao sorteados 7 numeros e 1 time do coracao.',
-      'Ganha quem acertar 3, 4, 5, 6, 7 numeros ou o time do coracao.',
-      'Sorteios na terca, quinta e sabado, as 20h.',
+      'Escolha 10 números entre 1 e 80.',
+      'Escolha 1 time do coração entre os participantes.',
+      'A aposta única custa R$ 3,50.',
+      'São sorteados 7 números e 1 time do coração.',
+      'Ganha quem acertar 3, 4, 5, 6, 7 números ou o time do coração.',
+      'Sorteios na terça, quinta e sábado, às 21h.',
     ],
     odds: [
       { category: '7 acertos', odds: '1 em 26.472.637' },
@@ -166,7 +179,7 @@ const gameDetails: Record<
       { category: '5 acertos', odds: '1 em 5.765' },
       { category: '4 acertos', odds: '1 em 297' },
       { category: '3 acertos', odds: '1 em 26' },
-      { category: 'Time do Coracao', odds: '1 em 80' },
+      { category: 'Time do Coração', odds: '1 em 80' },
     ],
   },
 };
@@ -183,7 +196,7 @@ export default function ComoJogarPage() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Inicio',
+        name: 'Início',
         item: SITE_URL,
       },
       {
@@ -201,13 +214,52 @@ export default function ComoJogarPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'HowTo',
+            name: 'Como Jogar nas Loterias da Caixa',
+            description:
+              'Guia completo com regras, dicas e probabilidades de todas as 9 loterias da Caixa Econômica Federal.',
+            step: [
+              {
+                '@type': 'HowToStep',
+                name: 'Escolha a loteria',
+                text: 'Decida em qual das 9 loterias da Caixa você deseja apostar: Mega-Sena, Lotofácil, Quina, Lotomania, +Milionária, Dia de Sorte, Super Sete, Dupla Sena ou Timemania.',
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Selecione seus números',
+                text: 'Marque os números no volante de acordo com as regras de cada loteria, ou utilize a opção Surpresinha para números aleatórios.',
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Faça sua aposta',
+                text: 'Registre sua aposta em uma casa lotérica credenciada, pelo aplicativo Loterias Caixa ou pelo Internet Banking da Caixa.',
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Aguarde o sorteio',
+                text: 'Os sorteios acontecem às 21h (horário de Brasília). Confira os resultados neste site logo após o sorteio.',
+              },
+              {
+                '@type': 'HowToStep',
+                name: 'Confira o resultado',
+                text: 'Verifique se seus números foram sorteados. Prêmios de até R$ 2.259,20 podem ser resgatados em casas lotéricas. Valores maiores devem ser sacados em agências da Caixa.',
+              },
+            ],
+          }),
+        }}
+      />
 
       <div className="mx-auto max-w-4xl px-4 py-8">
         <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
           <ol className="flex items-center gap-1">
             <li>
               <a href="/" className="hover:text-emerald-600">
-                Inicio
+                Início
               </a>
             </li>
             <li>/</li>
@@ -220,7 +272,7 @@ export default function ComoJogarPage() {
         </h1>
         <p className="mb-10 text-lg text-gray-600">
           Guia completo com regras, dicas e probabilidades de todas as 9 loterias da Caixa
-          Economica Federal. Aprenda a jogar e aumente suas chances de ganhar.
+          Econômica Federal. Aprenda a jogar e aumente suas chances de ganhar.
         </p>
 
         {/* Game sections */}
@@ -242,7 +294,7 @@ export default function ComoJogarPage() {
 
               <div className="mb-6 grid gap-2 text-sm text-gray-700">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-gray-900">Aposta minima:</span>{' '}
+                  <span className="font-semibold text-gray-900">Aposta mínima:</span>{' '}
                   {game.minBet}
                 </div>
                 <div className="flex items-center gap-2">
@@ -250,8 +302,8 @@ export default function ComoJogarPage() {
                   {getDrawDaysLabel(game.drawDays)}
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-gray-900">Horario:</span>{' '}
-                  {game.drawTime} (horario de Brasilia)
+                  <span className="font-semibold text-gray-900">Horário:</span>{' '}
+                  {game.drawTime} (horário de Brasília)
                 </div>
               </div>
 
@@ -270,7 +322,7 @@ export default function ComoJogarPage() {
                   <thead>
                     <tr>
                       <th className="bg-gray-50 p-3 text-left font-semibold text-gray-900">
-                        Faixa de Premio
+                        Faixa de Prêmio
                       </th>
                       <th className="bg-gray-50 p-3 text-left font-semibold text-gray-900">
                         Probabilidade
@@ -302,13 +354,13 @@ export default function ComoJogarPage() {
           </h2>
           <ul className="space-y-3 text-gray-700">
             {[
-              'Defina um orcamento mensal para apostas e nunca gaste mais do que pode perder.',
-              'Considere participar de boloes para aumentar suas chances sem gastar muito.',
+              'Defina um orçamento mensal para apostas e nunca gaste mais do que pode perder.',
+              'Considere participar de bolões para aumentar suas chances sem gastar muito.',
               'Diversifique suas apostas entre diferentes loterias.',
-              'Verifique sempre seus bilhetes apos os sorteios para nao perder premios.',
+              'Verifique sempre seus bilhetes após os sorteios para não perder prêmios.',
               'Guarde seus comprovantes de aposta em local seguro.',
-              'Lembre-se: loteria e entretenimento, nao investimento.',
-              'Apostas com mais numeros aumentam as chances, mas tambem o custo.',
+              'Lembre-se: loteria é entretenimento, não investimento.',
+              'Apostas com mais números aumentam as chances, mas também o custo.',
             ].map((tip, i) => (
               <li key={i} className="flex items-start gap-3">
                 <svg
@@ -340,19 +392,19 @@ export default function ComoJogarPage() {
           </p>
           <div className="space-y-4 text-gray-700">
             <div>
-              <strong className="text-gray-900">Casas Lotericas</strong>
+              <strong className="text-gray-900">Casas Lotéricas</strong>
               <p>
-                Voce pode fazer suas apostas em qualquer casa loterica credenciada pela
-                Caixa Economica Federal em todo o Brasil. Basta preencher o volante do
+                Você pode fazer suas apostas em qualquer casa lotérica credenciada pela
+                Caixa Econômica Federal em todo o Brasil. Basta preencher o volante do
                 jogo desejado e pagar na boca do caixa.
               </p>
             </div>
             <div>
               <strong className="text-gray-900">App Loterias Caixa</strong>
               <p>
-                Baixe o aplicativo oficial Loterias Caixa, disponivel para Android e iOS.
-                Voce pode apostar diretamente pelo celular com pagamento via cartao de
-                credito ou Pix. E necessario ter mais de 18 anos e cadastro no site da
+                Baixe o aplicativo oficial Loterias Caixa, disponível para Android e iOS.
+                Você pode apostar diretamente pelo celular com pagamento via cartão de
+                crédito ou Pix. É necessário ter mais de 18 anos e cadastro no site da
                 Caixa.
               </p>
             </div>
@@ -360,16 +412,16 @@ export default function ComoJogarPage() {
               <strong className="text-gray-900">Internet Banking Caixa</strong>
               <p>
                 Clientes da Caixa podem apostar pelo internet banking ou pelo app Caixa
-                Tem. As apostas online tem valor minimo de R$ 30,00 no carrinho (somando
+                Tem. As apostas online têm valor mínimo de R$ 30,00 no carrinho (somando
                 todas as apostas).
               </p>
             </div>
             <div>
-              <strong className="text-gray-900">Boloes</strong>
+              <strong className="text-gray-900">Bolões</strong>
               <p>
-                Voce pode participar de boloes organizados pelas casas lotericas. O bolao
-                permite apostar com mais numeros por um custo menor, dividindo o premio
-                entre os participantes. A cota minima e de R$ 3,00.
+                Você pode participar de bolões organizados pelas casas lotéricas. O bolão
+                permite apostar com mais números por um custo menor, dividindo o prêmio
+                entre os participantes. A cota mínima é de R$ 3,00.
               </p>
             </div>
           </div>
@@ -382,28 +434,28 @@ export default function ComoJogarPage() {
           </h2>
           <div className="space-y-4 text-gray-700">
             <p>
-              As loterias da Caixa Economica Federal sao os jogos de azar mais populares
-              do Brasil, oferecendo premios que podem chegar a centenas de milhoes de
+              As loterias da Caixa Econômica Federal são os jogos de azar mais populares
+              do Brasil, oferecendo prêmios que podem chegar a centenas de milhões de
               reais. Atualmente, existem 9 modalidades de loterias, cada uma com suas
-              regras e probabilidades especificas.
+              regras e probabilidades específicas.
             </p>
             <p>
-              A <strong className="text-gray-900">Mega-Sena</strong> e a mais conhecida,
-              com premios recordes que ja ultrapassaram R$ 500 milhoes na Mega da Virada.
-              Ja a <strong className="text-gray-900">Lotofacil</strong> e considerada a
-              loteria mais facil de ganhar, com odds de 1 em 11 para o premio minimo.
+              A <strong className="text-gray-900">Mega-Sena</strong> é a mais conhecida,
+              com prêmios recordes que já ultrapassaram R$ 500 milhões na Mega da Virada.
+              Já a <strong className="text-gray-900">Lotofácil</strong> é considerada a
+              loteria mais fácil de ganhar, com odds de 1 em 11 para o prêmio mínimo.
             </p>
             <p>
-              A <strong className="text-gray-900">+Milionaria</strong>, lancada em 2022, e
-              a loteria com o premio minimo garantido de R$ 10 milhoes, mas tambem a com
-              menor probabilidade de acerto na faixa principal. Ja o{' '}
-              <strong className="text-gray-900">Super Sete</strong> traz um formato unico
+              A <strong className="text-gray-900">+Milionária</strong>, lançada em 2022, é
+              a loteria com o prêmio mínimo garantido de R$ 10 milhões, mas também a com
+              menor probabilidade de acerto na faixa principal. Já o{' '}
+              <strong className="text-gray-900">Super Sete</strong> traz um formato único
               de colunas que diferencia essa modalidade das demais.
             </p>
             <p>
-              Parte da arrecadacao das loterias e destinada a programas sociais nas areas
-              de saude, educacao, esporte, seguranca publica e cultura, tornando cada
-              aposta tambem uma contribuicao para a sociedade brasileira.
+              Parte da arrecadação das loterias é destinada a programas sociais nas áreas
+              de saúde, educação, esporte, segurança pública e cultura, tornando cada
+              aposta também uma contribuição para a sociedade brasileira.
             </p>
           </div>
         </section>

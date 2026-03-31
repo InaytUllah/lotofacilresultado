@@ -36,13 +36,14 @@ export default function ResultCard({
       </div>
 
       {/* Balls */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4">
         {result.dezenas.map((dezena, index) => (
           <LotteryBall
             key={`${dezena}-${index}`}
             number={dezena}
             color={game.ballColor}
             textColor={game.ballTextColor}
+            size={result.dezenas.length > 10 ? 'sm' : 'md'}
             delay={index * 80}
           />
         ))}
@@ -50,7 +51,7 @@ export default function ResultCard({
 
       {/* Acumulado value */}
       {result.acumulado && result.valorAcumulado > 0 && (
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-gray-600 mb-2">
           Acumulou para{' '}
           <span className="font-bold text-amber-600">
             {formatCurrency(result.valorAcumulado)}
@@ -58,17 +59,27 @@ export default function ResultCard({
         </p>
       )}
 
+      {/* Estimated next prize */}
+      {result.valorEstimadoProximoConcurso > 0 && (
+        <p className="text-sm text-gray-600 mb-4">
+          Próximo prêmio estimado:{' '}
+          <span className="font-bold text-emerald-600">
+            {formatCurrency(result.valorEstimadoProximoConcurso)}
+          </span>
+        </p>
+      )}
+
       {/* Prize table */}
       {showPrizes && result.premiacoes.length > 0 && (
         <div className="border-t border-gray-100 pt-4 mt-2">
-          <h4 className="text-sm font-semibold text-gray-700 mb-2">Premia{'\u00E7\u00E3'}o</h4>
+          <h4 className="text-sm font-semibold text-gray-700 mb-2">Premiação</h4>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500">
                   <th className="pb-1 font-medium">Faixa</th>
                   <th className="pb-1 font-medium text-center">Ganhadores</th>
-                  <th className="pb-1 font-medium text-right">Pr{'\u00EA'}mio</th>
+                  <th className="pb-1 font-medium text-right">Prêmio</th>
                 </tr>
               </thead>
               <tbody>

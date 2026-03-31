@@ -1,19 +1,31 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { SITE_URL, GAMES, GAME_SLUGS } from '@/lib/constants';
+import { SITE_URL, SITE_NAME, GAMES, GAME_SLUGS } from '@/lib/constants';
 import { fetchRecentResults } from '@/lib/api/lottery';
 import LotteryBall from '@/components/ui/LotteryBall';
 import SEOContent from '@/components/ui/SEOContent';
+import ResponsibleGamblingBanner from '@/components/ui/ResponsibleGamblingBanner';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Numeros Quentes e Frios - Estatisticas das Loterias',
+  title: 'Números Quentes e Frios - Estatísticas das Loterias',
   description:
-    'Descubra os numeros quentes e frios de todas as loterias da Caixa. Analise de frequencia dos numeros mais e menos sorteados na Mega-Sena, Lotofacil, Quina e mais.',
+    'Descubra os números quentes e frios de todas as loterias da Caixa. Análise de frequência dos números mais e menos sorteados na Mega-Sena, Lotofácil, Quina e mais.',
   alternates: {
     canonical: '/numeros-quentes-frios',
+    languages: {
+      'pt-BR': `${SITE_URL}/numeros-quentes-frios`,
+    },
+  },
+  openGraph: {
+    title: 'Números Quentes e Frios - Estatísticas das Loterias',
+    description: 'Descubra os números quentes e frios de todas as loterias da Caixa. Análise de frequência dos números mais e menos sorteados na Mega-Sena, Lotofácil, Quina e mais.',
+    url: `${SITE_URL}/numeros-quentes-frios`,
+    siteName: SITE_NAME,
+    locale: 'pt_BR',
+    type: 'website',
   },
 };
 
@@ -47,20 +59,13 @@ function calculateFrequencies(
 }
 
 export default async function NumerosQuentesFriosPage() {
-  const gameData: {
-    slug: string;
-    hot: NumberFrequency[];
-    cold: NumberFrequency[];
-    maxFreq: number;
-    totalResults: number;
-  }[] = [];
-
   let hasError = false;
 
-  for (const slug of GAME_SLUGS) {
-    try {
-      const results = await fetchRecentResults(slug, 10);
-      if (results.length === 0) continue;
+  // Fetch all games in PARALLEL to avoid sequential timeout
+  const settledResults = await Promise.allSettled(
+    GAME_SLUGS.map(async (slug) => {
+      const results = await fetchRecentResults(slug, 5);
+      if (results.length === 0) return null;
 
       const game = GAMES[slug];
       const frequencies = calculateFrequencies(results, game.maxNumber);
@@ -73,16 +78,25 @@ export default async function NumerosQuentesFriosPage() {
 
       const maxFreq = sorted[0]?.frequency || 1;
 
-      gameData.push({
+      return {
         slug,
         hot,
         cold,
         maxFreq,
         totalResults: results.length,
-      });
-    } catch {
-      hasError = true;
-    }
+      };
+    }),
+  );
+
+  const gameData = settledResults
+    .filter(
+      (r): r is PromiseFulfilledResult<{ slug: string; hot: NumberFrequency[]; cold: NumberFrequency[]; maxFreq: number; totalResults: number }> =>
+        r.status === 'fulfilled' && r.value !== null,
+    )
+    .map((r) => r.value);
+
+  if (settledResults.some((r) => r.status === 'rejected')) {
+    hasError = true;
   }
 
   const breadcrumbSchema = {
@@ -92,13 +106,13 @@ export default async function NumerosQuentesFriosPage() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Inicio',
+        name: 'Início',
         item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Numeros Quentes e Frios',
+        name: 'Números Quentes e Frios',
         item: `${SITE_URL}/numeros-quentes-frios`,
       },
     ],
@@ -116,26 +130,28 @@ export default async function NumerosQuentesFriosPage() {
         <div className="max-w-7xl mx-auto px-4">
           <nav className="text-sm text-emerald-200 mb-4">
             <Link href="/" className="hover:text-white">
-              Inicio
+              Início
             </Link>
             <span className="mx-2">/</span>
-            <span>Numeros Quentes e Frios</span>
+            <span>Números Quentes e Frios</span>
           </nav>
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-            Numeros Quentes e Frios
+            Números Quentes e Frios
           </h1>
           <p className="text-lg text-emerald-100 max-w-2xl">
-            Analise de frequencia dos numeros mais e menos sorteados nas loterias
-            da Caixa. Baseado nos ultimos 50 concursos de cada jogo.
+            Análise de frequência dos números mais e menos sorteados nas loterias
+            da Caixa. Baseado nos últimos 50 concursos de cada jogo.
           </p>
         </div>
       </section>
 
       <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 space-y-8">
+        <ResponsibleGamblingBanner />
+
         {hasError && gameData.length === 0 && (
           <div className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8 text-center">
             <p className="text-gray-600">
-              Nao foi possivel carregar os dados estatisticos no momento. Por
+              Não foi possível carregar os dados estatísticos no momento. Por
               favor, tente novamente mais tarde.
             </p>
           </div>
@@ -162,7 +178,7 @@ export default async function NumerosQuentesFriosPage() {
                 {/* Hot Numbers */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <span>🔥</span> Numeros Quentes
+                    <span>🔥</span> Números Quentes
                   </h3>
                   <div className="space-y-2">
                     {hot.map(({ number, frequency }) => (
@@ -196,7 +212,7 @@ export default async function NumerosQuentesFriosPage() {
                 {/* Cold Numbers */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <span>❄️</span> Numeros Frios
+                    <span>❄️</span> Números Frios
                   </h3>
                   <div className="space-y-2">
                     {cold.map(({ number, frequency }) => (
@@ -234,36 +250,36 @@ export default async function NumerosQuentesFriosPage() {
         {/* SEO Content */}
         <SEOContent>
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
-            O que sao Numeros Quentes e Frios?
+            O que são Números Quentes e Frios?
           </h2>
           <div className="prose prose-gray max-w-none space-y-4">
             <p className="text-gray-600">
-              Na analise estatistica das loterias, os{' '}
-              <strong className="text-gray-900">numeros quentes</strong> sao
-              aqueles que foram sorteados com maior frequencia em um determinado
+              Na análise estatística das loterias, os{' '}
+              <strong className="text-gray-900">números quentes</strong> são
+              aqueles que foram sorteados com maior frequência em um determinado
               periodo. Ja os{' '}
-              <strong className="text-gray-900">numeros frios</strong> sao os
+              <strong className="text-gray-900">números frios</strong> são os
               que apareceram menos vezes nos sorteios recentes.
             </p>
             <p className="text-gray-600">
-              Muitos apostadores utilizam essa analise para montar suas apostas,
-              seja apostando nos numeros quentes (acreditando que a tendencia
-              vai continuar) ou nos numeros frios (acreditando que eles estao
+              Muitos apostadores utilizam essa análise para montar suas apostas,
+              seja apostando nos números quentes (acreditando que a tendencia
+              vai continuar) ou nos números frios (acreditando que eles estão
               &quot;atrasados&quot; e devem sair em breve).
             </p>
             <p className="text-gray-600">
               E importante lembrar que cada sorteio e{' '}
               <strong className="text-gray-900">independente</strong> dos
-              anteriores. Os numeros sao sorteados aleatoriamente e a frequencia
-              passada nao garante resultados futuros. No entanto, a analise
+              anteriores. Os números são sorteados aleatoriamente e a frequência
+              passada não garante resultados futuros. No entanto, a análise
               estatistica pode ser uma ferramenta divertida para quem gosta de
-              estudar padroes.
+              estudar padrões.
             </p>
             <p className="text-gray-600">
-              Nossa analise e baseada nos{' '}
-              <strong className="text-gray-900">ultimos 50 concursos</strong> de
+              Nossa análise é baseada nos{' '}
+              <strong className="text-gray-900">últimos 50 concursos</strong> de
               cada loteria, oferecendo uma visao recente da distribuicao dos
-              numeros. Os dados sao atualizados automaticamente apos cada
+              números. Os dados são atualizados automaticamente após cada
               sorteio.
             </p>
           </div>
@@ -273,21 +289,21 @@ export default async function NumerosQuentesFriosPage() {
               href="/previsoes"
               className="text-emerald-600 hover:underline font-medium"
             >
-              Ver Previsoes
+              Ver Previsões
             </Link>
             <span className="text-gray-300">|</span>
             <Link
               href="/gerador"
               className="text-emerald-600 hover:underline font-medium"
             >
-              Gerador de Numeros
+              Gerador de Números
             </Link>
             <span className="text-gray-300">|</span>
             <Link
               href="/historico"
               className="text-emerald-600 hover:underline font-medium"
             >
-              Historico de Resultados
+              Histórico de Resultados
             </Link>
           </div>
         </SEOContent>

@@ -1,95 +1,108 @@
 import { Metadata } from 'next';
-import { SITE_URL } from '@/lib/constants';
+import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Perguntas Frequentes sobre Loterias da Caixa',
   description:
-    'Respostas para as principais duvidas sobre loterias da Caixa: como jogar, como resgatar premios, impostos, probabilidades, apostas online e muito mais.',
+    'Respostas para as principais dúvidas sobre loterias da Caixa: como jogar, como resgatar prêmios, impostos, probabilidades, apostas online e muito mais.',
   alternates: {
     canonical: `${SITE_URL}/faq`,
+    languages: {
+      'pt-BR': `${SITE_URL}/faq`,
+    },
+  },
+  openGraph: {
+    title: 'Perguntas Frequentes sobre Loterias da Caixa',
+    description: 'Respostas para as principais dúvidas sobre loterias da Caixa: como jogar, como resgatar prêmios, impostos, probabilidades, apostas online e muito mais.',
+    url: `${SITE_URL}/faq`,
+    siteName: SITE_NAME,
+    locale: 'pt_BR',
+    type: 'website',
   },
 };
+
+export const dynamic = 'force-dynamic';
 
 const faqItems: { question: string; answer: string }[] = [
   {
     question: 'Como jogar nas loterias da Caixa?',
     answer:
-      'Voce pode apostar nas loterias da Caixa de tres formas: presencialmente em qualquer casa loterica credenciada, pelo aplicativo Loterias Caixa (disponivel para Android e iOS) ou pelo internet banking da Caixa Economica Federal. Para apostas online, e necessario ter mais de 18 anos e cadastro no site da Caixa. O valor minimo do carrinho online e de R$ 30,00.',
+      'Você pode apostar nas loterias da Caixa de três formas: presencialmente em qualquer casa lotérica credenciada, pelo aplicativo Loterias Caixa (disponível para Android e iOS) ou pelo internet banking da Caixa Econômica Federal. Para apostas online, é necessário ter mais de 18 anos e cadastro no site da Caixa. O valor mínimo do carrinho online é de R$ 30,00.',
   },
   {
-    question: 'Como resgatar premios das loterias?',
+    question: 'Como resgatar prêmios das loterias?',
     answer:
-      'Premios de ate R$ 2.259,20 podem ser resgatados em qualquer casa loterica. Valores acima de R$ 2.259,20 devem ser resgatados exclusivamente em agencias da Caixa Economica Federal, com apresentacao de documento de identidade e CPF. O prazo para resgate e de 90 dias corridos apos a data do sorteio. Premios brutos acima de R$ 2.259,20 tem desconto de imposto de renda na fonte.',
+      'Prêmios de até R$ 2.259,20 podem ser resgatados em qualquer casa lotérica. Valores acima de R$ 2.259,20 devem ser resgatados exclusivamente em agências da Caixa Econômica Federal, com apresentação de documento de identidade e CPF. O prazo para resgate é de 90 dias corridos após a data do sorteio. Prêmios brutos acima de R$ 2.259,20 têm desconto de imposto de renda na fonte.',
   },
   {
-    question: 'Qual o imposto sobre premios de loteria?',
+    question: 'Qual o imposto sobre prêmios de loteria?',
     answer:
-      'Premios de loterias acima de R$ 2.259,20 sao tributados em 30% de Imposto de Renda na fonte, de acordo com a legislacao brasileira. Esse desconto e feito automaticamente antes do pagamento do premio. Premios ate R$ 2.259,20 sao isentos de impostos.',
+      'Prêmios de loterias acima de R$ 2.259,20 são tributados em 30% de Imposto de Renda na fonte, de acordo com a legislação brasileira. Esse desconto é feito automaticamente antes do pagamento do prêmio. Prêmios até R$ 2.259,20 são isentos de impostos.',
   },
   {
-    question: 'Quais sao os dias e horarios dos sorteios das loterias?',
+    question: 'Quais são os dias e horários dos sorteios das loterias?',
     answer:
-      'A maioria dos sorteios acontece as 20h (horario de Brasilia). A Mega-Sena, Dupla Sena, Dia de Sorte e Timemania tem sorteios na terca, quinta e sabado. A Lotofacil e a Quina tem sorteios de segunda a sabado. A Lotomania e o Super Sete sorteiam na segunda, quarta e sexta. A +Milionaria sorteia na quarta e sabado. Os sorteios sao transmitidos ao vivo pela TV e internet.',
+      'A maioria dos sorteios acontece às 21h (horário de Brasília). A Mega-Sena, Dupla Sena, Dia de Sorte e Timemania têm sorteios na terça, quinta e sábado. A Lotofácil e a Quina têm sorteios de segunda a sábado. A Lotomania e o Super Sete sorteiam na segunda, quarta e sexta. A +Milionária sorteia na quarta e sábado. Os sorteios são transmitidos ao vivo pela TV e internet.',
   },
   {
     question: 'Qual loteria tem as melhores chances de ganhar?',
     answer:
-      'A Lotofacil e considerada a loteria com as melhores chances de premiacao. A probabilidade de acertar 11 numeros (menor faixa premiada) e de 1 em 11. Ja para o premio principal (15 acertos), a chance e de 1 em 3.268.760. O Super Sete tambem oferece boas chances na faixa de 3 acertos (1 em 4). No entanto, loterias com melhores odds geralmente oferecem premios menores.',
+      'A Lotofácil é considerada a loteria com as melhores chances de premiação. A probabilidade de acertar 11 números (menor faixa premiada) é de 1 em 11. Já para o prêmio principal (15 acertos), a chance é de 1 em 3.268.760. O Super Sete também oferece boas chances na faixa de 3 acertos (1 em 4). No entanto, loterias com melhores odds geralmente oferecem prêmios menores.',
   },
   {
     question: 'Onde comprar apostas de loteria online?',
     answer:
-      'As apostas online oficiais podem ser feitas pelo aplicativo Loterias Caixa ou pelo site loterias.caixa.gov.br. E necessario criar uma conta com CPF valido e ter mais de 18 anos. O pagamento pode ser feito por cartao de credito, debito ou Pix. O valor minimo do carrinho de apostas e de R$ 30,00 (somando todas as apostas).',
+      'As apostas online oficiais podem ser feitas pelo aplicativo Loterias Caixa ou pelo site loterias.caixa.gov.br. É necessário criar uma conta com CPF válido e ter mais de 18 anos. O pagamento pode ser feito por cartão de crédito, débito ou Pix. O valor mínimo do carrinho de apostas é de R$ 30,00 (somando todas as apostas).',
   },
   {
-    question: 'O que e a Mega da Virada?',
+    question: 'O que é a Mega da Virada?',
     answer:
-      'A Mega da Virada e um concurso especial da Mega-Sena realizado no ultimo dia de cada ano (31 de dezembro). E o maior premio do ano e nao acumula: caso nenhum apostador acerte as 6 dezenas, o premio e dividido entre os acertadores de 5 numeros, e assim por diante. Os premios ja superaram R$ 500 milhoes. As apostas ficam disponiveis a partir de novembro.',
+      'A Mega da Virada é um concurso especial da Mega-Sena realizado no último dia de cada ano (31 de dezembro). É o maior prêmio do ano e não acumula: caso nenhum apostador acerte as 6 dezenas, o prêmio é dividido entre os acertadores de 5 números, e assim por diante. Os prêmios já superaram R$ 500 milhões. As apostas ficam disponíveis a partir de novembro.',
   },
   {
     question: 'O que acontece quando a loteria acumula?',
     answer:
-      'Quando ninguem acerta a faixa principal de um concurso, o premio acumula para o proximo sorteio, somando-se ao valor estimado. A acumulacao pode ocorrer varias vezes seguidas, gerando premios milionarios. Porem, na Lotofacil e na Lotomania, apos um certo numero de acumulacoes, ha regras especificas de rateio.',
+      'Quando ninguém acerta a faixa principal de um concurso, o prêmio acumula para o próximo sorteio, somando-se ao valor estimado. A acumulação pode ocorrer várias vezes seguidas, gerando prêmios milionários. Porém, na Lotofácil e na Lotomania, após um certo número de acumulações, há regras específicas de rateio.',
   },
   {
-    question: 'Qual o valor minimo de uma aposta?',
+    question: 'Qual o valor mínimo de uma aposta?',
     answer:
-      'O valor minimo varia por modalidade: Mega-Sena custa R$ 5,00 (6 numeros), Lotofacil R$ 3,00 (15 numeros), Quina R$ 2,50 (5 numeros), Lotomania R$ 3,00 (50 numeros), +Milionaria R$ 6,00 (6 numeros + 2 trevos), Dia de Sorte R$ 3,00 (7 numeros), Super Sete R$ 2,50 (7 numeros), Dupla Sena R$ 2,50 (6 numeros) e Timemania R$ 3,50 (10 numeros).',
+      'O valor mínimo varia por modalidade: Mega-Sena custa R$ 5,00 (6 números), Lotofácil R$ 3,00 (15 números), Quina R$ 2,50 (5 números), Lotomania R$ 3,00 (50 números), +Milionária R$ 6,00 (6 números + 2 trevos), Dia de Sorte R$ 3,00 (7 números), Super Sete R$ 2,50 (7 números), Dupla Sena R$ 2,50 (6 números) e Timemania R$ 3,50 (10 números).',
   },
   {
     question: 'Existe limite de idade para jogar na loteria?',
     answer:
-      'Sim. E proibida a venda de bilhetes de loteria para menores de 18 anos, conforme a legislacao brasileira (Estatuto da Crianca e do Adolescente). Essa regra vale tanto para apostas presenciais em casas lotericas quanto para apostas online pelo aplicativo ou site da Caixa.',
+      'Sim. É proibida a venda de bilhetes de loteria para menores de 18 anos, conforme a legislação brasileira (Estatuto da Criança e do Adolescente). Essa regra vale tanto para apostas presenciais em casas lotéricas quanto para apostas online pelo aplicativo ou site da Caixa.',
   },
   {
     question: 'Estrangeiros podem jogar nas loterias da Caixa?',
     answer:
-      'Sim, estrangeiros podem apostar presencialmente em casas lotericas sem restricoes. Para apostas online, e necessario ter CPF brasileiro. Para resgatar premios, o estrangeiro deve apresentar documento de identidade valido (passaporte) e, se o valor for alto, comparecer a uma agencia da Caixa.',
+      'Sim, estrangeiros podem apostar presencialmente em casas lotéricas sem restrições. Para apostas online, é necessário ter CPF brasileiro. Para resgatar prêmios, o estrangeiro deve apresentar documento de identidade válido (passaporte) e, se o valor for alto, comparecer a uma agência da Caixa.',
   },
   {
     question: 'Quando saem os resultados dos sorteios?',
     answer:
-      'Os resultados sao divulgados imediatamente apos os sorteios, que geralmente ocorrem as 20h (horario de Brasilia). Voce pode conferir os resultados no nosso site, que e atualizado automaticamente minutos apos cada sorteio, ou pela transmissao ao vivo no canal da Caixa no YouTube.',
+      'Os resultados são divulgados imediatamente após os sorteios, que geralmente ocorrem às 21h (horário de Brasília). Você pode conferir os resultados no nosso site, que é atualizado automaticamente minutos após cada sorteio, ou pela transmissão ao vivo no canal da Caixa no YouTube.',
   },
   {
-    question: 'O que sao numeros quentes e frios?',
+    question: 'O que são números quentes e frios?',
     answer:
-      'Numeros quentes sao aqueles que foram sorteados com maior frequencia nos ultimos concursos, enquanto numeros frios sao os que menos apareceram. Embora cada sorteio seja independente e aleatorio, muitos apostadores utilizam essas estatisticas como estrategia para montar suas apostas. Nosso site oferece ferramentas de analise de numeros quentes e frios para todas as loterias.',
+      'Números quentes são aqueles que foram sorteados com maior frequência nos últimos concursos, enquanto números frios são os que menos apareceram. Embora cada sorteio seja independente e aleatório, muitos apostadores utilizam essas estatísticas como estratégia para montar suas apostas. Nosso site oferece ferramentas de análise de números quentes e frios para todas as loterias.',
   },
   {
-    question: 'E possivel melhorar as chances de ganhar na loteria?',
+    question: 'É possível melhorar as chances de ganhar na loteria?',
     answer:
-      'Matematicamente, a unica forma de aumentar suas chances e apostando com mais numeros (apostas ampliadas), o que tambem aumenta o custo. Participar de boloes e outra estrategia popular, pois permite apostar com mais numeros por um custo menor por pessoa. Nao existe formula magica ou sistema que garanta ganhos, pois os sorteios sao completamente aleatorios.',
+      'Matematicamente, a única forma de aumentar suas chances é apostando com mais números (apostas ampliadas), o que também aumenta o custo. Participar de bolões é outra estratégia popular, pois permite apostar com mais números por um custo menor por pessoa. Não existe fórmula mágica ou sistema que garanta ganhos, pois os sorteios são completamente aleatórios.',
   },
   {
-    question: 'O que e um bolao de loteria?',
+    question: 'O que é um bolão de loteria?',
     answer:
-      'Bolao e uma aposta coletiva onde varias pessoas dividem o custo de uma ou mais apostas e, em caso de premiacao, dividem o premio proporcionalmente ao numero de cotas adquiridas. As casas lotericas organizam boloes oficiais com cota minima de R$ 3,00. Tambem e possivel criar boloes entre amigos. O organizador pode cobrar uma taxa de administracao de ate 35% do valor da cota.',
+      'Bolão é uma aposta coletiva onde várias pessoas dividem o custo de uma ou mais apostas e, em caso de premiação, dividem o prêmio proporcionalmente ao número de cotas adquiridas. As casas lotéricas organizam bolões oficiais com cota mínima de R$ 3,00. Também é possível criar bolões entre amigos. O organizador pode cobrar uma taxa de administração de até 35% do valor da cota.',
   },
   {
-    question: 'Qual a diferenca entre Surpresinha e Teimosinha?',
+    question: 'Qual a diferença entre Surpresinha e Teimosinha?',
     answer:
-      'Na Surpresinha, o sistema seleciona numeros aleatorios para voce, sem que voce precise escolher. Na Teimosinha, voce concorre com a mesma aposta por varios concursos consecutivos (2, 3, 4, 5, 6, 9, 12 ou 18 concursos). As duas opcoes podem ser combinadas: voce pode pedir uma Surpresinha com Teimosinha.',
+      'Na Surpresinha, o sistema seleciona números aleatórios para você, sem que você precise escolher. Na Teimosinha, você concorre com a mesma aposta por vários concursos consecutivos (2, 3, 4, 5, 6, 9, 12 ou 18 concursos). As duas opções podem ser combinadas: você pode pedir uma Surpresinha com Teimosinha.',
   },
 ];
 
@@ -101,7 +114,7 @@ export default function FAQPage() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Inicio',
+        name: 'Início',
         item: SITE_URL,
       },
       {
@@ -142,7 +155,7 @@ export default function FAQPage() {
           <ol className="flex items-center gap-1">
             <li>
               <a href="/" className="hover:text-emerald-600">
-                Inicio
+                Início
               </a>
             </li>
             <li>/</li>
@@ -154,8 +167,8 @@ export default function FAQPage() {
           Perguntas Frequentes sobre Loterias da Caixa
         </h1>
         <p className="mb-10 text-lg text-gray-600">
-          Encontre respostas para as duvidas mais comuns sobre as loterias da Caixa
-          Economica Federal, incluindo como jogar, resgatar premios, impostos e muito
+          Encontre respostas para as dúvidas mais comuns sobre as loterias da Caixa
+          Econômica Federal, incluindo como jogar, resgatar prêmios, impostos e muito
           mais.
         </p>
 
@@ -195,20 +208,20 @@ export default function FAQPage() {
           </h2>
           <div className="space-y-4 text-gray-700">
             <p>
-              As loterias da Caixa Economica Federal sao uma das formas de entretenimento
-              mais populares do Brasil. Com 9 modalidades diferentes, ha opcoes para todos
-              os perfis de apostadores, desde quem busca premios modestos com melhores
-              chances ate quem sonha com os jackpots milionarios.
+              As loterias da Caixa Econômica Federal são uma das formas de entretenimento
+              mais populares do Brasil. Com 9 modalidades diferentes, há opções para todos
+              os perfis de apostadores, desde quem busca prêmios modestos com melhores
+              chances até quem sonha com os jackpots milionários.
             </p>
             <p>
-              E fundamental jogar com{' '}
+              É fundamental jogar com{' '}
               <strong className="text-gray-900">responsabilidade</strong>, definindo um
-              orcamento para apostas e nunca comprometendo recursos essenciais. As loterias
-              devem ser vistas como uma forma de diversao, nao como investimento ou fonte
+              orçamento para apostas e nunca comprometendo recursos essenciais. As loterias
+              devem ser vistas como uma forma de diversão, não como investimento ou fonte
               de renda.
             </p>
             <p>
-              Para mais informacoes sobre como jogar, visite nossa pagina{' '}
+              Para mais informações sobre como jogar, visite nossa página{' '}
               <a
                 href="/como-jogar"
                 className="text-emerald-600 hover:underline font-medium"

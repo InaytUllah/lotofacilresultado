@@ -110,7 +110,7 @@ export default function NumberGenerator() {
             <h2 className="text-xl font-bold text-gray-900">{game.name}</h2>
           </div>
           <p className="text-sm text-gray-500">
-            {game.selectNumbers} a {game.maxNumber} numeros de 01 a{' '}
+            {game.selectNumbers} a {game.maxNumber} números de 01 a{' '}
             {String(game.maxNumber).padStart(2, '0')}
           </p>
         </div>
@@ -122,7 +122,7 @@ export default function NumberGenerator() {
               htmlFor="quantity"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Quantos numeros deseja gerar?
+              Quantos números deseja gerar?
             </label>
             <select
               id="quantity"
@@ -135,7 +135,7 @@ export default function NumberGenerator() {
                 (_, i) => minSelect + i,
               ).map((n) => (
                 <option key={n} value={n}>
-                  {n} numeros
+                  {n} números
                 </option>
               ))}
             </select>
@@ -147,14 +147,14 @@ export default function NumberGenerator() {
           onClick={generateNumbers}
           className="bg-emerald-600 text-white rounded-lg px-6 py-3 font-semibold hover:bg-emerald-700 transition-colors"
         >
-          {generated ? 'Gerar Novamente' : 'Gerar Numeros'}
+          {generated ? 'Gerar Novamente' : 'Gerar Números'}
         </button>
 
         {/* Generated Numbers */}
         {generated && (
           <div className="mt-6 p-4 bg-gray-50 rounded-xl">
             <h3 className="text-sm font-medium text-gray-500 mb-3">
-              Numeros Gerados:
+              Números Gerados:
             </h3>
             <div className="flex flex-wrap gap-2">
               {generated.map((num, idx) => (
@@ -176,7 +176,7 @@ export default function NumberGenerator() {
       {history.length > 0 && (
         <div className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="text-lg font-bold text-gray-900 mb-4">
-            Ultimas Combinacoes Geradas
+            Últimas Combinações Geradas
           </h2>
           <div className="space-y-3">
             {history.map((combo, idx) => (

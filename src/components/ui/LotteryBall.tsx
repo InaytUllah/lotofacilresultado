@@ -4,14 +4,15 @@ interface LotteryBallProps {
   number: string;
   color?: string;
   textColor?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   delay?: number;
 }
 
 const sizeClasses = {
-  sm: 'w-8 h-8 text-sm',
-  md: 'w-10 h-10 text-base',
-  lg: 'w-12 h-12 text-lg',
+  xs: 'w-7 h-7 text-xs',
+  sm: 'w-8 h-8 text-xs sm:text-sm',
+  md: 'w-8 h-8 text-xs sm:w-10 sm:h-10 sm:text-base',
+  lg: 'w-9 h-9 text-sm sm:w-12 sm:h-12 sm:text-lg',
 } as const;
 
 export default function LotteryBall({
@@ -23,8 +24,10 @@ export default function LotteryBall({
 }: LotteryBallProps) {
   return (
     <div
-      className={`${sizeClasses[size]} ${color} ${textColor} font-bold flex items-center justify-center rounded-full shadow-md animate-bounceIn`}
+      className={`${sizeClasses[size]} ${color} ${textColor} font-bold flex items-center justify-center rounded-full shadow-md animate-bounceIn flex-shrink-0`}
       style={{ animationDelay: `${delay}ms` }}
+      role="img"
+      aria-label={`Número sorteado ${number}`}
     >
       {number}
     </div>

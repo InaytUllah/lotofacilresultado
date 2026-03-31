@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { GAMES, GAME_SLUGS, SITE_URL } from '@/lib/constants';
+import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME } from '@/lib/constants';
 import { fetchResultByConcurso } from '@/lib/api/lottery';
 import LotteryBall from '@/components/ui/LotteryBall';
 
@@ -21,20 +21,41 @@ export async function generateMetadata({
   const game = GAMES[gameSlug];
   if (!game) return {};
 
-  const title = `Resultado ${game.name} Concurso ${concurso} - Numeros Sorteados`;
-  const description = `Confira o resultado do concurso ${concurso} da ${game.name}. Veja os numeros sorteados, premiacao completa e ganhadores.`;
+  // Fetch result to include drawn numbers in OG title
+  const concursoNum = parseInt(concurso, 10);
+  let numbersStr = '';
+  if (!isNaN(concursoNum) && concursoNum > 0) {
+    try {
+      const result = await fetchResultByConcurso(game.slug, concursoNum);
+      if (result && result.dezenas.length > 0) {
+        numbersStr = result.dezenas.join(', ');
+      }
+    } catch {
+      // Fallback: metadata without numbers is still valid
+    }
+  }
+
+  const title = numbersStr
+    ? `${game.name} Concurso ${concurso} — ${numbersStr} | Resultado Oficial`
+    : `Resultado ${game.name} Concurso ${concurso} - Números Sorteados`;
+  const description = numbersStr
+    ? `Resultado oficial do Concurso ${concurso} da ${game.name}. Números sorteados: ${numbersStr}. Confira premiação completa e ganhadores.`
+    : `Confira o resultado do concurso ${concurso} da ${game.name}. Veja os números sorteados, premiação completa e ganhadores.`;
 
   return {
     title,
     description,
     alternates: {
       canonical: `${SITE_URL}/${game.slug}/resultado/${concurso}`,
+      languages: {
+        'pt-BR': `${SITE_URL}/${game.slug}/resultado/${concurso}`,
+      },
     },
     openGraph: {
       title,
       description,
       url: `${SITE_URL}/${game.slug}/resultado/${concurso}`,
-      siteName: 'Resultados Mega Sena',
+      siteName: SITE_NAME,
       locale: 'pt_BR',
       type: 'article',
     },
@@ -77,7 +98,7 @@ export default async function ConcursoPage({
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Inicio',
+        name: 'Início',
         item: SITE_URL,
       },
       {
@@ -99,11 +120,11 @@ export default async function ConcursoPage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: `Resultado ${game.name} Concurso ${concurso}`,
-    description: `Numeros sorteados e premiacao do concurso ${concurso} da ${game.name}.`,
+    description: `Números sorteados e premiação do concurso ${concurso} da ${game.name}.`,
     datePublished: result.data,
     publisher: {
       '@type': 'Organization',
-      name: 'Resultados Mega Sena',
+      name: 'Lotofácil Resultado',
       url: SITE_URL,
     },
     mainEntityOfPage: {
@@ -112,21 +133,51 @@ export default async function ConcursoPage({
     },
   };
 
+  // Convert DD/MM/YYYY date to ISO format with BRT offset (-03:00)
+  const dateParts = result.data.split('/');
+  const isoDate = dateParts.length === 3
+    ? `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T21:00:00-03:00`
+    : new Date().toISOString();
+
+  const eventSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: `${game.name} Concurso ${concurso}`,
+    startDate: isoDate,
+    location: {
+      '@type': 'Place',
+      name: result.localSorteio || 'Espaço da Sorte',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'São Paulo',
+        addressRegion: 'SP',
+        addressCountry: 'BR',
+      },
+    },
+    organizer: {
+      '@type': 'Organization',
+      name: 'Caixa Econômica Federal',
+      url: 'https://loterias.caixa.gov.br',
+    },
+    description: `Resultado oficial do Concurso ${concurso} da ${game.name}. Números sorteados: ${result.dezenas.join(', ')}.`,
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([breadcrumbSchema, articleSchema]),
+          __html: JSON.stringify([breadcrumbSchema, articleSchema, eventSchema]),
         }}
       />
 
+      <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
         <ol className="flex items-center gap-1 flex-wrap">
           <li>
             <Link href="/" className="hover:text-gray-700 transition-colors">
-              Inicio
+              Início
             </Link>
           </li>
           <li className="before:content-['/'] before:mx-1">
@@ -167,7 +218,7 @@ export default async function ConcursoPage({
       {/* Lottery Balls */}
       <section className="mb-8 rounded-xl border border-gray-200 bg-white p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Numeros Sorteados
+          Números Sorteados
         </h2>
         <div className="flex flex-wrap gap-3 justify-center">
           {result.dezenas.map((dezena, index) => (
@@ -185,7 +236,7 @@ export default async function ConcursoPage({
         {/* Dia de Sorte - Month */}
         {result.mesSorte && (
           <p className="text-center mt-4 text-gray-600">
-            Mes da Sorte:{' '}
+            Mês da Sorte:{' '}
             <span className="font-bold" style={{ color: game.color }}>
               {result.mesSorte}
             </span>
@@ -195,7 +246,7 @@ export default async function ConcursoPage({
         {/* Timemania - Team */}
         {result.timeCoracao && (
           <p className="text-center mt-4 text-gray-600">
-            Time do Coracao:{' '}
+            Time do Coração:{' '}
             <span className="font-bold" style={{ color: game.color }}>
               {result.timeCoracao}
             </span>
@@ -227,14 +278,14 @@ export default async function ConcursoPage({
       {result.acumulado && result.valorAcumulado > 0 && (
         <section className="mb-8 rounded-xl border border-amber-200 bg-amber-50 p-6 text-center">
           <p className="text-gray-700 mb-1">
-            Ninguem acertou. O premio acumulou para:
+            Ninguém acertou. O prêmio acumulou para:
           </p>
           <p className="text-3xl font-bold text-amber-600">
             {formatCurrency(result.valorAcumulado)}
           </p>
           {result.valorEstimadoProximoConcurso > 0 && (
             <p className="text-sm text-gray-500 mt-2">
-              Estimativa proximo concurso:{' '}
+              Estimativa próximo concurso:{' '}
               {formatCurrency(result.valorEstimadoProximoConcurso)}
             </p>
           )}
@@ -245,7 +296,7 @@ export default async function ConcursoPage({
       {result.premiacoes.length > 0 && (
         <section className="mb-8 rounded-xl border border-gray-200 bg-white p-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Premiacao Completa
+            Premiação Completa
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -256,7 +307,7 @@ export default async function ConcursoPage({
                     Ganhadores
                   </th>
                   <th className="pb-3 font-semibold text-gray-700 text-right">
-                    Premio
+                    Prêmio
                   </th>
                 </tr>
               </thead>
@@ -288,6 +339,25 @@ export default async function ConcursoPage({
           </div>
         </section>
       )}
+
+      {/* YouTube Draw Video */}
+      <div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 p-5">
+        <h2 className="text-lg font-semibold text-gray-700 mb-3">
+          Transmissao Oficial do Sorteio
+        </h2>
+        <p className="text-sm text-gray-600 mb-3">
+          Assista a transmissao oficial do sorteio do Concurso {concurso} da {game.name} no canal da Caixa Economica Federal.
+        </p>
+        <a
+          href={`https://www.youtube.com/results?search_query=resultado+${game.apiName}+concurso+${concurso}+caixa`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white font-medium text-sm hover:bg-red-700 transition-colors"
+        >
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          Assistir no YouTube
+        </a>
+      </div>
 
       {/* Previous / Next Navigation */}
       <section className="mb-8 flex items-center justify-between gap-4">
@@ -356,6 +426,7 @@ export default async function ConcursoPage({
         >
           &larr; Ver todos os resultados da {game.name}
         </Link>
+      </div>
       </div>
     </>
   );

@@ -12,6 +12,8 @@ const footerColumns = [
   {
     title: 'Ferramentas',
     links: [
+      { href: '/conferidor', label: 'Conferidor de Apostas' },
+      { href: '/simulador', label: 'Simulador' },
       { href: '/previsoes', label: 'Previsões' },
       { href: '/numeros-quentes-frios', label: 'Números Quentes e Frios' },
       { href: '/gerador', label: 'Gerador de Números' },
@@ -97,7 +99,7 @@ export default function Footer() {
       <div className="border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <p className="text-center text-gray-500 text-sm">
-            &copy; {currentYear} resultadosmegasena.com.br. Todos os direitos reservados.
+            &copy; {currentYear} lotofacilresultado.com. Todos os direitos reservados.
           </p>
         </div>
       </div>

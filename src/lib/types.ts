@@ -44,6 +44,7 @@ export interface GameConfig {
   odds: string;
   minBet: string;
   prizeCategories: string[];
+  prizeTiers: { faixa: string; acertos: string; probabilidade: string; premio: string }[];
 }
 
 export interface BlogPost {

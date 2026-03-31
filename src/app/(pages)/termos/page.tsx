@@ -1,35 +1,73 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Termos de Uso',
   description:
-    'Termos de uso do site Resultados Mega Sena. Condicoes para utilizacao dos servicos e conteudos disponibilizados.',
+    'Termos de uso do Lotofácil Resultado. Conheça as condições para utilização dos serviços, conteúdos e ferramentas de loterias disponibilizados. Leia agora.',
   alternates: {
     canonical: `${SITE_URL}/termos`,
+    languages: {
+      'pt-BR': `${SITE_URL}/termos`,
+    },
+  },
+  openGraph: {
+    title: 'Termos de Uso',
+    description: 'Termos de uso do Lotofácil Resultado. Conheça as condições para utilização dos serviços, conteúdos e ferramentas de loterias disponibilizados. Leia agora.',
+    url: `${SITE_URL}/termos`,
+    siteName: SITE_NAME,
+    locale: 'pt_BR',
+    type: 'website',
   },
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function TermosPage() {
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Início',
+        item: SITE_URL,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Termos de Uso',
+        item: `${SITE_URL}/termos`,
+      },
+    ],
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     <div className="mx-auto max-w-4xl px-4 py-8">
       <h1 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
         Termos de Uso
       </h1>
       <p className="mb-10 text-sm text-gray-500">
-        Ultima atualizacao: 1 de janeiro de 2025
+        Última atualização: 1 de janeiro de 2025
       </p>
 
       <div className="space-y-8">
         <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="mb-4 text-xl font-bold text-gray-900">
-            Aceitacao dos Termos
+            Aceitação dos Termos
           </h2>
           <p className="text-gray-700">
             Ao acessar e utilizar o site{' '}
             <strong className="text-gray-900">{SITE_NAME}</strong> ({SITE_URL}
-            ), voce concorda integralmente com estes Termos de Uso. Caso nao concorde com
-            alguma disposicao aqui estabelecida, pedimos que nao utilize nossos servicos.
+            ), você concorda integralmente com estes Termos de Uso. Caso não concorde com
+            alguma disposição aqui estabelecida, pedimos que não utilize nossos serviços.
           </p>
         </section>
 
@@ -37,21 +75,21 @@ export default function TermosPage() {
           <h2 className="mb-4 text-xl font-bold text-gray-900">Uso do Site</h2>
           <div className="space-y-4 text-gray-700">
             <p>
-              Este site tem carater exclusivamente{' '}
+              Este site tem caráter exclusivamente{' '}
               <strong className="text-gray-900">informativo</strong>. Disponibilizamos
-              resultados de loterias, estatisticas, ferramentas de analise e conteudos
-              educativos sobre as loterias da Caixa Economica Federal.
+              resultados de loterias, estatísticas, ferramentas de análise e conteúdos
+              educativos sobre as loterias da Caixa Econômica Federal.
             </p>
-            <p>O usuario se compromete a:</p>
+            <p>O usuário se compromete a:</p>
             <ul className="list-inside list-disc space-y-2">
-              <li>Utilizar o site de forma licita e de boa-fe.</li>
-              <li>Nao tentar acessar areas restritas ou sistemas do servidor.</li>
-              <li>Nao utilizar o conteudo do site para fins ilegais.</li>
+              <li>Utilizar o site de forma lícita e de boa-fé.</li>
+              <li>Não tentar acessar áreas restritas ou sistemas do servidor.</li>
+              <li>Não utilizar o conteúdo do site para fins ilegais.</li>
               <li>
-                Nao reproduzir, distribuir ou modificar o conteudo sem autorizacao previa.
+                Não reproduzir, distribuir ou modificar o conteúdo sem autorização prévia.
               </li>
               <li>
-                Nao utilizar robos, scrapers ou ferramentas automatizadas para acessar o
+                Não utilizar robôs, scrapers ou ferramentas automatizadas para acessar o
                 site de forma massiva.
               </li>
             </ul>
@@ -64,17 +102,17 @@ export default function TermosPage() {
           </h2>
           <div className="space-y-4 text-gray-700">
             <p>
-              O {SITE_NAME} e um site{' '}
+              O {SITE_NAME} é um site{' '}
               <strong className="text-gray-900">
                 informativo e independente
               </strong>
-              . Nao somos afiliados, patrocinados ou endossados pela Caixa Economica
-              Federal ou qualquer orgao governamental.
+              . Não somos afiliados, patrocinados ou endossados pela Caixa Econômica
+              Federal ou qualquer órgão governamental.
             </p>
             <p>
-              Os resultados, estatisticas e previsoes apresentados neste site sao baseados
-              em dados publicamente disponiveis e algoritmos estatisticos. Nenhuma
-              informacao aqui apresentada constitui garantia de acerto ou recomendacao de
+              Os resultados, estatísticas e previsões apresentados neste site são baseados
+              em dados publicamente disponíveis e algoritmos estatísticos. Nenhuma
+              informação aqui apresentada constitui garantia de acerto ou recomendação de
               aposta.
             </p>
           </div>
@@ -86,42 +124,42 @@ export default function TermosPage() {
           </h2>
           <div className="space-y-4 text-gray-700">
             <p>
-              Todo o conteudo deste site, incluindo textos, graficos, logotipos, icones,
-              imagens, codigo-fonte e software, e protegido por leis de propriedade
+              Todo o conteúdo deste site, incluindo textos, gráficos, logotipos, ícones,
+              imagens, código-fonte e software, é protegido por leis de propriedade
               intelectual e pertence ao {SITE_NAME} ou a seus licenciadores.
             </p>
             <p>
-              E permitido o compartilhamento de links para nossas paginas, desde que nao
-              haja alteracao do conteudo original. A reproducao total ou parcial do conteudo
-              sem autorizacao expressa e proibida.
+              É permitido o compartilhamento de links para nossas páginas, desde que não
+              haja alteração do conteúdo original. A reprodução total ou parcial do conteúdo
+              sem autorização expressa é proibida.
             </p>
           </div>
         </section>
 
         <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="mb-4 text-xl font-bold text-gray-900">
-            Limitacao de Responsabilidade
+            Limitação de Responsabilidade
           </h2>
           <div className="space-y-4 text-gray-700">
-            <p>O {SITE_NAME} nao se responsabiliza por:</p>
+            <p>O {SITE_NAME} não se responsabiliza por:</p>
             <ul className="list-inside list-disc space-y-2">
               <li>
-                Eventuais imprecisoes, erros ou atrasos na publicacao dos resultados.
+                Eventuais imprecisões, erros ou atrasos na publicação dos resultados.
               </li>
               <li>
-                Perdas financeiras decorrentes de apostas baseadas em informacoes do site.
+                Perdas financeiras decorrentes de apostas baseadas em informações do site.
               </li>
               <li>
-                Decisoes tomadas pelo usuario com base em previsoes, analises ou
-                estatisticas apresentadas.
+                Decisões tomadas pelo usuário com base em previsões, análises ou
+                estatísticas apresentadas.
               </li>
               <li>
-                Indisponibilidade temporaria do site por motivos tecnicos ou de
-                manutencao.
+                Indisponibilidade temporária do site por motivos técnicos ou de
+                manutenção.
               </li>
               <li>
-                Danos causados por virus ou elementos nocivos que possam afetar o
-                equipamento do usuario.
+                Danos causados por vírus ou elementos nocivos que possam afetar o
+                equipamento do usuário.
               </li>
             </ul>
             <p>
@@ -132,7 +170,7 @@ export default function TermosPage() {
                 rel="noopener noreferrer"
                 className="text-emerald-600 hover:underline font-medium"
               >
-                Caixa Economica Federal
+                Caixa Econômica Federal
               </a>
               .
             </p>
@@ -142,50 +180,74 @@ export default function TermosPage() {
         <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="mb-4 text-xl font-bold text-gray-900">Links Externos</h2>
           <p className="text-gray-700">
-            Nosso site pode conter links para sites de terceiros. Esses links sao
-            fornecidos apenas para conveniencia e nao implicam endosso ou
-            responsabilidade sobre o conteudo, politicas de privacidade ou praticas
-            desses sites. Recomendamos que voce leia os termos e politicas de cada site
+            Nosso site pode conter links para sites de terceiros. Esses links são
+            fornecidos apenas para conveniência e não implicam endosso ou
+            responsabilidade sobre o conteúdo, políticas de privacidade ou práticas
+            desses sites. Recomendamos que você leia os termos e políticas de cada site
             externo que visitar.
           </p>
         </section>
 
         <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="mb-4 text-xl font-bold text-gray-900">
-            Modificacoes dos Termos
+            Modificações dos Termos
           </h2>
           <p className="text-gray-700">
             Reservamo-nos o direito de alterar estes Termos de Uso a qualquer momento, sem
-            aviso previo. As alteracoes entram em vigor imediatamente apos sua publicacao
-            nesta pagina. O uso continuado do site apos quaisquer modificacoes constitui
-            sua aceitacao dos novos termos.
+            aviso prévio. As alterações entram em vigor imediatamente após sua publicação
+            nesta página. O uso continuado do site após quaisquer modificações constitui
+            sua aceitação dos novos termos.
           </p>
         </section>
 
         <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="mb-4 text-xl font-bold text-gray-900">
-            Legislacao Aplicavel
+            Legislação Aplicável
           </h2>
           <p className="text-gray-700">
-            Estes Termos de Uso sao regidos pelas leis da Republica Federativa do Brasil.
-            Qualquer disputa sera submetida ao foro da comarca de domicilio do usuario,
-            conforme o Codigo de Defesa do Consumidor.
+            Estes Termos de Uso são regidos pelas leis da República Federativa do Brasil.
+            Qualquer disputa será submetida ao foro da comarca de domicílio do usuário,
+            conforme o Código de Defesa do Consumidor.
           </p>
         </section>
 
         <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="mb-4 text-xl font-bold text-gray-900">Contato</h2>
           <p className="text-gray-700">
-            Em caso de duvidas sobre estes Termos de Uso, entre em contato pelo e-mail:{' '}
+            Em caso de dúvidas sobre estes Termos de Uso, entre em contato pelo e-mail:{' '}
             <a
-              href="mailto:contato@resultadosmegasena.com.br"
+              href="mailto:contato@lotofacilresultado.com"
               className="text-emerald-600 hover:underline font-medium"
             >
-              contato@resultadosmegasena.com.br
+              contato@lotofacilresultado.com
             </a>
           </p>
         </section>
+        {/* Documentos Relacionados */}
+        <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
+          <h2 className="mb-4 text-xl font-bold text-gray-900">
+            Documentos Relacionados
+          </h2>
+          <ul className="space-y-2 text-gray-700">
+            <li>
+              <Link href="/privacidade" className="text-emerald-600 hover:underline font-medium">
+                Política de Privacidade
+              </Link>
+            </li>
+            <li>
+              <Link href="/aviso-legal" className="text-emerald-600 hover:underline font-medium">
+                Aviso Legal
+              </Link>
+            </li>
+            <li>
+              <Link href="/contato" className="text-emerald-600 hover:underline font-medium">
+                Contato
+              </Link>
+            </li>
+          </ul>
+        </section>
       </div>
     </div>
+    </>
   );
 }

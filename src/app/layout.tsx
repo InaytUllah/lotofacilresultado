@@ -3,9 +3,12 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
+import Script from 'next/script';
 import Navigation from '@/components/layout/Navigation';
 import Footer from '@/components/layout/Footer';
 import ResponsibleGamingToast from '@/components/ui/ResponsibleGamingToast';
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6YPCF13JT5';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -20,8 +23,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Resultados Mega Sena - Lotofacil, Quina e Todas as Loterias',
-    template: '%s | Resultados Mega Sena',
+    default: 'Lotofácil Resultado - Lotofácil, Quina e Todas as Loterias',
+    template: '%s | Lotofácil Resultado',
   },
   description: SITE_DESCRIPTION,
   alternates: {
@@ -34,6 +37,10 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
     type: 'website',
     siteName: SITE_NAME,
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
   },
   robots: {
     index: true,
@@ -55,8 +62,52 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-screen flex flex-col">
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Lotofácil Resultado',
+              url: SITE_URL,
+              logo: `${SITE_URL}/icon.png`,
+              sameAs: [],
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Lotofácil Resultado',
+              url: SITE_URL,
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: {
+                  '@type': 'EntryPoint',
+                  urlTemplate: `${SITE_URL}/historico?q={search_term_string}`,
+                },
+                'query-input': 'required name=search_term_string',
+              },
+            }),
+          }}
+        />
         <a href="#main-content" className="skip-to-content">
-          Pular para o conteudo
+          Pular para o conteúdo
         </a>
         <Navigation />
         <main id="main-content" className="flex-1">

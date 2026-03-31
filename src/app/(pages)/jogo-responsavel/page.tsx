@@ -2,13 +2,26 @@ import { Metadata } from 'next';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Jogo Responsavel - Informacoes e Recursos',
+  title: 'Jogo Responsável - Informações e Recursos',
   description:
-    'Informacoes sobre jogo responsavel, sinais de alerta para jogo problematico e recursos de ajuda. Jogue com consciencia e dentro dos seus limites.',
+    'Informações sobre jogo responsável, sinais de alerta para jogo problemático e recursos de ajuda. Jogue com consciência e dentro dos seus limites.',
   alternates: {
     canonical: `${SITE_URL}/jogo-responsavel`,
+    languages: {
+      'pt-BR': `${SITE_URL}/jogo-responsavel`,
+    },
+  },
+  openGraph: {
+    title: 'Jogo Responsável - Informações e Recursos',
+    description: 'Informações sobre jogo responsável, sinais de alerta para jogo problemático e recursos de ajuda. Jogue com consciência e dentro dos seus limites.',
+    url: `${SITE_URL}/jogo-responsavel`,
+    siteName: SITE_NAME,
+    locale: 'pt_BR',
+    type: 'website',
   },
 };
+
+export const dynamic = 'force-dynamic';
 
 function WarningBox({ children }: { children: React.ReactNode }) {
   return (
@@ -41,13 +54,13 @@ export default function JogoResponsavelPage() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Inicio',
+        name: 'Início',
         item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Jogo Responsavel',
+        name: 'Jogo Responsável',
         item: `${SITE_URL}/jogo-responsavel`,
       },
     ],
@@ -65,20 +78,20 @@ export default function JogoResponsavelPage() {
           <ol className="flex items-center gap-1">
             <li>
               <a href="/" className="hover:text-emerald-600">
-                Inicio
+                Início
               </a>
             </li>
             <li>/</li>
-            <li className="text-gray-900 font-medium">Jogo Responsavel</li>
+            <li className="text-gray-900 font-medium">Jogo Responsável</li>
           </ol>
         </nav>
 
         <h1 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
-          Jogo Responsavel
+          Jogo Responsável
         </h1>
         <p className="mb-10 text-lg text-gray-600">
-          Jogar na loteria pode ser divertido, mas e fundamental faze-lo com
-          responsabilidade. Confira informacoes importantes, sinais de alerta e recursos
+          Jogar na loteria pode ser divertido, mas é fundamental fazê-lo com
+          responsabilidade. Confira informações importantes, sinais de alerta e recursos
           de apoio.
         </p>
 
@@ -89,26 +102,26 @@ export default function JogoResponsavelPage() {
               Proibido para menores de 18 anos
             </p>
             <p className="mt-1">
-              De acordo com a legislacao brasileira, a venda de bilhetes de loteria e
-              apostas e proibida para menores de 18 anos. Jogue com responsabilidade e
+              De acordo com a legislação brasileira, a venda de bilhetes de loteria e
+              apostas é proibida para menores de 18 anos. Jogue com responsabilidade e
               respeite os limites legais.
             </p>
           </WarningBox>
 
           <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
             <h2 className="mb-4 text-xl font-bold text-gray-900">
-              O Que e Jogo Responsavel?
+              O Que é Jogo Responsável?
             </h2>
             <div className="space-y-4 text-gray-700">
               <p>
-                Jogo responsavel significa tratar as loterias e apostas como uma forma de{' '}
-                <strong className="text-gray-900">entretenimento</strong>, nao como uma
-                fonte de renda ou solucao para problemas financeiros. Envolve tomar
-                decisoes conscientes sobre quanto, quando e com que frequencia jogar.
+                Jogo responsável significa tratar as loterias e apostas como uma forma de{' '}
+                <strong className="text-gray-900">entretenimento</strong>, não como uma
+                fonte de renda ou solução para problemas financeiros. Envolve tomar
+                decisões conscientes sobre quanto, quando e com que frequência jogar.
               </p>
               <p>
-                A grande maioria dos apostadores joga de forma recreativa e saudavel. No
-                entanto, para uma pequena parcela da populacao, o jogo pode se tornar um
+                A grande maioria dos apostadores joga de forma recreativa e saudável. No
+                entanto, para uma pequena parcela da população, o jogo pode se tornar um
                 problema que afeta a vida pessoal, profissional e financeira.
               </p>
             </div>
@@ -120,16 +133,16 @@ export default function JogoResponsavelPage() {
             </h2>
             <ul className="space-y-3 text-gray-700">
               {[
-                'Defina um orcamento fixo mensal para apostas e nunca ultrapasse esse limite.',
-                'Nunca aposte dinheiro que voce precisa para despesas essenciais (aluguel, alimentacao, contas).',
+                'Defina um orçamento fixo mensal para apostas e nunca ultrapasse esse limite.',
+                'Nunca aposte dinheiro que você precisa para despesas essenciais (aluguel, alimentação, contas).',
                 'Nunca tente recuperar perdas fazendo apostas maiores ou mais frequentes.',
-                'Nao empreste dinheiro ou use credito para apostar.',
-                'Estabeleca limites de tempo para atividades relacionadas a apostas.',
-                'Lembre-se de que a loteria e um jogo de azar - nao existe estrategia que garanta ganhos.',
-                'Mantenha outras atividades de lazer alem das apostas.',
-                'Nao jogue quando estiver emocionalmente fragilizado, estressado ou sob efeito de alcool.',
-                'Converse abertamente com familiares e amigos sobre seus habitos de jogo.',
-                'Se perceber que esta perdendo o controle, procure ajuda imediatamente.',
+                'Não empreste dinheiro ou use crédito para apostar.',
+                'Estabeleça limites de tempo para atividades relacionadas a apostas.',
+                'Lembre-se de que a loteria é um jogo de azar - não existe estratégia que garanta ganhos.',
+                'Mantenha outras atividades de lazer além das apostas.',
+                'Não jogue quando estiver emocionalmente fragilizado, estressado ou sob efeito de álcool.',
+                'Converse abertamente com familiares e amigos sobre seus hábitos de jogo.',
+                'Se perceber que está perdendo o controle, procure ajuda imediatamente.',
               ].map((tip, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <svg
@@ -153,10 +166,10 @@ export default function JogoResponsavelPage() {
 
           <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
             <h2 className="mb-4 text-xl font-bold text-gray-900">
-              Sinais de Alerta do Jogo Problematico
+              Sinais de Alerta do Jogo Problemático
             </h2>
             <p className="mb-4 text-gray-600">
-              Se voce ou alguem que conhece apresenta um ou mais destes sinais, pode ser
+              Se você ou alguém que conhece apresenta um ou mais destes sinais, pode ser
               hora de procurar ajuda:
             </p>
             <ul className="space-y-3 text-gray-700">
@@ -164,12 +177,12 @@ export default function JogoResponsavelPage() {
                 'Gastar mais dinheiro com apostas do que pode perder.',
                 'Mentir para familiares ou amigos sobre quanto gasta com jogo.',
                 'Apostar para tentar recuperar dinheiro perdido.',
-                'Sentir necessidade de apostar quantias cada vez maiores para obter a mesma emocao.',
+                'Sentir necessidade de apostar quantias cada vez maiores para obter a mesma emoção.',
                 'Negligenciar responsabilidades pessoais ou profissionais por causa do jogo.',
                 'Pedir dinheiro emprestado ou vender bens para financiar apostas.',
-                'Sentir-se irritado, ansioso ou deprimido quando nao pode jogar.',
+                'Sentir-se irritado, ansioso ou deprimido quando não pode jogar.',
                 'Tentar parar de jogar sem sucesso.',
-                'Usar o jogo como fuga de problemas pessoais ou emocoes negativas.',
+                'Usar o jogo como fuga de problemas pessoais ou emoções negativas.',
                 'Comprometer relacionamentos importantes por causa do jogo.',
               ].map((sign, i) => (
                 <li key={i} className="flex items-start gap-3">
@@ -194,7 +207,7 @@ export default function JogoResponsavelPage() {
 
           <WarningBox>
             <p className="font-bold text-base">
-              Se voce se identificou com algum dos sinais acima, procure ajuda profissional. Voce nao esta sozinho.
+              Se você se identificou com algum dos sinais acima, procure ajuda profissional. Você não está sozinho.
             </p>
           </WarningBox>
 
@@ -203,17 +216,17 @@ export default function JogoResponsavelPage() {
               Recursos de Ajuda e Apoio
             </h2>
             <p className="mb-6 text-gray-600">
-              Se voce ou alguem proximo precisa de ajuda com problemas relacionados ao
-              jogo, os seguintes recursos estao disponiveis:
+              Se você ou alguém próximo precisa de ajuda com problemas relacionados ao
+              jogo, os seguintes recursos estão disponíveis:
             </p>
             <div className="space-y-6">
               <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 sm:p-6">
                 <h3 className="mb-2 text-lg font-bold text-gray-900">
-                  Jogadores Anonimos (JA)
+                  Jogadores Anônimos (JA)
                 </h3>
                 <p className="mb-2 text-gray-700">
-                  Grupo de apoio mutuo para pessoas com problemas de jogo compulsivo.
-                  Reunioes presenciais e online disponiveis em diversas cidades do Brasil.
+                  Grupo de apoio mútuo para pessoas com problemas de jogo compulsivo.
+                  Reuniões presenciais e online disponíveis em diversas cidades do Brasil.
                 </p>
                 <p className="text-sm text-gray-600">
                   Site:{' '}
@@ -230,15 +243,15 @@ export default function JogoResponsavelPage() {
 
               <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 sm:p-6">
                 <h3 className="mb-2 text-lg font-bold text-gray-900">
-                  CVV - Centro de Valorizacao da Vida
+                  CVV - Centro de Valorização da Vida
                 </h3>
                 <p className="mb-2 text-gray-700">
-                  Apoio emocional e prevencao do suicidio. Atendimento 24 horas, gratuito
+                  Apoio emocional e prevenção do suicídio. Atendimento 24 horas, gratuito
                   e sigiloso, por telefone, chat ou e-mail.
                 </p>
                 <p className="text-sm text-gray-600">
                   Telefone:{' '}
-                  <strong className="text-gray-900 text-lg">188</strong> (ligacao
+                  <strong className="text-gray-900 text-lg">188</strong> (ligação
                   gratuita)
                 </p>
                 <p className="text-sm text-gray-600">
@@ -256,38 +269,38 @@ export default function JogoResponsavelPage() {
 
               <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 sm:p-6">
                 <h3 className="mb-2 text-lg font-bold text-gray-900">
-                  CAPS - Centro de Atencao Psicossocial
+                  CAPS - Centro de Atenção Psicossocial
                 </h3>
                 <p className="mb-2 text-gray-700">
-                  Servico publico de saude mental do SUS. Oferece atendimento
+                  Serviço público de saúde mental do SUS. Oferece atendimento
                   multiprofissional para pessoas com transtornos mentais, incluindo
-                  dependencias comportamentais. Procure a unidade mais proxima da sua
+                  dependências comportamentais. Procure a unidade mais próxima da sua
                   cidade.
                 </p>
                 <p className="text-sm text-gray-600">
-                  Informacoes: Ligue para o{' '}
-                  <strong className="text-gray-900">136</strong> (Disque Saude)
+                  Informações: Ligue para o{' '}
+                  <strong className="text-gray-900">136</strong> (Disque Saúde)
                 </p>
               </div>
             </div>
           </section>
 
           <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
-            <h2 className="mb-4 text-xl font-bold text-gray-900">Autoexclusao</h2>
+            <h2 className="mb-4 text-xl font-bold text-gray-900">Autoexclusão</h2>
             <div className="space-y-4 text-gray-700">
               <p>
-                Se voce sente que precisa se afastar das apostas, considere as seguintes
-                opcoes de autoexclusao:
+                Se você sente que precisa se afastar das apostas, considere as seguintes
+                opções de autoexclusão:
               </p>
               <ul className="list-inside list-disc space-y-2">
                 <li>
-                  <strong className="text-gray-900">App Loterias Caixa:</strong> Voce pode
+                  <strong className="text-gray-900">App Loterias Caixa:</strong> Você pode
                   desativar sua conta de apostas online entrando em contato com o suporte
                   da Caixa.
                 </li>
                 <li>
-                  <strong className="text-gray-900">Bloqueio voluntario:</strong> Solicite
-                  a um familiar ou pessoa de confianca que ajude a controlar seus acessos
+                  <strong className="text-gray-900">Bloqueio voluntário:</strong> Solicite
+                  a um familiar ou pessoa de confiança que ajude a controlar seus acessos
                   a sites e aplicativos de apostas.
                 </li>
                 <li>
@@ -297,8 +310,8 @@ export default function JogoResponsavelPage() {
                 </li>
               </ul>
               <p>
-                A decisao de parar e um ato de coragem e autocuidado. Nao hesite em
-                procurar ajuda profissional se necessario.
+                A decisão de parar é um ato de coragem e autocuidado. Não hesite em
+                procurar ajuda profissional se necessário.
               </p>
             </div>
           </section>
@@ -308,11 +321,11 @@ export default function JogoResponsavelPage() {
               Nosso Compromisso
             </h2>
             <p className="text-gray-700">
-              O <strong className="text-gray-900">{SITE_NAME}</strong> e comprometido com
-              a promocao do jogo responsavel. Nosso site e exclusivamente informativo e
-              nao vende nem intermedia apostas. Incentivamos todos os nossos usuarios a
-              jogar com consciencia, dentro de seus limites financeiros, e a buscar ajuda
-              caso percebam qualquer sinal de jogo problematico.
+              O <strong className="text-gray-900">{SITE_NAME}</strong> é comprometido com
+              a promoção do jogo responsável. Nosso site é exclusivamente informativo e
+              não vende nem intermedia apostas. Incentivamos todos os nossos usuários a
+              jogar com consciência, dentro de seus limites financeiros, e a buscar ajuda
+              caso percebam qualquer sinal de jogo problemático.
             </p>
           </section>
         </div>

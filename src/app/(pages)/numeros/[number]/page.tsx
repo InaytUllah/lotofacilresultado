@@ -2,18 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { SITE_URL, GAMES, GAME_SLUGS } from '@/lib/constants';
+import { SITE_URL, SITE_NAME, GAMES, GAME_SLUGS } from '@/lib/constants';
 import { fetchRecentResults } from '@/lib/api/lottery';
 import LotteryBall from '@/components/ui/LotteryBall';
 import SEOContent from '@/components/ui/SEOContent';
 
-export const revalidate = 60;
-export const dynamicParams = true;
-
-export function generateStaticParams() {
-  // Don't pre-render at build time — generated on demand via ISR
-  return [];
-}
+// force-dynamic prevents build timeout — API calls happen at request time only
+export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: Promise<{ number: string }>;
@@ -24,14 +19,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const n = parseInt(number, 10);
 
   if (isNaN(n) || n < 1 || n > 100) {
-    return { title: 'Numero Invalido' };
+    return { title: 'Número Inválido' };
   }
 
   return {
-    title: `Numero ${n} - Estatisticas nas Loterias da Caixa`,
-    description: `Estatisticas completas do numero ${n} em todas as loterias da Caixa. Frequencia, percentual de aparicao e ultima vez que foi sorteado.`,
+    title: `Número ${n} - Estatísticas nas Loterias da Caixa`,
+    description: `Estatísticas completas do número ${n} em todas as loterias da Caixa. Frequência, percentual de aparição e última vez que foi sorteado.`,
     alternates: {
       canonical: `/numeros/${n}`,
+      languages: {
+        'pt-BR': `${SITE_URL}/numeros/${n}`,
+      },
+    },
+    openGraph: {
+      title: `Número ${n} - Estatísticas nas Loterias da Caixa`,
+      description: `Estatísticas completas do número ${n} em todas as loterias da Caixa. Frequência, percentual de aparição e última vez que foi sorteado.`,
+      url: `${SITE_URL}/numeros/${n}`,
+      siteName: SITE_NAME,
+      locale: 'pt_BR',
+      type: 'website',
+    },
+    robots: {
+      index: false,
+      follow: true,
     },
   };
 }
@@ -115,19 +125,19 @@ export default async function NumeroPage({ params }: PageProps) {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Inicio',
+        name: 'Início',
         item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Numeros',
+        name: 'Números',
         item: `${SITE_URL}/numeros/1`,
       },
       {
         '@type': 'ListItem',
         position: 3,
-        name: `Numero ${n}`,
+        name: `Número ${n}`,
         item: `${SITE_URL}/numeros/${n}`,
       },
     ],
@@ -145,11 +155,11 @@ export default async function NumeroPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4">
           <nav className="text-sm text-emerald-200 mb-4">
             <Link href="/" className="hover:text-white">
-              Inicio
+              Início
             </Link>
             <span className="mx-2">/</span>
             <Link href="/numeros/1" className="hover:text-white">
-              Numeros
+              Números
             </Link>
             <span className="mx-2">/</span>
             <span>{n}</span>
@@ -160,10 +170,10 @@ export default async function NumeroPage({ params }: PageProps) {
             </div>
             <div>
               <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-                Numero {n}
+                Número {n}
               </h1>
               <p className="text-lg text-emerald-100">
-                Estatisticas detalhadas nas loterias da Caixa
+                Estatísticas detalhadas nas loterias da Caixa
               </p>
             </div>
           </div>
@@ -178,7 +188,7 @@ export default async function NumeroPage({ params }: PageProps) {
               href={`/numeros/${prevNumber}`}
               className="text-emerald-600 hover:underline font-medium flex items-center gap-1"
             >
-              <span>&larr;</span> Numero {prevNumber}
+              <span>&larr;</span> Número {prevNumber}
             </Link>
           ) : (
             <span />
@@ -188,7 +198,7 @@ export default async function NumeroPage({ params }: PageProps) {
               href={`/numeros/${nextNumber}`}
               className="text-emerald-600 hover:underline font-medium flex items-center gap-1"
             >
-              Numero {nextNumber} <span>&rarr;</span>
+              Número {nextNumber} <span>&rarr;</span>
             </Link>
           ) : (
             <span />
@@ -198,7 +208,7 @@ export default async function NumeroPage({ params }: PageProps) {
         {hasError && gameStats.length === 0 && (
           <div className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8 text-center">
             <p className="text-gray-600">
-              Nao foi possivel carregar as estatisticas no momento. Por favor,
+              Não foi possível carregar as estatísticas no momento. Por favor,
               tente novamente mais tarde.
             </p>
           </div>
@@ -251,7 +261,7 @@ export default async function NumeroPage({ params }: PageProps) {
                 {/* Frequency Bar */}
                 <div className="mb-4">
                   <div className="flex justify-between text-xs text-gray-500 mb-1">
-                    <span>Frequencia</span>
+                    <span>Frequência</span>
                     <span>{stats.percentage.toFixed(1)}%</span>
                   </div>
                   <div className="bg-gray-100 rounded-full h-3 overflow-hidden">
@@ -268,7 +278,7 @@ export default async function NumeroPage({ params }: PageProps) {
                   {stats.lastDrawnConcurso ? (
                     <>
                       <p>
-                        Ultimo sorteio:{' '}
+                        Último sorteio:{' '}
                         <strong className="text-gray-900">
                           Concurso {stats.lastDrawnConcurso}
                         </strong>
@@ -284,7 +294,7 @@ export default async function NumeroPage({ params }: PageProps) {
                     </>
                   ) : (
                     <p>
-                      Nao foi sorteado nos ultimos {stats.totalResults}{' '}
+                      Não foi sorteado nos últimos {stats.totalResults}{' '}
                       concursos
                     </p>
                   )}
@@ -304,7 +314,7 @@ export default async function NumeroPage({ params }: PageProps) {
         {/* Quick Navigation to Other Numbers */}
         <div className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="text-lg font-bold text-gray-900 mb-4">
-            Consultar Outro Numero
+            Consultar Outro Número
           </h2>
           <div className="flex flex-wrap gap-1.5">
             {Array.from({ length: 60 }, (_, i) => i + 1).map((num) => (
@@ -326,32 +336,32 @@ export default async function NumeroPage({ params }: PageProps) {
         {/* SEO Content */}
         <SEOContent>
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
-            Analise do Numero {n} nas Loterias
+            Análise do Número {n} nas Loterias
           </h2>
           <div className="prose prose-gray max-w-none space-y-4">
             <p className="text-gray-600">
-              Esta pagina apresenta as{' '}
+              Esta página apresenta as{' '}
               <strong className="text-gray-900">
-                estatisticas detalhadas
+                estatísticas detalhadas
               </strong>{' '}
-              do numero {n} em todas as loterias da Caixa Economica Federal
-              onde ele pode ser sorteado. A analise considera os ultimos 50
+              do número {n} em todas as loterias da Caixa Econômica Federal
+              onde ele pode ser sorteado. A análise considera os últimos 50
               concursos de cada jogo.
             </p>
             <p className="text-gray-600">
-              Um numero e classificado como{' '}
+              Um número é classificado como{' '}
               <strong className="text-gray-900">quente</strong> (🔥) quando
-              aparece com frequencia acima da media esperada, e como{' '}
+              aparece com frequência acima da média esperada, e como{' '}
               <strong className="text-gray-900">frio</strong> (❄️) quando
               aparece abaixo da media. Essa classificacao e relativa a cada
               jogo, pois as probabilidades variam conforme a quantidade de
-              numeros disponiveis e selecionados.
+              números disponíveis e selecionados.
             </p>
             <p className="text-gray-600">
               Lembre-se que cada sorteio e{' '}
               <strong className="text-gray-900">independente</strong> e a
-              frequencia passada nao influencia os resultados futuros. Use
-              essas estatisticas como referencia, mas jogue sempre com
+              frequência passada não influencia os resultados futuros. Use
+              essas estatísticas como referência, mas jogue sempre com
               responsabilidade.
             </p>
           </div>
@@ -361,21 +371,21 @@ export default async function NumeroPage({ params }: PageProps) {
               href="/numeros-quentes-frios"
               className="text-emerald-600 hover:underline font-medium"
             >
-              Numeros Quentes e Frios
+              Números Quentes e Frios
             </Link>
             <span className="text-gray-300">|</span>
             <Link
               href="/previsoes"
               className="text-emerald-600 hover:underline font-medium"
             >
-              Previsoes
+              Previsões
             </Link>
             <span className="text-gray-300">|</span>
             <Link
               href="/gerador"
               className="text-emerald-600 hover:underline font-medium"
             >
-              Gerador de Numeros
+              Gerador de Números
             </Link>
           </div>
         </SEOContent>

@@ -18,6 +18,23 @@ export default function Navigation() {
     setOpenAccordion(null);
   }, [pathname]);
 
+  // Close dropdown on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (openDropdown !== null) {
+          setOpenDropdown(null);
+        }
+        if (mobileOpen) {
+          setMobileOpen(false);
+          setOpenAccordion(null);
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [openDropdown, mobileOpen]);
+
   const handleDropdownEnter = (index: number) => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
@@ -42,7 +59,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="text-emerald-600 font-bold text-xl flex-shrink-0">
-            🍀 Resultados Mega Sena
+            🍀 Lotofácil Resultado
           </Link>
 
           {/* Desktop mega menu */}
@@ -54,7 +71,11 @@ export default function Navigation() {
                 onMouseEnter={() => handleDropdownEnter(catIndex)}
                 onMouseLeave={handleDropdownLeave}
               >
-                <button className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-emerald-600 transition-colors rounded-lg hover:bg-gray-50">
+                <button
+                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-emerald-600 transition-colors rounded-lg hover:bg-gray-50"
+                  aria-expanded={openDropdown === catIndex}
+                  aria-haspopup="true"
+                >
                   {category.title}
                 </button>
 
@@ -86,6 +107,7 @@ export default function Navigation() {
             className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Abrir menu"
+            aria-expanded={mobileOpen}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {mobileOpen ? (
@@ -107,6 +129,7 @@ export default function Navigation() {
                 <button
                   className="flex items-center justify-between w-full py-3 text-left font-medium text-gray-900"
                   onClick={() => toggleAccordion(catIndex)}
+                  aria-expanded={openAccordion === catIndex}
                 >
                   <span>{category.title}</span>
                   <svg

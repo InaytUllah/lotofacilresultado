@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { GAMES, GAME_SLUGS, SITE_URL } from '@/lib/constants';
-import { fetchMultipleLatestResults } from '@/lib/api/lottery';
-import { generateResultBlogPost, generatePredictionBlogPost } from '@/lib/blog';
+import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME } from '@/lib/constants';
+import { generatePredictionBlogPost } from '@/lib/blog';
 import { BlogPost } from '@/lib/types';
 import GameBadge from '@/components/ui/GameBadge';
 import SEOContent from '@/components/ui/SEOContent';
@@ -10,18 +9,21 @@ import SEOContent from '@/components/ui/SEOContent';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Blog - Resultados e Previsões das Loterias',
+  title: 'Blog - Previsões e Análises das Loterias',
   description:
-    'Acompanhe os últimos resultados e previsões de todas as loterias da Caixa. Análises, números sorteados e estatísticas atualizadas.',
+    'Previsões estatísticas e análises de todas as loterias da Caixa. Números quentes, frios, tendências e combinações sugeridas baseadas em dados históricos.',
   alternates: {
     canonical: `${SITE_URL}/blog`,
+    languages: {
+      'pt-BR': `${SITE_URL}/blog`,
+    },
   },
   openGraph: {
-    title: 'Blog - Resultados e Previsões das Loterias',
+    title: 'Blog - Previsões e Análises das Loterias',
     description:
-      'Acompanhe os últimos resultados e previsões de todas as loterias da Caixa. Análises, números sorteados e estatísticas atualizadas.',
+      'Previsões estatísticas e análises de todas as loterias da Caixa. Números quentes, frios, tendências e combinações sugeridas baseadas em dados históricos.',
     url: `${SITE_URL}/blog`,
-    siteName: 'Resultados Mega Sena',
+    siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
   },
@@ -50,20 +52,11 @@ function truncateText(text: string, maxLength: number): string {
 }
 
 export default async function BlogPage() {
-  const results = await fetchMultipleLatestResults();
   const today = getTodayISO();
 
   const posts: BlogPost[] = [];
 
-  // Generate result blog posts from latest results
-  for (const slug of GAME_SLUGS) {
-    const result = results[slug];
-    if (result) {
-      posts.push(generateResultBlogPost(slug, result));
-    }
-  }
-
-  // Generate today's prediction posts for all games
+  // Generate prediction posts for all games (no result posts)
   for (const slug of GAME_SLUGS) {
     posts.push(generatePredictionBlogPost(slug, today));
   }
@@ -81,7 +74,7 @@ export default async function BlogPage() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Inicio',
+        name: 'Início',
         item: SITE_URL,
       },
       {
@@ -100,13 +93,14 @@ export default async function BlogPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
+      <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
       {/* Header */}
       <section className="mb-8">
         <nav className="text-sm text-gray-500 mb-4" aria-label="Breadcrumb">
           <ol className="flex items-center gap-1">
             <li>
               <Link href="/" className="hover:text-gray-700 transition-colors">
-                Inicio
+                Início
               </Link>
             </li>
             <li className="before:content-['/'] before:mx-1">Blog</li>
@@ -114,10 +108,13 @@ export default async function BlogPage() {
         </nav>
 
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
-          Blog de Loterias
+          Blog de Análise Estatística das Loterias
         </h1>
-        <p className="text-lg text-gray-600">
-          Resultados atualizados e previsões estatísticas de todas as loterias da Caixa.
+        <p className="text-lg text-gray-600 mb-1">
+          Análises estatísticas e previsões para os próximos sorteios de todas as loterias da Caixa.
+        </p>
+        <p className="text-sm text-gray-500">
+          Por Equipe Lotofácil Resultado &middot; Baseado em análise de 50+ concursos recentes
         </p>
       </section>
 
@@ -178,23 +175,26 @@ export default async function BlogPage() {
       {/* SEO Content */}
       <SEOContent className="mb-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Sobre o Blog de Loterias
+          Sobre o Blog de Previsões
         </h2>
         <p className="text-gray-600 mb-4">
-          No nosso blog, você encontra os resultados mais recentes de todas as loterias da
-          Caixa Econômica Federal, incluindo Mega-Sena, Lotofácil, Quina, Lotomania,
-          +Milionária, Dia de Sorte, Super Sete, Dupla Sena e Timemania.
+          No nosso blog, publicamos análises estatísticas e previsões para os próximos sorteios
+          de todas as loterias da Caixa Econômica Federal, incluindo Mega-Sena, Lotofácil, Quina,
+          Lotomania, +Milionária, Dia de Sorte, Super Sete, Dupla Sena e Timemania.
         </p>
         <p className="text-gray-600 mb-4">
-          Além dos resultados, publicamos análises estatísticas e previsões para os
-          próximos sorteios, baseadas em dados históricos e frequência dos números
-          sorteados. Acompanhe nosso blog para ficar sempre atualizado.
+          Nossas previsões são baseadas em análise de frequência dos últimos 50+ concursos,
+          identificando números quentes (com maior frequência recente) e números frios
+          (com menor frequência). Cada artigo inclui análise de tendências, metodologia
+          estatística e combinações sugeridas.
         </p>
         <p className="text-gray-600">
-          Todas as informações são atualizadas automaticamente após cada sorteio, garantindo
-          que você tenha acesso aos dados mais recentes das loterias brasileiras.
+          Para os resultados oficiais de cada sorteio, visite as páginas de resultados
+          individuais de cada loteria. Este blog foca exclusivamente em análise preditiva
+          e conteúdo estatístico original.
         </p>
       </SEOContent>
+      </div>
     </>
   );
 }

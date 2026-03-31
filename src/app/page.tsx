@@ -9,16 +9,29 @@ import ResultCard from '@/components/ui/ResultCard';
 import CountdownTimer from '@/components/ui/CountdownTimer';
 import SEOContent from '@/components/ui/SEOContent';
 import ChecklistItem from '@/components/ui/ChecklistItem';
+import LiveResultPoller from '@/components/ui/LiveResultPoller';
 
+// force-dynamic prevents build timeout — API calls happen at request time, not build time
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title:
-    'Resultados Mega Sena Hoje - Lotofacil, Quina e Todas as Loterias da Caixa',
+    'Resultado das Loterias da Caixa Hoje — Mega-Sena, Lotofácil, Quina e Mais',
   description:
-    'Confira os resultados atualizados da Mega-Sena, Lotofacil, Quina, Lotomania, +Milionaria, Dia de Sorte, Super Sete, Dupla Sena e Timemania. Numeros sorteados, premiacao e proximos sorteios.',
+    'Confira os resultados atualizados de todas as loterias da Caixa Econômica Federal. Mega-Sena, Lotofácil, Quina, Lotomania e muito mais. Resultados minutos após o sorteio.',
   alternates: {
     canonical: '/',
+    languages: {
+      'pt-BR': SITE_URL,
+    },
+  },
+  openGraph: {
+    title: 'Resultado das Loterias da Caixa Hoje — Mega-Sena, Lotofácil, Quina e Mais',
+    description: 'Confira os resultados atualizados de todas as loterias da Caixa Econômica Federal. Mega-Sena, Lotofácil, Quina, Lotomania e muito mais. Resultados minutos após o sorteio.',
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    locale: 'pt_BR',
+    type: 'website',
   },
 };
 
@@ -33,6 +46,13 @@ export default async function HomePage() {
 
   return (
     <>
+      {/* Live Result Poller - polls every 10s during draw window (21:00 BRT, all draw days) */}
+      <LiveResultPoller
+        drawTime="21:00"
+        drawDays={[0, 1, 2, 3, 4, 5, 6]}
+        pollInterval={10000}
+      />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-emerald-600 to-emerald-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -41,7 +61,7 @@ export default async function HomePage() {
           </h1>
           <p className="text-lg text-emerald-100 max-w-2xl mb-8">
             Confira os resultados atualizados de todas as loterias da Caixa
-            Economica Federal. Mega-Sena, Lotofacil, Quina e muito mais.
+            Econômica Federal. Mega-Sena, Lotofácil, Quina e muito mais.
           </p>
 
           {/* Badge pills */}
@@ -66,7 +86,7 @@ export default async function HomePage() {
       {/* Latest Results Grid */}
       <section className="max-w-7xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Ultimos Resultados
+          Últimos Resultados
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {GAME_SLUGS.map((slug) => {
@@ -88,7 +108,7 @@ export default async function HomePage() {
                     </span>
                   </div>
                   <p className="text-gray-500 text-sm">
-                    Resultado indisponivel no momento.
+                    Resultado indisponível no momento.
                   </p>
                 </div>
               );
@@ -110,7 +130,7 @@ export default async function HomePage() {
       <section className="bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Proximos Sorteios
+            Próximos Sorteios
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {GAME_SLUGS.map((slug) => {
@@ -131,7 +151,7 @@ export default async function HomePage() {
                   </div>
                   <CountdownTimer
                     targetDate={nextDraw}
-                    label={`Proximo sorteio: ${game.drawTime}h`}
+                    label={`Próximo sorteio: ${game.drawTime}h`}
                   />
                 </div>
               );
@@ -151,12 +171,12 @@ export default async function HomePage() {
             <p>
               As{' '}
               <strong className="text-gray-900">
-                loterias da Caixa Economica Federal
+                loterias da Caixa Econômica Federal
               </strong>{' '}
-              sao os jogos de azar mais populares do Brasil, com milhoes de
+              são os jogos de azar mais populares do Brasil, com milhões de
               apostadores participando dos sorteios semanais. Nosso site oferece
-              os resultados atualizados de todas as modalidades logo apos a
-              apuracao oficial.
+              os resultados atualizados de todas as modalidades logo após a
+              apuração oficial.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-8">
@@ -171,8 +191,8 @@ export default async function HomePage() {
               >
                 Mega-Sena
               </Link>{' '}
-              e a loteria mais famosa do Brasil, com sorteios as tercas, quintas
-              e sabados. O apostador escolhe 6 numeros de 1 a 60 e pode ganhar
+              é a loteria mais famosa do Brasil, com sorteios às terças, quintas
+              e sábados. O apostador escolhe 6 números de 1 a 60 e pode ganhar
               acertando 4, 5 ou 6 dezenas.
             </p>
 
@@ -182,10 +202,10 @@ export default async function HomePage() {
                 href="/lotofacil"
                 className="text-emerald-600 hover:underline font-medium"
               >
-                Lotofacil
+                Lotofácil
               </Link>{' '}
-              e considerada a loteria mais facil de ganhar, com sorteios de
-              segunda a sabado. O jogador marca 15 numeros entre 25, e ganha
+              é considerada a loteria mais fácil de ganhar, com sorteios de
+              segunda a sábado. O jogador marca 15 números entre 25, e ganha
               acertando a partir de 11 dezenas.
             </p>
 
@@ -197,8 +217,8 @@ export default async function HomePage() {
               >
                 Quina
               </Link>{' '}
-              oferece sorteios de segunda a sabado, onde o apostador escolhe 5
-              numeros de 1 a 80. E possivel ganhar acertando de 2 a 5 numeros.
+              oferece sorteios de segunda a sábado, onde o apostador escolhe 5
+              números de 1 a 80. É possível ganhar acertando de 2 a 5 números.
             </p>
 
             <p>
@@ -214,7 +234,7 @@ export default async function HomePage() {
                 href="/mais-milionaria"
                 className="text-emerald-600 hover:underline font-medium"
               >
-                +Milionaria
+                +Milionária
               </Link>
               , o{' '}
               <Link
@@ -248,7 +268,7 @@ export default async function HomePage() {
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-8">
-              Calendario de Sorteios
+              Calendário de Sorteios
             </h3>
 
             <div className="overflow-x-auto">
@@ -262,10 +282,10 @@ export default async function HomePage() {
                       Dias de Sorteio
                     </th>
                     <th className="text-left py-3 pr-4 font-semibold text-gray-900">
-                      Horario
+                      Horário
                     </th>
                     <th className="text-left py-3 font-semibold text-gray-900">
-                      Aposta Minima
+                      Aposta Mínima
                     </th>
                   </tr>
                 </thead>
@@ -301,7 +321,7 @@ export default async function HomePage() {
             </div>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-8">
-              O que voce encontra aqui
+              O que você encontra aqui
             </h3>
 
             <div className="space-y-3">
@@ -309,19 +329,19 @@ export default async function HomePage() {
                 Resultados atualizados de todos os sorteios da Caixa
               </ChecklistItem>
               <ChecklistItem>
-                Premiacao detalhada com numero de ganhadores por faixa
+                Premiação detalhada com número de ganhadores por faixa
               </ChecklistItem>
               <ChecklistItem>
-                Contagem regressiva para os proximos sorteios
+                Contagem regressiva para os próximos sorteios
               </ChecklistItem>
               <ChecklistItem>
-                Estatisticas e analise de numeros quentes e frios
+                Estatísticas e análise de números quentes e frios
               </ChecklistItem>
               <ChecklistItem>
-                Gerador de numeros aleatorios para suas apostas
+                Gerador de números aleatórios para suas apostas
               </ChecklistItem>
               <ChecklistItem>
-                Historico completo de resultados anteriores
+                Histórico completo de resultados anteriores
               </ChecklistItem>
             </div>
           </div>
@@ -338,7 +358,7 @@ export default async function HomePage() {
             name: SITE_NAME,
             url: SITE_URL,
             description:
-              'Resultados atualizados de todas as loterias da Caixa Economica Federal.',
+              'Resultados atualizados de todas as loterias da Caixa Econômica Federal.',
             inLanguage: 'pt-BR',
             potentialAction: {
               '@type': 'SearchAction',
