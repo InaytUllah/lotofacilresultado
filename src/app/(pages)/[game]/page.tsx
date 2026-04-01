@@ -166,10 +166,13 @@ export default async function GamePage({
         </h1>
         <p className="text-white/90 text-lg">{game.description}</p>
 
-        <div className="mt-4 flex flex-wrap gap-4 text-sm text-white/80">
+        <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-white/80">
           <span>Sorteios: {drawDaysText}</span>
           <span>Horário: {game.drawTime} (Horário de Brasília)</span>
           <span>Aposta mínima: {game.minBet}</span>
+          <span className="inline-flex items-center gap-1 bg-red-600 text-white rounded px-2 py-0.5 text-xs font-bold">
+            18+ Jogue com responsabilidade
+          </span>
         </div>
       </section>
 

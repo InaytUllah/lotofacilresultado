@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useSharedTick } from '@/lib/hooks/useSharedTick';
 
 interface CountdownTimerProps {
   targetDate: Date;
@@ -26,14 +26,10 @@ function calcTimeLeft(target: Date): TimeLeft | null {
 }
 
 export default function CountdownTimer({ targetDate, label }: CountdownTimerProps) {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(calcTimeLeft(targetDate));
+  // All CountdownTimer instances share a single setInterval via useSharedTick
+  useSharedTick();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft(calcTimeLeft(targetDate));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [targetDate]);
+  const timeLeft = calcTimeLeft(targetDate);
 
   if (!timeLeft) {
     return (

@@ -145,6 +145,59 @@ export default function SobrePage() {
           </section>
 
           <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
+            <h2 className="mb-4 text-xl font-bold text-gray-900">Política Editorial</h2>
+            <div className="space-y-4 text-gray-700">
+              <p>
+                Nossos dados são obtidos diretamente da{' '}
+                <strong className="text-gray-900">API oficial da Caixa Econômica Federal</strong>{' '}
+                em tempo real. Os resultados são publicados automaticamente minutos após cada
+                sorteio, sem intervenção manual, garantindo máxima precisão e agilidade.
+              </p>
+              <p>
+                Todas as estatísticas, análises de frequência e previsões são geradas por
+                algoritmos matemáticos baseados exclusivamente em dados históricos oficiais.
+                Nenhuma informação é inventada ou manipulada.
+              </p>
+            </div>
+          </section>
+
+          <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
+            <h2 className="mb-4 text-xl font-bold text-gray-900">Equipe Editorial</h2>
+            <div className="space-y-4 text-gray-700">
+              <p>
+                O {SITE_NAME} é mantido por uma equipe dedicada de desenvolvedores e
+                entusiastas de loterias desde 2024. Nossa equipe é responsável por:
+              </p>
+              <ul className="space-y-2">
+                {[
+                  'Desenvolvimento e manutenção da plataforma',
+                  'Verificação da precisão dos dados publicados',
+                  'Criação de conteúdo educativo sobre loterias',
+                  'Desenvolvimento de ferramentas estatísticas',
+                  'Suporte ao usuário e atendimento de dúvidas',
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <svg
+                      className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.5 12.75l6 6 9-13.5"
+                      />
+                    </svg>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
             <h2 className="mb-4 text-xl font-bold text-gray-900">Aviso Importante</h2>
             <p className="text-gray-700">
               O {SITE_NAME} é um site informativo e independente. Não somos afiliados,

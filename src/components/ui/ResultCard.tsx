@@ -60,14 +60,18 @@ export default function ResultCard({
       )}
 
       {/* Estimated next prize */}
-      {result.valorEstimadoProximoConcurso > 0 && (
-        <p className="text-sm text-gray-600 mb-4">
-          Próximo prêmio estimado:{' '}
-          <span className="font-bold text-emerald-600">
-            {formatCurrency(result.valorEstimadoProximoConcurso)}
-          </span>
-        </p>
-      )}
+      <p className="text-sm text-gray-600 mb-4">
+        {result.valorEstimadoProximoConcurso > 0 ? (
+          <>
+            Próximo prêmio estimado:{' '}
+            <span className="font-bold text-emerald-600">
+              {formatCurrency(result.valorEstimadoProximoConcurso)}
+            </span>
+          </>
+        ) : (
+          <span className="text-gray-500 italic">Aguardando apuração do próximo prêmio</span>
+        )}
+      </p>
 
       {/* Prize table */}
       {showPrizes && result.premiacoes.length > 0 && (

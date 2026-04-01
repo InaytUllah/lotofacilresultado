@@ -98,9 +98,20 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <p className="text-center text-gray-500 text-sm">
-            &copy; {currentYear} lotofacilresultado.com. Todos os direitos reservados.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-gray-500">
+            <p>&copy; {currentYear} lotofacilresultado.com. Todos os direitos reservados.</p>
+            <p>
+              Dados oficiais:{' '}
+              <a
+                href="https://loterias.caixa.gov.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-400 hover:text-emerald-300 transition-colors"
+              >
+                Caixa Econômica Federal
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

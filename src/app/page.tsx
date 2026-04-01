@@ -83,6 +83,47 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Featured Jackpot Card */}
+      {(() => {
+        let maxPrize = 0;
+        let jackpotSlug = '';
+        for (const slug of GAME_SLUGS) {
+          const r = results[slug];
+          if (r && r.valorEstimadoProximoConcurso > maxPrize) {
+            maxPrize = r.valorEstimadoProximoConcurso;
+            jackpotSlug = slug;
+          }
+        }
+        if (!jackpotSlug || maxPrize <= 0) return null;
+        const jackpotGame = GAMES[jackpotSlug];
+        const jackpotResult = results[jackpotSlug]!;
+        const formatted = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(maxPrize);
+        return (
+          <section className="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
+            <Link
+              href={`/${jackpotSlug}`}
+              className="block rounded-2xl border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-yellow-50 p-6 sm:p-8 shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-200 rounded-full px-3 py-1 mb-3">
+                    🏆 Maior Prêmio Estimado
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                    {jackpotGame.emoji} {jackpotGame.name} — Concurso {jackpotResult.concurso + 1}
+                  </h2>
+                  <p className="text-gray-600 mt-1">Próximo sorteio estimado em</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl sm:text-4xl font-extrabold text-emerald-600">{formatted}</p>
+                  <p className="text-sm text-emerald-700 font-medium mt-1">Ver detalhes &rarr;</p>
+                </div>
+              </div>
+            </Link>
+          </section>
+        );
+      })()}
+
       {/* Latest Results Grid */}
       <section className="max-w-7xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -132,7 +173,33 @@ export default async function HomePage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Próximos Sorteios
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Mobile: horizontal scroll; Desktop: grid */}
+          <div className="flex md:hidden gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
+            {GAME_SLUGS.map((slug) => {
+              const game = GAMES[slug];
+              const nextDraw = getNextDrawDate(game.drawDays, game.drawTime);
+              return (
+                <div
+                  key={slug}
+                  className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm snap-start flex-shrink-0 w-[280px]"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full font-medium text-white"
+                      style={{ backgroundColor: game.color }}
+                    >
+                      {game.emoji} {game.name}
+                    </span>
+                  </div>
+                  <CountdownTimer
+                    targetDate={nextDraw}
+                    label={`Próximo: ${game.drawTime}h`}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {GAME_SLUGS.map((slug) => {
               const game = GAMES[slug];
               const nextDraw = getNextDrawDate(game.drawDays, game.drawTime);
@@ -192,8 +259,10 @@ export default async function HomePage() {
                 Mega-Sena
               </Link>{' '}
               é a loteria mais famosa do Brasil, com sorteios às terças, quintas
-              e sábados. O apostador escolhe 6 números de 1 a 60 e pode ganhar
-              acertando 4, 5 ou 6 dezenas.
+              e sábados às 21h. O apostador escolhe 6 números de 1 a 60 e pode ganhar
+              acertando 4, 5 ou 6 dezenas. A probabilidade de acertar a Sena com uma aposta
+              simples é de 1 em 50.063.860. A aposta mínima custa R$ 5,00 e os prêmios
+              frequentemente ultrapassam R$ 100 milhões quando acumulados.
             </p>
 
             <p>
@@ -206,7 +275,10 @@ export default async function HomePage() {
               </Link>{' '}
               é considerada a loteria mais fácil de ganhar, com sorteios de
               segunda a sábado. O jogador marca 15 números entre 25, e ganha
-              acertando a partir de 11 dezenas.
+              acertando a partir de 11 dezenas. A chance de acertar os 15 números é de
+              1 em 3.268.760, mas a probabilidade de ganhar qualquer prêmio (11 acertos)
+              é de aproximadamente 1 em 11. A aposta mínima é de apenas R$ 3,00, tornando-a
+              acessível para todos os perfis de apostadores.
             </p>
 
             <p>
@@ -218,53 +290,90 @@ export default async function HomePage() {
                 Quina
               </Link>{' '}
               oferece sorteios de segunda a sábado, onde o apostador escolhe 5
-              números de 1 a 80. É possível ganhar acertando de 2 a 5 números.
+              números de 1 a 80. É possível ganhar acertando de 2 a 5 números, com
+              probabilidade de 1 em 24.040.016 para o prêmio principal. A aposta mínima
+              custa R$ 2,50 e a Quina de São João, realizada no dia 24 de junho, não acumula.
             </p>
 
             <p>
-              Outras modalidades incluem a{' '}
+              A{' '}
               <Link
                 href="/lotomania"
                 className="text-emerald-600 hover:underline font-medium"
               >
                 Lotomania
-              </Link>
-              , a{' '}
+              </Link>{' '}
+              é uma modalidade única onde o apostador escolhe 50 números de 00 a 99.
+              São sorteados 20 números por concurso, e quem acertar todos os 20 ou
+              nenhum dos 20 leva o prêmio máximo. Os sorteios acontecem às segundas,
+              quartas e sextas-feiras, com aposta fixa de R$ 3,00.
+            </p>
+
+            <p>
+              A{' '}
               <Link
                 href="/mais-milionaria"
                 className="text-emerald-600 hover:underline font-medium"
               >
                 +Milionária
-              </Link>
-              , o{' '}
+              </Link>{' '}
+              é a loteria com os maiores prêmios do Brasil, com mínimo garantido de
+              R$ 10 milhões. O apostador escolhe 6 números de 1 a 50 mais 2 trevos
+              de 1 a 6. Com sorteios às quartas e sábados, a probabilidade de acertar
+              tudo é de 1 em 238.360.500.
+            </p>
+
+            <p>
+              O{' '}
               <Link
                 href="/dia-de-sorte"
                 className="text-emerald-600 hover:underline font-medium"
               >
                 Dia de Sorte
-              </Link>
-              , o{' '}
+              </Link>{' '}
+              combina números e meses: o apostador escolhe 7 números de 1 a 31 e um
+              mês da sorte. Sorteios às terças, quintas e sábados. A chance de
+              acertar o mês é de 1 em 12, proporcionando um prêmio adicional.
+            </p>
+
+            <p>
+              O{' '}
               <Link
                 href="/super-sete"
                 className="text-emerald-600 hover:underline font-medium"
               >
                 Super Sete
-              </Link>
-              , a{' '}
+              </Link>{' '}
+              funciona com 7 colunas, cada uma com números de 0 a 9. O apostador
+              escolhe um número por coluna e ganha acertando de 3 a 7 colunas.
+              Sorteios às segundas, quartas e sextas, com aposta mínima de R$ 2,50.
+            </p>
+
+            <p>
+              A{' '}
               <Link
                 href="/dupla-sena"
                 className="text-emerald-600 hover:underline font-medium"
               >
                 Dupla Sena
               </Link>{' '}
-              e a{' '}
+              oferece duas chances de ganhar no mesmo concurso: são realizados dois
+              sorteios de 6 números (de 1 a 50) por concurso. Sorteios às segundas,
+              quartas e sextas-feiras, com aposta mínima de R$ 2,50.
+            </p>
+
+            <p>
+              A{' '}
               <Link
                 href="/timemania"
                 className="text-emerald-600 hover:underline font-medium"
               >
                 Timemania
-              </Link>
-              .
+              </Link>{' '}
+              une futebol e loteria: o apostador escolhe 10 números de 1 a 80 e um
+              time do coração entre 80 clubes brasileiros. São sorteados 7 números,
+              e acertar o time do coração também garante prêmio. Sorteios às terças,
+              quintas e sábados, com aposta única de R$ 3,50.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-8">

@@ -61,6 +61,12 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://loteriascaixa-api.herokuapp.com" />
+        <link rel="dns-prefetch" href="https://loteriascaixa-api.herokuapp.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      </head>
       <body className="min-h-screen flex flex-col">
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
