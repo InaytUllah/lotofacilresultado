@@ -8,6 +8,7 @@ import Navigation from '@/components/layout/Navigation';
 import Footer from '@/components/layout/Footer';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import ServiceWorkerRegistration from '@/components/ui/ServiceWorkerRegistration';
+import NotificationBell from '@/components/ui/NotificationBell';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6YPCF13JT5';
 
@@ -131,6 +132,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <ThemeToggle />
+        <NotificationBell />
         <ServiceWorkerRegistration />
       </body>
     </html>

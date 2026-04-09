@@ -53,6 +53,11 @@ export async function generateMetadata({
       siteName: SITE_NAME,
       locale: 'pt_BR',
       type: 'website',
+      images: [{
+        url: `/api/og?title=${encodeURIComponent(`Resultado ${game.name}`)}&game=${encodeURIComponent(game.name)}&color=${encodeURIComponent(game.color)}`,
+        width: 1200,
+        height: 630,
+      }],
     },
   };
 }
@@ -585,6 +590,36 @@ export default async function GamePage({
               <div>
                 <p className="font-medium text-gray-800 text-sm">Histórico</p>
                 <p className="text-xs text-gray-500">Resultados anteriores</p>
+              </div>
+            </Link>
+            <Link
+              href="/estatisticas"
+              className="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:border-gray-300 transition-colors"
+            >
+              <span className="text-lg">📈</span>
+              <div>
+                <p className="font-medium text-gray-800 text-sm">Dashboard Estatístico</p>
+                <p className="text-xs text-gray-500">Gráficos e visualizações</p>
+              </div>
+            </Link>
+            <Link
+              href="/meus-numeros"
+              className="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:border-gray-300 transition-colors"
+            >
+              <span className="text-lg">💾</span>
+              <div>
+                <p className="font-medium text-gray-800 text-sm">Meus Números</p>
+                <p className="text-xs text-gray-500">Salve e confira suas apostas</p>
+              </div>
+            </Link>
+            <Link
+              href="/comparar"
+              className="flex items-center gap-2 rounded-lg border border-gray-200 p-3 hover:border-gray-300 transition-colors"
+            >
+              <span className="text-lg">🔄</span>
+              <div>
+                <p className="font-medium text-gray-800 text-sm">Comparar Sorteios</p>
+                <p className="text-xs text-gray-500">Compare dois concursos</p>
               </div>
             </Link>
           </div>

@@ -8,6 +8,7 @@ export async function GET(request: Request) {
   const title = searchParams.get("title") || "Resultados das Loterias";
   const game = searchParams.get("game") || "";
   const numbers = searchParams.get("numbers") || "";
+  const color = searchParams.get("color") || "#059669";
 
   const numberList = numbers
     ? numbers.split(",").map((n) => n.trim())
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #059669, #065f46)",
+          background: `linear-gradient(135deg, ${color}, ${color}dd)`,
           fontFamily: "sans-serif",
         }}
       >
@@ -106,7 +107,7 @@ export async function GET(request: Request) {
                   justifyContent: "center",
                   fontSize: 32,
                   fontWeight: 700,
-                  color: "#059669",
+                  color: color,
                 }}
               >
                 {num}
