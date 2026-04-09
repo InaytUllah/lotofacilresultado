@@ -336,6 +336,7 @@ export const NAV_CATEGORIES = [
       { href: '/gerador', emoji: '🎰', title: 'Gerador de Números', description: 'Gere combinações aleatórias' },
       { href: '/numero-da-sorte', emoji: '🍀', title: 'Número da Sorte', description: 'Gere números personalizados' },
       { href: '/bolao', emoji: '👥', title: 'Calculadora de Bolão', description: 'Calcule custos e chances do bolão' },
+      { href: '/como-resgatar-premio', emoji: '🏧', title: 'Como Resgatar Prêmio', description: 'Guia para resgatar seu prêmio' },
       { href: '/como-jogar', emoji: '📖', title: 'Como Jogar', description: 'Regras e dicas para cada loteria' },
       { href: '/probabilidades', emoji: '📊', title: 'Probabilidades', description: 'Chances de ganhar em cada loteria' },
       { href: '/historico', emoji: '📅', title: 'Histórico', description: 'Resultados anteriores e download CSV' },

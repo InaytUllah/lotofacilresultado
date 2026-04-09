@@ -15,7 +15,7 @@ export const revalidate = 300; // ISR: revalidate every 5 minutes
 export const dynamicParams = true;
 
 export function generateStaticParams() {
-  return [];
+  return GAME_SLUGS.map((slug) => ({ game: slug }));
 }
 
 export async function generateMetadata({
