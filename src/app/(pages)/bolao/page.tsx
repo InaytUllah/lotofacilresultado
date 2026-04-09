@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Calculadora%20de%20Bol%C3%A3o&color=%23059669', width: 1200, height: 630 }],
   },
 };
 

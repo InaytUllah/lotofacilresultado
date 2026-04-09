@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Hist%C3%B3rico%20de%20Resultados&color=%23059669', width: 1200, height: 630 }],
   },
 };
 

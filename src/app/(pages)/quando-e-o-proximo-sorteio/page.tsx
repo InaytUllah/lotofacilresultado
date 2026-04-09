@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Pr%C3%B3ximo%20Sorteio&color=%23059669', width: 1200, height: 630 }],
   },
 };
 
