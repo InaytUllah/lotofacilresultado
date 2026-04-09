@@ -230,6 +230,7 @@ export default async function HomepageResults() {
             { href: '/numeros-quentes-frios', emoji: '🔥', title: 'Quentes e Frios', desc: 'Frequência dos números' },
             { href: '/meus-numeros', emoji: '💾', title: 'Meus Números', desc: 'Salve suas apostas' },
             { href: '/comparar', emoji: '🔄', title: 'Comparar', desc: 'Compare dois sorteios' },
+            { href: '/acumulados', emoji: '💰', title: 'Acumulados', desc: 'Prêmios acumulados' },
             { href: '/bolao', emoji: '🤝', title: 'Bolão', desc: 'Calcule cotas e custos' },
           ].map((tool) => (
             <Link
