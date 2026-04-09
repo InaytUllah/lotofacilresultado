@@ -319,6 +319,20 @@ export default async function HistoricoPage({ searchParams }: HistoricoPageProps
             >
               Gerador de Números
             </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/estatisticas"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Dashboard Estatístico
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/meus-numeros"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Meus Números
+            </Link>
           </div>
         </SEOContent>
 

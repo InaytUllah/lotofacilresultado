@@ -296,6 +296,20 @@ export default async function NumerosQuentesFriosPage() {
             >
               Histórico de Resultados
             </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/estatisticas"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Dashboard Estatístico
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/comparar"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Comparar Sorteios
+            </Link>
           </div>
         </SEOContent>
 

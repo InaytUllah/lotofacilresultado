@@ -125,6 +125,27 @@ export default function GeradorPage() {
             >
               Probabilidades
             </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/meus-numeros"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Meus Números
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/estatisticas"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Dashboard Estatístico
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/numero-da-sorte"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Número da Sorte
+            </Link>
           </div>
         </SEOContent>
 

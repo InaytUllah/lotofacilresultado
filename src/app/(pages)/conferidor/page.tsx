@@ -129,6 +129,27 @@ export default function ConferidorPage() {
             >
               Probabilidades
             </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/meus-numeros"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Meus Números
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/comparar"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Comparar Sorteios
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/estatisticas"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Dashboard Estatístico
+            </Link>
           </div>
         </SEOContent>
 

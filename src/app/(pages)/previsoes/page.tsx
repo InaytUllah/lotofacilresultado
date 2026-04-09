@@ -88,6 +88,10 @@ export default function PrevisoesPage() {
             <Link href="/gerador" className="text-emerald-600 hover:underline font-medium">Gerador de Números</Link>
             <span className="text-gray-300">|</span>
             <Link href="/probabilidades" className="text-emerald-600 hover:underline font-medium">Probabilidades</Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/estatisticas" className="text-emerald-600 hover:underline font-medium">Dashboard Estatístico</Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/comparar" className="text-emerald-600 hover:underline font-medium">Comparar Sorteios</Link>
           </div>
         </SEOContent>
 
