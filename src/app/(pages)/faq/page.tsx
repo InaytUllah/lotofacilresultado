@@ -230,6 +230,27 @@ export default function FAQPage() {
               >
                 Probabilidades
               </a>
+              . Confira também nossas{' '}
+              <a
+                href="/dicas-para-apostar"
+                className="text-emerald-600 hover:underline font-medium"
+              >
+                Dicas para Apostar
+              </a>
+              , o{' '}
+              <a
+                href="/glossario"
+                className="text-emerald-600 hover:underline font-medium"
+              >
+                Glossário de Loteria
+              </a>
+              {' '}e saiba{' '}
+              <a
+                href="/como-resgatar-premio"
+                className="text-emerald-600 hover:underline font-medium"
+              >
+                como resgatar seu prêmio
+              </a>
               . E lembre-se de jogar com{' '}
               <a
                 href="/jogo-responsavel"

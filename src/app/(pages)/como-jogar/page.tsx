@@ -456,6 +456,28 @@ export default function ComoJogarPage() {
               aposta também uma contribuição para a sociedade brasileira.
             </p>
           </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href="/dicas-para-apostar" className="text-emerald-600 hover:underline font-medium">
+              Dicas para Apostar
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="/glossario" className="text-emerald-600 hover:underline font-medium">
+              Glossário de Loteria
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="/como-resgatar-premio" className="text-emerald-600 hover:underline font-medium">
+              Como Resgatar Prêmio
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="/probabilidades" className="text-emerald-600 hover:underline font-medium">
+              Probabilidades
+            </a>
+            <span className="text-gray-300">|</span>
+            <a href="/conferidor" className="text-emerald-600 hover:underline font-medium">
+              Conferidor de Apostas
+            </a>
+          </div>
         </section>
       </div>
     </>

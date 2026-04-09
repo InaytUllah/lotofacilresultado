@@ -63,6 +63,9 @@ export default function NotFound() {
               { href: '/historico', label: 'Histórico' },
               { href: '/quando-e-o-proximo-sorteio', label: 'Próximo Sorteio' },
               { href: '/maiores-premios', label: 'Maiores Prêmios' },
+              { href: '/dicas-para-apostar', label: 'Dicas' },
+              { href: '/glossario', label: 'Glossário' },
+              { href: '/como-resgatar-premio', label: 'Resgatar Prêmio' },
               { href: '/blog', label: 'Blog' },
             ].map((link) => (
               <Link

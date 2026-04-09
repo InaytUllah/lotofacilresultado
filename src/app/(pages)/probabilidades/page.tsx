@@ -308,6 +308,20 @@ export default function ProbabilidadesPage() {
               >
                 perguntas frequentes
               </a>
+              . Veja também nossas{' '}
+              <a
+                href="/dicas-para-apostar"
+                className="text-emerald-600 hover:underline font-medium"
+              >
+                dicas para apostar
+              </a>
+              {' '}e o{' '}
+              <a
+                href="/glossario"
+                className="text-emerald-600 hover:underline font-medium"
+              >
+                glossário de loteria
+              </a>
               .
             </p>
           </div>
