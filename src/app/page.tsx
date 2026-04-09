@@ -162,6 +162,40 @@ export default async function HomePage() {
         <HomepageResults />
       </div>
 
+      {/* Quick Access — renders INSTANTLY (no API needed) */}
+      <section className="max-w-7xl mx-auto px-4 py-10">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          Explore
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {[
+            { href: '/acumulados', emoji: '💰', label: 'Loterias Acumuladas' },
+            { href: '/quando-e-o-proximo-sorteio', emoji: '⏰', label: 'Próximo Sorteio' },
+            { href: '/maiores-premios', emoji: '🏆', label: 'Maiores Prêmios' },
+            { href: '/conferidor', emoji: '✅', label: 'Conferidor de Apostas' },
+            { href: '/gerador', emoji: '🎰', label: 'Gerador de Números' },
+            { href: '/simulador', emoji: '🧪', label: 'Simulador' },
+            { href: '/dicas-para-apostar', emoji: '💡', label: 'Dicas para Apostar' },
+            { href: '/como-jogar', emoji: '📖', label: 'Como Jogar' },
+            { href: '/probabilidades', emoji: '📊', label: 'Probabilidades' },
+            { href: '/glossario', emoji: '📚', label: 'Glossário' },
+            { href: '/como-resgatar-premio', emoji: '🏧', label: 'Resgatar Prêmio' },
+            { href: '/resultados-ao-vivo', emoji: '🔴', label: 'Ao Vivo' },
+            { href: '/qual-loteria-jogar', emoji: '🤔', label: 'Qual Loteria?' },
+            { href: '/historico', emoji: '📅', label: 'Histórico' },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-200 bg-white hover:border-emerald-300 hover:bg-emerald-50 transition-colors text-sm font-medium text-gray-700"
+            >
+              <span>{item.emoji}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* Next Draws Countdown — renders INSTANTLY (no API needed) */}
       <section className="bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4">

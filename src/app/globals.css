@@ -165,6 +165,18 @@ body {
   border-color: #991b1b;
 }
 
+.dark .bg-blue-50 {
+  background-color: #1e2a3a;
+}
+
+.dark .border-blue-200 {
+  border-color: #1e40af;
+}
+
+.dark .bg-emerald-50 {
+  background-color: #0d2818;
+}
+
 .dark .border-amber-200 {
   border-color: #92400e;
 }

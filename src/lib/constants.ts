@@ -336,6 +336,8 @@ export const NAV_CATEGORIES = [
       { href: '/gerador', emoji: '🎰', title: 'Gerador de Números', description: 'Gere combinações aleatórias' },
       { href: '/numero-da-sorte', emoji: '🍀', title: 'Número da Sorte', description: 'Gere números personalizados' },
       { href: '/bolao', emoji: '👥', title: 'Calculadora de Bolão', description: 'Calcule custos e chances do bolão' },
+      { href: '/resultados-ao-vivo', emoji: '🔴', title: 'Resultados ao Vivo', description: 'Sorteios em tempo real' },
+      { href: '/qual-loteria-jogar', emoji: '🤔', title: 'Qual Loteria Jogar?', description: 'Compare todas as loterias' },
       { href: '/como-resgatar-premio', emoji: '🏧', title: 'Como Resgatar Prêmio', description: 'Guia para resgatar seu prêmio' },
       { href: '/dicas-para-apostar', emoji: '💡', title: 'Dicas para Apostar', description: 'Estratégias e orientações' },
       { href: '/glossario', emoji: '📚', title: 'Glossário', description: 'Termos e definições de loteria' },
