@@ -623,6 +623,29 @@ export default async function GamePage({
               </div>
             </Link>
           </div>
+
+          {/* Content links */}
+          <div className="mt-6 flex flex-wrap gap-3 pt-4 border-t border-gray-200">
+            <Link href="/qual-loteria-jogar" className="text-emerald-600 hover:underline text-sm font-medium">
+              Qual Loteria Jogar?
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/dicas-para-apostar" className="text-emerald-600 hover:underline text-sm font-medium">
+              Dicas para Apostar
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/como-resgatar-premio" className="text-emerald-600 hover:underline text-sm font-medium">
+              Como Resgatar Prêmio
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/glossario" className="text-emerald-600 hover:underline text-sm font-medium">
+              Glossário
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/resultados-ao-vivo" className="text-emerald-600 hover:underline text-sm font-medium">
+              Ao Vivo
+            </Link>
+          </div>
         </SEOContent>
       )}
 

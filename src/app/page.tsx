@@ -107,6 +107,22 @@ export default async function HomePage() {
     })),
   };
 
+  // SiteNavigationElement schema
+  const siteNavSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SiteNavigationElement',
+    name: 'Navegação Principal',
+    hasPart: [
+      { '@type': 'WebPage', name: 'Resultados ao Vivo', url: `${SITE_URL}/resultados-ao-vivo` },
+      { '@type': 'WebPage', name: 'Loterias Acumuladas', url: `${SITE_URL}/acumulados` },
+      { '@type': 'WebPage', name: 'Conferidor de Apostas', url: `${SITE_URL}/conferidor` },
+      { '@type': 'WebPage', name: 'Gerador de Números', url: `${SITE_URL}/gerador` },
+      { '@type': 'WebPage', name: 'Como Jogar', url: `${SITE_URL}/como-jogar` },
+      { '@type': 'WebPage', name: 'Probabilidades', url: `${SITE_URL}/probabilidades` },
+      { '@type': 'WebPage', name: 'Qual Loteria Jogar?', url: `${SITE_URL}/qual-loteria-jogar` },
+    ],
+  };
+
   return (
     <>
       {/* FAQPage JSON-LD */}
@@ -118,6 +134,11 @@ export default async function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      {/* SiteNavigationElement JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavSchema) }}
       />
 
       {/* Live Result Poller */}
