@@ -162,6 +162,89 @@ export default async function HomepageResults() {
         </div>
       </section>
 
+      {/* Jackpot Ranking */}
+      {(() => {
+        const accumulated = GAME_SLUGS
+          .map((slug) => ({
+            slug,
+            game: GAMES[slug],
+            result: results[slug],
+            prize: results[slug]?.valorEstimadoProximoConcurso || 0,
+          }))
+          .filter((item) => item.prize > 0)
+          .sort((a, b) => b.prize - a.prize);
+
+        if (accumulated.length === 0) return null;
+
+        return (
+          <section className="max-w-7xl mx-auto px-4 pb-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Ranking de Prêmios Acumulados
+            </h2>
+            <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+              {accumulated.map((item, index) => (
+                <Link
+                  key={item.slug}
+                  href={`/${item.slug}`}
+                  className={`flex items-center gap-4 p-4 sm:p-5 hover:bg-gray-50 transition-colors ${
+                    index < accumulated.length - 1 ? 'border-b border-gray-100' : ''
+                  }`}
+                >
+                  <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                    index === 0 ? 'bg-amber-100 text-amber-700' :
+                    index === 1 ? 'bg-gray-100 text-gray-600' :
+                    index === 2 ? 'bg-orange-100 text-orange-700' :
+                    'bg-gray-50 text-gray-500'
+                  }`}>
+                    {index + 1}º
+                  </span>
+                  <span className="text-xl">{item.game.emoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-gray-900 truncate">{item.game.name}</p>
+                    <p className="text-xs text-gray-500">Concurso {(item.result?.concurso || 0) + 1}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="font-bold text-emerald-600 text-lg">{formatCurrency(item.prize)}</p>
+                    {item.result?.acumulado && (
+                      <span className="text-xs font-medium text-amber-600">Acumulado</span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* Quick Tools */}
+      <section className="max-w-7xl mx-auto px-4 pb-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          Ferramentas
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[
+            { href: '/conferidor', emoji: '✅', title: 'Conferidor', desc: 'Confira sua aposta' },
+            { href: '/gerador', emoji: '🎲', title: 'Gerador', desc: 'Gere números aleatórios' },
+            { href: '/simulador', emoji: '🧪', title: 'Simulador', desc: 'Teste seus números' },
+            { href: '/estatisticas', emoji: '📈', title: 'Estatísticas', desc: 'Gráficos e análises' },
+            { href: '/numeros-quentes-frios', emoji: '🔥', title: 'Quentes e Frios', desc: 'Frequência dos números' },
+            { href: '/meus-numeros', emoji: '💾', title: 'Meus Números', desc: 'Salve suas apostas' },
+            { href: '/comparar', emoji: '🔄', title: 'Comparar', desc: 'Compare dois sorteios' },
+            { href: '/bolao', emoji: '🤝', title: 'Bolão', desc: 'Calcule cotas e custos' },
+          ].map((tool) => (
+            <Link
+              key={tool.href}
+              href={tool.href}
+              className="rounded-xl border border-gray-200 bg-white p-4 hover:shadow-md hover:border-gray-300 transition-all group"
+            >
+              <span className="text-2xl block mb-2">{tool.emoji}</span>
+              <p className="font-semibold text-gray-900 text-sm group-hover:text-emerald-600 transition-colors">{tool.title}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{tool.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* Quick Stats */}
       <section className="bg-emerald-50 py-12">
         <div className="max-w-7xl mx-auto px-4">

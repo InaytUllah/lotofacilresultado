@@ -390,6 +390,20 @@ export default async function NumeroPage({ params }: PageProps) {
             >
               Gerador de Números
             </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/estatisticas"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Dashboard Estatístico
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link
+              href="/conferidor"
+              className="text-emerald-600 hover:underline font-medium"
+            >
+              Conferidor de Apostas
+            </Link>
           </div>
         </SEOContent>
       </div>
