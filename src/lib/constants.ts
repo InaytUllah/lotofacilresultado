@@ -320,6 +320,8 @@ export const NAV_CATEGORIES = [
       { href: '/previsoes', emoji: '🔮', title: 'Análise Estatística', description: 'Análise estatística para próximos sorteios' },
       { href: '/numeros-quentes-frios', emoji: '🔥', title: 'Números Quentes e Frios', description: 'Frequência dos números sorteados' },
       { href: '/numeros/1', emoji: '🔢', title: 'Estatísticas por Número', description: 'Análise detalhada de cada número' },
+      { href: '/estatisticas', emoji: '📈', title: 'Dashboard Estatístico', description: 'Visualizações dos últimos sorteios' },
+      { href: '/comparar', emoji: '🔄', title: 'Comparar Sorteios', description: 'Compare dois concursos lado a lado' },
     ],
   },
   {
@@ -329,6 +331,7 @@ export const NAV_CATEGORIES = [
       { href: '/meus-numeros', emoji: '💾', title: 'Meus Números', description: 'Salve e confira suas apostas' },
       { href: '/simulador', emoji: '🧪', title: 'Simulador', description: 'Teste seus números nos sorteios anteriores' },
       { href: '/gerador', emoji: '🎰', title: 'Gerador de Números', description: 'Gere combinações aleatórias' },
+      { href: '/numero-da-sorte', emoji: '🍀', title: 'Número da Sorte', description: 'Gere números personalizados' },
       { href: '/bolao', emoji: '👥', title: 'Calculadora de Bolão', description: 'Calcule custos e chances do bolão' },
       { href: '/como-jogar', emoji: '📖', title: 'Como Jogar', description: 'Regras e dicas para cada loteria' },
       { href: '/probabilidades', emoji: '📊', title: 'Probabilidades', description: 'Chances de ganhar em cada loteria' },
