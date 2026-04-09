@@ -149,6 +149,34 @@ body {
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3);
 }
 
+.dark .bg-gray-100 {
+  background-color: #1f2937;
+}
+
+.dark .bg-amber-50 {
+  background-color: #292524;
+}
+
+.dark .bg-red-50 {
+  background-color: #2a1215;
+}
+
+.dark .border-red-200 {
+  border-color: #991b1b;
+}
+
+.dark .border-amber-200 {
+  border-color: #92400e;
+}
+
+.dark .text-gray-400 {
+  color: #6b7280;
+}
+
+.dark .hover\:border-gray-300:hover {
+  border-color: #4b5563;
+}
+
 .dark ::-webkit-scrollbar-track {
   background: #1f2937;
 }

@@ -99,7 +99,7 @@ export default function RootLayout({
               '@type': 'Organization',
               name: 'Lotofácil Resultado',
               url: SITE_URL,
-              logo: `${SITE_URL}/icon.png`,
+              logo: `${SITE_URL}/api/icon?size=512`,
               sameAs: [],
             }),
           }}
