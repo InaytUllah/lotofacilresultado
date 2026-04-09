@@ -31,6 +31,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Loterias%20Acumuladas&color=%23d97706', width: 1200, height: 630 }],
   },
 };
 

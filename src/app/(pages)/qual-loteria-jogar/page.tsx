@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Qual%20Loteria%20Jogar%3F&color=%239333ea', width: 1200, height: 630 }],
   },
 };
 

@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Como%20Resgatar%20Pr%C3%AAmio&color=%23059669', width: 1200, height: 630 }],
   },
 };
 

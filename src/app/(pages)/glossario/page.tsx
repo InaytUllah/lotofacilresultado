@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Gloss%C3%A1rio%20de%20Loteria&color=%234f46e5', width: 1200, height: 630 }],
   },
 };
 

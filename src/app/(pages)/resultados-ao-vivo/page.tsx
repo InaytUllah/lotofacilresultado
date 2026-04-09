@@ -26,6 +26,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Resultados%20ao%20Vivo&color=%23dc2626', width: 1200, height: 630 }],
   },
 };
 

@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: 'pt_BR',
     type: 'website',
+    images: [{ url: '/api/og?title=Dicas%20para%20Apostar&color=%232563eb', width: 1200, height: 630 }],
   },
 };
 
