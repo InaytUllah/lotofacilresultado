@@ -327,6 +327,7 @@ export const NAV_CATEGORIES = [
   {
     title: 'Ferramentas & Info',
     items: [
+      { href: '/acumulados', emoji: '💰', title: 'Loterias Acumuladas', description: 'Veja todos os prêmios acumulados' },
       { href: '/conferidor', emoji: '✅', title: 'Conferidor de Apostas', description: 'Confira se seus números foram sorteados' },
       { href: '/meus-numeros', emoji: '💾', title: 'Meus Números', description: 'Salve e confira suas apostas' },
       { href: '/simulador', emoji: '🧪', title: 'Simulador', description: 'Teste seus números nos sorteios anteriores' },

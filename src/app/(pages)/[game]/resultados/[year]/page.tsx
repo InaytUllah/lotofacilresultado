@@ -136,7 +136,7 @@ export default async function YearlyArchivePage({
           <ol className="flex items-center gap-1 flex-wrap">
             <li>
               <Link href="/" className="hover:text-white transition-colors">
-                In&iacute;cio
+                Início
               </Link>
             </li>
             <li className="before:content-['/'] before:mx-1">
@@ -191,7 +191,7 @@ export default async function YearlyArchivePage({
 
         {concursos.length === 0 ? (
           <p className="text-gray-500 text-center py-8">
-            Nenhum concurso encontrado para este per&iacute;odo.
+            Nenhum concurso encontrado para este período.
           </p>
         ) : (
           <>
@@ -295,22 +295,22 @@ export default async function YearlyArchivePage({
         </h2>
         <div className="prose prose-gray max-w-none text-gray-600 space-y-3">
           <p>
-            Nesta p&aacute;gina voc&ecirc; encontra todos os resultados dos concursos da{' '}
+            Nesta página você encontra todos os resultados dos concursos da{' '}
             <strong>{game.name}</strong> realizados no ano de <strong>{year}</strong>.
             A {game.name} realiza sorteios {game.drawDays.length} vezes por semana,
             totalizando aproximadamente {drawsPerYear} concursos por ano.
           </p>
           <p>
-            Clique no n&uacute;mero de qualquer concurso para ver o resultado completo,
-            incluindo os n&uacute;meros sorteados, premia&ccedil;&atilde;o, quantidade de
-            ganhadores e valor acumulado. Os resultados s&atilde;o atualizados
-            automaticamente ap&oacute;s cada sorteio.
+            Clique no número de qualquer concurso para ver o resultado completo,
+            incluindo os números sorteados, premiação, quantidade de
+            ganhadores e valor acumulado. Os resultados são atualizados
+            automaticamente após cada sorteio.
           </p>
           <p>
-            A {game.name} &eacute; uma das loterias mais populares do Brasil, operada pela
-            Caixa Econ&ocirc;mica Federal. {game.description} Para jogar, voc&ecirc; escolhe{' '}
-            {game.selectNumbers} n&uacute;meros de 1 a {game.maxNumber}. As apostas
-            podem ser feitas em casas lot&eacute;ricas ou pelo site da Caixa.
+            A {game.name} é uma das loterias mais populares do Brasil, operada pela
+            Caixa Econômica Federal. {game.description} Para jogar, você escolhe{' '}
+            {game.selectNumbers} números de 1 a {game.maxNumber}. As apostas
+            podem ser feitas em casas lotéricas ou pelo site da Caixa.
           </p>
         </div>
       </SEOContent>
