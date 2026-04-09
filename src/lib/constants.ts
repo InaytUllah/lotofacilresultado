@@ -326,8 +326,10 @@ export const NAV_CATEGORIES = [
     title: 'Ferramentas & Info',
     items: [
       { href: '/conferidor', emoji: '✅', title: 'Conferidor de Apostas', description: 'Confira se seus números foram sorteados' },
+      { href: '/meus-numeros', emoji: '💾', title: 'Meus Números', description: 'Salve e confira suas apostas' },
       { href: '/simulador', emoji: '🧪', title: 'Simulador', description: 'Teste seus números nos sorteios anteriores' },
       { href: '/gerador', emoji: '🎰', title: 'Gerador de Números', description: 'Gere combinações aleatórias' },
+      { href: '/bolao', emoji: '👥', title: 'Calculadora de Bolão', description: 'Calcule custos e chances do bolão' },
       { href: '/como-jogar', emoji: '📖', title: 'Como Jogar', description: 'Regras e dicas para cada loteria' },
       { href: '/probabilidades', emoji: '📊', title: 'Probabilidades', description: 'Chances de ganhar em cada loteria' },
       { href: '/historico', emoji: '📅', title: 'Histórico', description: 'Resultados anteriores e download CSV' },

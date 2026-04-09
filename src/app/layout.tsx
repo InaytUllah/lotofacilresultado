@@ -6,6 +6,8 @@ import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
 import Script from 'next/script';
 import Navigation from '@/components/layout/Navigation';
 import Footer from '@/components/layout/Footer';
+import ThemeToggle from '@/components/ui/ThemeToggle';
+import ServiceWorkerRegistration from '@/components/ui/ServiceWorkerRegistration';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6YPCF13JT5';
 
@@ -65,6 +67,15 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://loteriascaixa-api.herokuapp.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#059669" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
       </head>
       <body className="min-h-screen flex flex-col">
         <Script
@@ -119,6 +130,8 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <ThemeToggle />
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );
