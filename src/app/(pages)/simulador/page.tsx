@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import Simulator from '@/components/Simulator';
 import SEOContent from '@/components/ui/SEOContent';
+import ToolContentSections from '@/components/ui/ToolContentSections';
+import { TOOL_CONTENT } from '@/lib/lotteryContent';
 
 const title = 'Simulador de Apostas - Teste Seus Números nas Loterias';
 const description =
@@ -133,6 +135,8 @@ export default function SimuladorPage() {
             </Link>
           </div>
         </SEOContent>
+
+        <ToolContentSections toolName="Simulador de Apostas" content={TOOL_CONTENT.simulador} />
       </div>
     </>
   );

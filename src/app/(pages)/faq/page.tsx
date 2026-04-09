@@ -212,11 +212,8 @@ export default function FAQPage() {
               chances até quem sonha com os jackpots milionários.
             </p>
             <p>
-              É fundamental jogar com{' '}
-              <strong className="text-gray-900">responsabilidade</strong>, definindo um
-              orçamento para apostas e nunca comprometendo recursos essenciais. As loterias
-              devem ser vistas como uma forma de diversão, não como investimento ou fonte
-              de renda.
+              Jogue com responsabilidade: defina um orçamento para apostas e não comprometa
+              recursos essenciais. Loteria é diversão, não investimento.
             </p>
             <p>
               Para mais informações sobre como jogar, visite nossa página{' '}

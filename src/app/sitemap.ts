@@ -53,6 +53,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  // Number statistics pages (1-60, most common lottery range)
+  for (let n = 1; n <= 60; n++) {
+    entries.push({
+      url: `${SITE_URL}/numeros/${n}`,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 0.5,
+    });
+  }
+
   // Yearly archive pages (current year + previous year)
   const currentYear = new Date().getFullYear();
   for (const slug of GAME_SLUGS) {
@@ -72,6 +82,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     GAME_SLUGS.map((slug) => fetchLatestResult(slug)),
   );
 
+  const today = new Date();
+
   for (let i = 0; i < GAME_SLUGS.length; i++) {
     const slug = GAME_SLUGS[i];
     const settled = latestResults[i];
@@ -81,17 +93,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const startConcurso = Math.max(1, latestConcurso - 99);
 
     for (let c = latestConcurso; c >= startConcurso; c--) {
+      // Calculate age-based priority
+      const drawsFromLatest = latestConcurso - c;
+      let priority: number;
+      if (drawsFromLatest <= 3) {
+        // Very recent draws (≈ last week) — high priority
+        priority = 0.8;
+      } else if (drawsFromLatest <= 15) {
+        // Last ~30 days — medium priority
+        priority = 0.6;
+      } else {
+        // Older draws — low priority
+        priority = 0.4;
+      }
+
       entries.push({
         url: `${SITE_URL}/${slug}/resultado/${c}`,
         lastModified: c === latestConcurso ? now : undefined,
         changeFrequency: 'never',
-        priority: 0.5,
+        priority,
       });
     }
   }
 
-  // Generate prediction blog post URLs for recent dates
-  const today = new Date();
+  // Generate prediction blog post URLs for recent dates (7 days only)
   for (let d = 0; d < 7; d++) {
     const date = new Date(today);
     date.setDate(date.getDate() - d);

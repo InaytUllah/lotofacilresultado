@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
-import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME } from '@/lib/constants';
+import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME, DAYS_PT } from '@/lib/constants';
 import { getPredictionBlogSlug } from '@/lib/blog';
+import { fetchResultByConcurso } from '@/lib/api/lottery';
+import { fetchDrawAnalysis } from '@/lib/analysis';
 import LotteryBall from '@/components/ui/LotteryBall';
 import GameBadge from '@/components/ui/GameBadge';
 import WarningBox from '@/components/ui/WarningBox';
@@ -18,8 +20,16 @@ export function generateStaticParams() {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function parseResultSlug(slug: string): { gameSlug: string; concurso: number } | null {
-  // resultado-mega-sena-concurso-1234
+function parseResultSlug(slug: string): { gameSlug: string; concurso: number; dateStr?: string } | null {
+  // resultado-mega-sena-concurso-1234-2026-03-23
+  const matchWithDate = slug.match(/^resultado-(.+)-concurso-(\d+)-(\d{4}-\d{2}-\d{2})$/);
+  if (matchWithDate) {
+    const gameSlug = matchWithDate[1];
+    const concurso = parseInt(matchWithDate[2], 10);
+    if (!GAMES[gameSlug]) return null;
+    return { gameSlug, concurso, dateStr: matchWithDate[3] };
+  }
+  // Legacy: resultado-mega-sena-concurso-1234
   const match = slug.match(/^resultado-(.+)-concurso-(\d+)$/);
   if (!match) return null;
   const gameSlug = match[1];
@@ -88,10 +98,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
-  // Result slugs redirect, no metadata needed
+  // Result blog posts
   const resultInfo = parseResultSlug(slug);
   if (resultInfo) {
-    return {};
+    const game = GAMES[resultInfo.gameSlug];
+    const title = `Resultado ${game.name} Concurso ${resultInfo.concurso} | Blog`;
+    const description = `Resultado detalhado do concurso ${resultInfo.concurso} da ${game.name}. Números sorteados, premiação completa, análise estatística e muito mais.`;
+    return {
+      title,
+      description,
+      alternates: {
+        canonical: `${SITE_URL}/blog/${slug}`,
+        languages: { 'pt-BR': `${SITE_URL}/blog/${slug}` },
+      },
+      openGraph: {
+        title,
+        description,
+        url: `${SITE_URL}/blog/${slug}`,
+        siteName: SITE_NAME,
+        locale: 'pt_BR',
+        type: 'article',
+      },
+    };
   }
 
   const predictionInfo = parsePredictionSlug(slug);
@@ -133,10 +161,10 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
 
-  // Result slugs: redirect to canonical result page
+  // Result blog posts — render full article
   const resultInfo = parseResultSlug(slug);
   if (resultInfo) {
-    redirect(`/${resultInfo.gameSlug}/resultado/${resultInfo.concurso}`);
+    return <ResultBlogPost gameSlug={resultInfo.gameSlug} concurso={resultInfo.concurso} />;
   }
 
   // Try prediction post
@@ -505,6 +533,250 @@ function PredictionBlogPost({
           </Link>
         </div>
       </article>
+      </div>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Result Blog Post — auto-generated from draw data (~400 words)
+// ---------------------------------------------------------------------------
+
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+
+async function ResultBlogPost({
+  gameSlug,
+  concurso,
+}: {
+  gameSlug: string;
+  concurso: number;
+}) {
+  const game = GAMES[gameSlug];
+  const result = await fetchResultByConcurso(gameSlug, concurso);
+
+  if (!result) {
+    notFound();
+  }
+
+  // Fetch analysis
+  let analysis = null;
+  try {
+    analysis = await fetchDrawAnalysis(gameSlug, concurso, result.dezenas, game.maxNumber);
+  } catch {
+    // silently fail
+  }
+
+  // Parse date
+  const [day, month, year] = result.data.split('/').map(Number);
+  const drawDate = new Date(year, month - 1, day);
+  const weekday = DAYS_PT[drawDate.getDay()]?.toLowerCase() || '';
+  const isoDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+  const topTier = result.premiacoes?.[0];
+  const winners = topTier?.ganhadores ?? 0;
+  const totalDist = result.premiacoes.reduce((s, p) => s + p.ganhadores * p.valorPremio, 0);
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Resultado ${game.name} ${result.data}: Concurso ${concurso}`,
+    datePublished: isoDate,
+    dateModified: isoDate,
+    author: {
+      '@type': 'Organization',
+      name: 'Lotofácil Resultado',
+      url: SITE_URL,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Lotofácil Resultado',
+      url: SITE_URL,
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE_URL}/blog/resultado-${gameSlug}-concurso-${concurso}-${isoDate}`,
+    },
+    description: `Resultado do concurso ${concurso} da ${game.name} realizado em ${result.data}. Números: ${result.dezenas.join(', ')}.`,
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
+      { '@type': 'ListItem', position: 3, name: `${game.name} Concurso ${concurso}`, item: `${SITE_URL}/blog/resultado-${gameSlug}-concurso-${concurso}-${isoDate}` },
+    ],
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+
+      <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
+        {/* Breadcrumb */}
+        <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+          <ol className="flex items-center gap-1 flex-wrap">
+            <li><Link href="/" className="hover:text-gray-700">Início</Link></li>
+            <li className="before:content-['/'] before:mx-1"><Link href="/blog" className="hover:text-gray-700">Blog</Link></li>
+            <li className="before:content-['/'] before:mx-1 text-gray-700">{game.name} Concurso {concurso}</li>
+          </ol>
+        </nav>
+
+        <article className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8 mb-8">
+          {/* Header */}
+          <div className="mb-6">
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <GameBadge game={game} />
+              <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-emerald-100 text-emerald-700">
+                Resultado
+              </span>
+              <time dateTime={isoDate} className="text-sm text-gray-500">{result.data}</time>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+              Resultado {game.name} {result.data}: Concurso {concurso}
+            </h1>
+            <p className="text-sm text-gray-500">Por Equipe Lotofácil Resultado</p>
+          </div>
+
+          {/* Intro paragraph */}
+          <div className="mb-6 text-gray-700 leading-relaxed space-y-3">
+            <p>
+              O sorteio do concurso {concurso} da {game.name} foi realizado nesta {weekday} à noite, às 21h,
+              nas instalações da Caixa Econômica Federal{result.localSorteio ? `, no ${result.localSorteio}` : ''}.
+            </p>
+          </div>
+
+          {/* Numbers */}
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-gray-700 mb-3">Números Sorteados</h2>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {result.dezenas.map((d, i) => (
+                <LotteryBall key={`${d}-${i}`} number={d} color={game.ballColor} textColor={game.ballTextColor} />
+              ))}
+            </div>
+          </div>
+
+          {/* Winners table */}
+          {result.premiacoes.length > 0 && (
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-700 mb-3">Premiação Completa</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left border-b-2 border-gray-200">
+                      <th className="pb-2 font-semibold text-gray-700">Faixa</th>
+                      <th className="pb-2 font-semibold text-gray-700 text-center">Ganhadores</th>
+                      <th className="pb-2 font-semibold text-gray-700 text-right">Prêmio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.premiacoes.map((p) => (
+                      <tr key={p.faixa} className="border-b border-gray-100">
+                        <td className="py-2 text-gray-800 font-medium">{p.descricao}</td>
+                        <td className="py-2 text-center">
+                          {p.ganhadores > 0 ? (
+                            <span className="font-semibold" style={{ color: game.color }}>
+                              {p.ganhadores.toLocaleString('pt-BR')}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 italic text-xs">Não houve</span>
+                          )}
+                        </td>
+                        <td className="py-2 text-right">{formatCurrency(p.valorPremio)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Accumulation or winners section */}
+          {winners === 0 && result.acumulado && (
+            <div className="mb-6 rounded-lg bg-amber-50 border border-amber-200 p-5">
+              <h2 className="text-lg font-semibold text-gray-700 mb-2">
+                Prêmio Acumula para o Concurso {concurso + 1}
+              </h2>
+              <p className="text-sm text-gray-600">
+                Como nenhum apostador acertou os {result.dezenas.length} números do prêmio principal,
+                o valor acumulou.
+                {result.valorEstimadoProximoConcurso > 0 && (
+                  <> O prêmio estimado para o próximo concurso {concurso + 1} é de aproximadamente{' '}
+                  <strong>{formatCurrency(result.valorEstimadoProximoConcurso)}</strong>.</>
+                )}
+              </p>
+            </div>
+          )}
+
+          {winners > 0 && (
+            <div className="mb-6 rounded-lg bg-emerald-50 border border-emerald-200 p-5">
+              <h2 className="text-lg font-semibold text-gray-700 mb-2">
+                Ganhadores do Concurso {concurso}
+              </h2>
+              <p className="text-sm text-gray-600">
+                {winners} apostador(es) acertou(aram) o prêmio principal e cada um
+                receberá {formatCurrency(topTier.valorPremio)} antes dos impostos.
+                {totalDist > 0 && (
+                  <> No total, {formatCurrency(totalDist)} foram distribuídos neste concurso.</>
+                )}
+              </p>
+            </div>
+          )}
+
+          {/* Statistical analysis */}
+          {analysis && analysis.numberFrequencies.length > 0 && (
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-700 mb-3">Análise Estatística</h2>
+              <p className="text-sm text-gray-600 mb-3">
+                Classificação dos números sorteados com base na frequência nos últimos 5 concursos:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {analysis.numberFrequencies.map((nf) => (
+                  <span
+                    key={nf.number}
+                    className={`inline-flex items-center gap-1 text-sm font-semibold px-2.5 py-1 rounded-full ${
+                      nf.label === 'quente' ? 'bg-red-100 text-red-700' :
+                      nf.label === 'frio' ? 'bg-blue-100 text-blue-700' :
+                      'bg-gray-100 text-gray-700'
+                    }`}
+                  >
+                    {nf.number} ({nf.count}x)
+                    {nf.label === 'quente' && ' 🔥'}
+                    {nf.label === 'frio' && ' ❄️'}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Next draw */}
+          <div className="mb-6 rounded-lg bg-gray-50 border border-gray-200 p-5">
+            <h2 className="text-lg font-semibold text-gray-700 mb-2">Próximo Sorteio</h2>
+            <p className="text-sm text-gray-600">
+              O próximo concurso da {game.name} será o de número {concurso + 1}.
+              {result.valorEstimadoProximoConcurso > 0 && (
+                <> O prêmio estimado é de {formatCurrency(result.valorEstimadoProximoConcurso)}.</>
+              )}
+              {' '}A aposta mínima custa {game.minBet}.
+            </p>
+          </div>
+
+          {/* Links */}
+          <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-100">
+            <Link href={`/${gameSlug}/resultado/${concurso}`} className="text-sm font-medium px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors">
+              Ver resultado completo
+            </Link>
+            <Link href={`/${gameSlug}`} className="text-sm font-medium px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors">
+              Todos os resultados da {game.name}
+            </Link>
+            <Link href="/blog" className="text-sm font-medium px-4 py-2 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors">
+              Voltar ao Blog
+            </Link>
+          </div>
+        </article>
       </div>
     </>
   );

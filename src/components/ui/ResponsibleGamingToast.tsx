@@ -33,7 +33,7 @@ export default function ResponsibleGamingToast() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 left-4 sm:left-auto max-w-sm z-50">
+    <div className="fixed bottom-4 right-4 left-4 sm:left-auto max-w-sm z-50" role="alert" aria-live="polite">
       <div className="bg-white shadow-xl rounded-xl p-4 relative">
         {/* Close button */}
         <button

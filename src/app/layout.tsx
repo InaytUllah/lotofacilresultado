@@ -6,7 +6,6 @@ import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
 import Script from 'next/script';
 import Navigation from '@/components/layout/Navigation';
 import Footer from '@/components/layout/Footer';
-import ResponsibleGamingToast from '@/components/ui/ResponsibleGamingToast';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6YPCF13JT5';
 
@@ -120,7 +119,6 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        <ResponsibleGamingToast />
       </body>
     </html>
   );

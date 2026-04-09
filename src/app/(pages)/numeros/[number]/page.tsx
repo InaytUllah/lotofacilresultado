@@ -7,8 +7,8 @@ import { fetchRecentResults } from '@/lib/api/lottery';
 import LotteryBall from '@/components/ui/LotteryBall';
 import SEOContent from '@/components/ui/SEOContent';
 
-// force-dynamic prevents build timeout — API calls happen at request time only
-export const dynamic = 'force-dynamic';
+// ISR: revalidate every 5 minutes
+export const revalidate = 300;
 
 interface PageProps {
   params: Promise<{ number: string }>;
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Número ${n} - Estatísticas nas Loterias da Caixa`,
-    description: `Estatísticas completas do número ${n} em todas as loterias da Caixa. Frequência, percentual de aparição e última vez que foi sorteado.`,
+    description: `Estatísticas do número ${n} em todas as loterias da Caixa Econômica Federal. Frequência de sorteio, percentual de aparição e último concurso sorteado.`,
     alternates: {
       canonical: `/numeros/${n}`,
       languages: {
@@ -33,14 +33,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     openGraph: {
       title: `Número ${n} - Estatísticas nas Loterias da Caixa`,
-      description: `Estatísticas completas do número ${n} em todas as loterias da Caixa. Frequência, percentual de aparição e última vez que foi sorteado.`,
+      description: `Estatísticas do número ${n} em todas as loterias da Caixa Econômica Federal. Frequência de sorteio, percentual de aparição e último concurso sorteado.`,
       url: `${SITE_URL}/numeros/${n}`,
       siteName: SITE_NAME,
       locale: 'pt_BR',
       type: 'website',
     },
     robots: {
-      index: false,
+      index: true,
       follow: true,
     },
   };
@@ -66,53 +66,56 @@ export default async function NumeroPage({ params }: PageProps) {
 
   const paddedNumber = String(n).padStart(2, '0');
 
-  const gameStats: NumberGameStats[] = [];
   let hasError = false;
 
-  for (const slug of GAME_SLUGS) {
+  // Fetch all games in parallel instead of sequentially
+  const validSlugs = GAME_SLUGS.filter((slug) => n <= GAMES[slug].maxNumber);
+  const settled = await Promise.allSettled(
+    validSlugs.map((slug) => fetchRecentResults(slug, 5)),
+  );
+
+  const gameStats: NumberGameStats[] = [];
+  for (let i = 0; i < validSlugs.length; i++) {
+    const slug = validSlugs[i];
     const game = GAMES[slug];
+    const result = settled[i];
 
-    // Only include games where this number is valid
-    if (n > game.maxNumber) continue;
+    if (result.status !== 'fulfilled' || !result.value || result.value.length === 0) {
+      if (result.status === 'rejected') hasError = true;
+      continue;
+    }
 
-    try {
-      const results = await fetchRecentResults(slug, 10);
-      if (results.length === 0) continue;
+    const results = result.value;
+    let frequency = 0;
+    let lastDrawnConcurso: number | null = null;
+    let lastDrawnDate: string | null = null;
 
-      let frequency = 0;
-      let lastDrawnConcurso: number | null = null;
-      let lastDrawnDate: string | null = null;
-
-      for (const result of results) {
-        const found = result.dezenas.some((d) => parseInt(d, 10) === n);
-        if (found) {
-          frequency++;
-          if (lastDrawnConcurso === null) {
-            lastDrawnConcurso = result.concurso;
-            lastDrawnDate = result.data;
-          }
+    for (const r of results) {
+      const found = r.dezenas.some((d) => parseInt(d, 10) === n);
+      if (found) {
+        frequency++;
+        if (lastDrawnConcurso === null) {
+          lastDrawnConcurso = r.concurso;
+          lastDrawnDate = r.data;
         }
       }
-
-      // Calculate average frequency to determine hot/cold
-      const totalDrawnNumbers = results.reduce(
-        (sum, r) => sum + r.dezenas.length,
-        0,
-      );
-      const avgFrequencyPerNumber = totalDrawnNumbers / game.maxNumber;
-
-      gameStats.push({
-        slug,
-        frequency,
-        totalResults: results.length,
-        percentage: results.length > 0 ? (frequency / results.length) * 100 : 0,
-        lastDrawnConcurso,
-        lastDrawnDate,
-        isHot: frequency > avgFrequencyPerNumber,
-      });
-    } catch {
-      hasError = true;
     }
+
+    const totalDrawnNumbers = results.reduce(
+      (sum, r) => sum + r.dezenas.length,
+      0,
+    );
+    const avgFrequencyPerNumber = totalDrawnNumbers / game.maxNumber;
+
+    gameStats.push({
+      slug,
+      frequency,
+      totalResults: results.length,
+      percentage: results.length > 0 ? (frequency / results.length) * 100 : 0,
+      lastDrawnConcurso,
+      lastDrawnDate,
+      isHot: frequency > avgFrequencyPerNumber,
+    });
   }
 
   const prevNumber = n > 1 ? n - 1 : null;
@@ -345,7 +348,7 @@ export default async function NumeroPage({ params }: PageProps) {
                 estatísticas detalhadas
               </strong>{' '}
               do número {n} em todas as loterias da Caixa Econômica Federal
-              onde ele pode ser sorteado. A análise considera os últimos 50
+              onde ele pode ser sorteado. A análise considera os últimos
               concursos de cada jogo.
             </p>
             <p className="text-gray-600">
@@ -353,12 +356,12 @@ export default async function NumeroPage({ params }: PageProps) {
               <strong className="text-gray-900">quente</strong> (🔥) quando
               aparece com frequência acima da média esperada, e como{' '}
               <strong className="text-gray-900">frio</strong> (❄️) quando
-              aparece abaixo da media. Essa classificacao e relativa a cada
+              aparece abaixo da média. Essa classificação é relativa a cada
               jogo, pois as probabilidades variam conforme a quantidade de
               números disponíveis e selecionados.
             </p>
             <p className="text-gray-600">
-              Lembre-se que cada sorteio e{' '}
+              Lembre-se que cada sorteio é{' '}
               <strong className="text-gray-900">independente</strong> e a
               frequência passada não influencia os resultados futuros. Use
               essas estatísticas como referência, mas jogue sempre com

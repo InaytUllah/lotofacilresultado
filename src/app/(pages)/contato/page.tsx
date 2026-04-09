@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -232,6 +233,28 @@ export default function ContatoPage() {
                 </p>
               </div>
             </section>
+          </div>
+        </div>
+
+        {/* Related Legal Pages */}
+        <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
+          <h2 className="text-lg font-bold text-gray-900 mb-3">Documentos Relacionados</h2>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/termos" className="text-emerald-600 hover:underline font-medium">
+              Termos de Uso
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/privacidade" className="text-emerald-600 hover:underline font-medium">
+              Política de Privacidade
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/aviso-legal" className="text-emerald-600 hover:underline font-medium">
+              Aviso Legal
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/jogo-responsavel" className="text-emerald-600 hover:underline font-medium">
+              Jogo Responsável
+            </Link>
           </div>
         </div>
       </div>

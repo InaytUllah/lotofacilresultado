@@ -1,6 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'esultadosmegasenacombr.vercel.app' }],
+        destination: 'https://lotofacilresultado.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'esultadosmegasenacombr-inayat-ullahs-projects-2d5a065f.vercel.app' }],
+        destination: 'https://lotofacilresultado.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

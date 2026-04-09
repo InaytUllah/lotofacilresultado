@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import TicketChecker from '@/components/TicketChecker';
 import SEOContent from '@/components/ui/SEOContent';
+import ToolContentSections from '@/components/ui/ToolContentSections';
+import { TOOL_CONTENT } from '@/lib/lotteryContent';
 
 const title = 'Conferidor de Apostas - Confira Seu Jogo das Loterias da Caixa';
 const description =
@@ -129,6 +131,8 @@ export default function ConferidorPage() {
             </Link>
           </div>
         </SEOContent>
+
+        <ToolContentSections toolName="Conferidor de Apostas" content={TOOL_CONTENT.conferidor} />
       </div>
     </>
   );

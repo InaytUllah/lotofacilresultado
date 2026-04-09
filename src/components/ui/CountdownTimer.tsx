@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useSharedTick } from '@/lib/hooks/useSharedTick';
 
 interface CountdownTimerProps {
@@ -25,9 +26,44 @@ function calcTimeLeft(target: Date): TimeLeft | null {
   };
 }
 
+const PLACEHOLDER_UNITS = [
+  { value: '--', label: 'Dias' },
+  { value: '--', label: 'Horas' },
+  { value: '--', label: 'Min' },
+  { value: '--', label: 'Seg' },
+];
+
 export default function CountdownTimer({ targetDate, label }: CountdownTimerProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // All CountdownTimer instances share a single setInterval via useSharedTick
   useSharedTick();
+
+  // Before mount, render static placeholder to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="text-center">
+        {label && <p className="text-sm text-gray-600 mb-2">{label}</p>}
+        <div className="flex items-center justify-center gap-2">
+          {PLACEHOLDER_UNITS.map((unit) => (
+            <div
+              key={unit.label}
+              className="bg-gray-100 rounded-lg p-2 min-w-[60px] text-center"
+            >
+              <span className="text-2xl font-bold text-emerald-600">
+                {unit.value}
+              </span>
+              <p className="text-xs text-gray-500">{unit.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   const timeLeft = calcTimeLeft(targetDate);
 

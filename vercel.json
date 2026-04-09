@@ -29,6 +29,10 @@
       "schedule": "*/2 0-2 * * 0-6"
     },
     {
+      "path": "/api/cron",
+      "schedule": "*/2 23 * * 0-6"
+    },
+    {
       "path": "/api/cron?full=true",
       "schedule": "7 6 * * *"
     }

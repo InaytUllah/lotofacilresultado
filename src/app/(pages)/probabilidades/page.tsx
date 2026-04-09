@@ -4,7 +4,7 @@ import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME } from '@/lib/constants';
 export const metadata: Metadata = {
   title: 'Probabilidades e Prêmios das Loterias da Caixa',
   description:
-    'Tabela completa de probabilidades e faixas de prêmios de todas as loterias da Caixa: Mega-Sena, Lotofácil, Quina, Lotomania, +Milionária, Dia de Sorte, Super Sete, Dupla Sena e Timemania.',
+    'Probabilidades e faixas de prêmios de todas as loterias da Caixa. Mega-Sena, Lotofácil, Quina, Lotomania e mais. Chances de ganhar.',
   alternates: {
     canonical: `${SITE_URL}/probabilidades`,
     languages: {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Probabilidades e Prêmios das Loterias da Caixa',
-    description: 'Tabela completa de probabilidades e faixas de prêmios de todas as loterias da Caixa: Mega-Sena, Lotofácil, Quina, Lotomania, +Milionária, Dia de Sorte, Super Sete, Dupla Sena e Timemania.',
+    description: 'Probabilidades e faixas de prêmios de todas as loterias da Caixa. Mega-Sena, Lotofácil, Quina, Lotomania e mais. Chances de ganhar.',
     url: `${SITE_URL}/probabilidades`,
     siteName: SITE_NAME,
     locale: 'pt_BR',
@@ -34,20 +34,20 @@ const oddsData: Record<string, OddsRow[]> = {
     { category: 'Quadra (4 acertos)', odds: '1 em 2.332', typicalPrize: 'R$ 500 a R$ 1.500' },
   ],
   lotofacil: [
-    { category: '15 acertos', odds: '1 em 3.268.760', typicalPrize: 'A partir de R$ 1,5 milhao' },
+    { category: '15 acertos', odds: '1 em 3.268.760', typicalPrize: 'A partir de R$ 1,5 milhão' },
     { category: '14 acertos', odds: '1 em 21.792', typicalPrize: 'R$ 1.000 a R$ 3.000' },
     { category: '13 acertos', odds: '1 em 691', typicalPrize: 'R$ 30 a R$ 50' },
     { category: '12 acertos', odds: '1 em 59', typicalPrize: 'R$ 12 a R$ 20' },
     { category: '11 acertos', odds: '1 em 11', typicalPrize: 'R$ 6 a R$ 8' },
   ],
   quina: [
-    { category: 'Quina (5 acertos)', odds: '1 em 24.040.016', typicalPrize: 'A partir de R$ 1 milhao' },
+    { category: 'Quina (5 acertos)', odds: '1 em 24.040.016', typicalPrize: 'A partir de R$ 1 milhão' },
     { category: 'Quadra (4 acertos)', odds: '1 em 64.106', typicalPrize: 'R$ 5.000 a R$ 15.000' },
     { category: 'Terno (3 acertos)', odds: '1 em 866', typicalPrize: 'R$ 100 a R$ 200' },
     { category: 'Duque (2 acertos)', odds: '1 em 36', typicalPrize: 'R$ 3 a R$ 7' },
   ],
   lotomania: [
-    { category: '20 acertos', odds: '1 em 11.372.635', typicalPrize: 'A partir de R$ 1 milhao' },
+    { category: '20 acertos', odds: '1 em 11.372.635', typicalPrize: 'A partir de R$ 1 milhão' },
     { category: '19 acertos', odds: '1 em 244.140', typicalPrize: 'R$ 20.000 a R$ 60.000' },
     { category: '18 acertos', odds: '1 em 15.504', typicalPrize: 'R$ 1.000 a R$ 3.000' },
     { category: '17 acertos', odds: '1 em 2.011', typicalPrize: 'R$ 100 a R$ 300' },
@@ -75,7 +75,7 @@ const oddsData: Record<string, OddsRow[]> = {
     { category: 'Mes da Sorte', odds: '1 em 12', typicalPrize: 'R$ 3 a R$ 6' },
   ],
   'super-sete': [
-    { category: '7 acertos', odds: '1 em 10.000.000', typicalPrize: 'A partir de R$ 1 milhao' },
+    { category: '7 acertos', odds: '1 em 10.000.000', typicalPrize: 'A partir de R$ 1 milhão' },
     { category: '6 acertos', odds: '1 em 476.190', typicalPrize: 'R$ 10.000 a R$ 50.000' },
     { category: '5 acertos', odds: '1 em 13.889', typicalPrize: 'R$ 500 a R$ 1.000' },
     { category: '4 acertos', odds: '1 em 277', typicalPrize: 'R$ 20 a R$ 50' },
@@ -88,7 +88,7 @@ const oddsData: Record<string, OddsRow[]> = {
     { category: 'Terno (3 acertos)', odds: '1 em 60', typicalPrize: 'R$ 3 a R$ 6' },
   ],
   timemania: [
-    { category: '7 acertos', odds: '1 em 26.472.637', typicalPrize: 'A partir de R$ 1 milhao' },
+    { category: '7 acertos', odds: '1 em 26.472.637', typicalPrize: 'A partir de R$ 1 milhão' },
     { category: '6 acertos', odds: '1 em 216.040', typicalPrize: 'R$ 10.000 a R$ 50.000' },
     { category: '5 acertos', odds: '1 em 5.765', typicalPrize: 'R$ 500 a R$ 1.000' },
     { category: '4 acertos', odds: '1 em 297', typicalPrize: 'R$ 8 a R$ 15' },
@@ -272,7 +272,7 @@ export default function ProbabilidadesPage() {
               As <strong className="text-gray-900">probabilidades</strong> nas loterias da
               Caixa são calculadas com base em combinações matemáticas. Quanto mais números
               disponíveis para escolha e menos números você marca, menor a probabilidade de
-              acertar todos. Cada sorteio e um evento independente, ou seja, os resultados
+              acertar todos. Cada sorteio é um evento independente, ou seja, os resultados
               anteriores não influenciam os futuros.
             </p>
             <p>

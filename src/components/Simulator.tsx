@@ -215,8 +215,10 @@ export default function Simulator() {
                     : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                 }`}
                 style={isSelected ? { backgroundColor: g.color } : undefined}
+                aria-label={`Selecionar ${g.name}`}
+                aria-pressed={isSelected}
               >
-                <span>{g.emoji}</span>
+                <span aria-hidden="true">{g.emoji}</span>
                 <span className="truncate">{g.name}</span>
               </button>
             );
@@ -352,7 +354,7 @@ export default function Simulator() {
 
       {/* Error */}
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 text-sm">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 text-sm" role="alert" aria-live="polite">
           {error}
         </div>
       )}

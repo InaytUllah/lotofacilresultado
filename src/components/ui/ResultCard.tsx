@@ -81,9 +81,9 @@ export default function ResultCard({
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500">
-                  <th className="pb-1 font-medium">Faixa</th>
-                  <th className="pb-1 font-medium text-center">Ganhadores</th>
-                  <th className="pb-1 font-medium text-right">Prêmio</th>
+                  <th scope="col" className="pb-1 font-medium">Faixa</th>
+                  <th scope="col" className="pb-1 font-medium text-center">Ganhadores</th>
+                  <th scope="col" className="pb-1 font-medium text-right">Prêmio</th>
                 </tr>
               </thead>
               <tbody>

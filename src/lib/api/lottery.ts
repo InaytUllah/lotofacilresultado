@@ -91,7 +91,7 @@ function normalizeResult(raw: any): LotteryResult | null {
 
 async function fetchWithTimeout(
   url: string,
-  timeoutMs = 10000,
+  timeoutMs = 3000,
 ): Promise<Response> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -100,7 +100,7 @@ async function fetchWithTimeout(
     const res = await fetch(url, {
       headers: HEADERS,
       signal: controller.signal,
-      cache: 'no-store',
+      next: { revalidate: 300 }, // cache responses for 5 minutes
     });
     return res;
   } finally {
@@ -114,6 +114,7 @@ async function fetchRaw(
 ): Promise<any | null> {
   const urls = buildUrls(apiName, concurso);
 
+  // Try primary first, only fall back if it fails fast (not timeout)
   for (const url of urls) {
     try {
       const res = await fetchWithTimeout(url);
@@ -123,11 +124,27 @@ async function fetchRaw(
         return data;
       }
     } catch {
-      // try next source
+      // Only try next URL if this one failed; don't retry all on timeout
+      continue;
     }
   }
 
   return null;
+}
+
+// Fetch with a hard overall timeout for the entire operation
+async function fetchRawWithLimit(
+  apiName: string,
+  concurso?: number,
+): Promise<any | null> {
+  try {
+    return await Promise.race([
+      fetchRaw(apiName, concurso),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
+    ]);
+  } catch {
+    return null;
+  }
 }
 
 function buildUrls(apiName: string, concurso?: number): string[] {
@@ -168,11 +185,11 @@ export async function fetchLatestResult(
 
   const cachedFetch = unstable_cache(
     async () => {
-      const raw = await fetchRaw(config.apiName);
+      const raw = await fetchRawWithLimit(config.apiName);
       return normalizeResult(raw);
     },
     [`lottery-latest-${gameSlug}`],
-    { revalidate: 60, tags: [`lottery-${gameSlug}`, 'lottery-all'] },
+    { revalidate: 300, tags: [`lottery-${gameSlug}`, 'lottery-all'] },
   );
 
   try {
@@ -190,12 +207,12 @@ export async function fetchResultByConcurso(
 
   const cachedFetch = unstable_cache(
     async () => {
-      const raw = await fetchRaw(config.apiName, concurso);
+      const raw = await fetchRawWithLimit(config.apiName, concurso);
       return normalizeResult(raw);
     },
     [`lottery-concurso-${gameSlug}-${concurso}`],
     {
-      revalidate: 60,
+      revalidate: 86400, // 24 hours — past results never change
       tags: [`lottery-${gameSlug}`, `lottery-concurso-${concurso}`],
     },
   );

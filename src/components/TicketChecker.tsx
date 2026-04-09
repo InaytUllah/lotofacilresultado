@@ -125,7 +125,7 @@ export default function TicketChecker() {
         const res = await fetch(
           `/api/results/${selectedGame}?concurso=${concursoInput.trim()}`,
         );
-        if (!res.ok) throw new Error('Concurso nao encontrado');
+        if (!res.ok) throw new Error('Concurso não encontrado');
         const data = await res.json();
         if (data.result) {
           draws = [data.result];
@@ -212,8 +212,10 @@ export default function TicketChecker() {
                     : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
                 }`}
                 style={isSelected ? { backgroundColor: g.color } : undefined}
+                aria-label={`Selecionar ${g.name}`}
+                aria-pressed={isSelected}
               >
-                <span>{g.emoji}</span>
+                <span aria-hidden="true">{g.emoji}</span>
                 <span className="truncate">{g.name}</span>
               </button>
             );
@@ -365,7 +367,7 @@ export default function TicketChecker() {
 
       {/* Error */}
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 text-sm">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700 text-sm" role="alert" aria-live="polite">
           {error}
         </div>
       )}

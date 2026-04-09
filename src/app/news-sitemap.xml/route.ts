@@ -3,6 +3,19 @@ import { fetchLatestResult } from '@/lib/api/lottery';
 
 export const dynamic = 'force-dynamic';
 
+// Lottery-specific keywords for Google News sitemap
+const GAME_KEYWORDS: Record<string, string> = {
+  'mega-sena': 'mega sena, resultado mega sena, mega-sena, números mega sena, concurso mega sena',
+  'lotofacil': 'lotofácil, resultado lotofácil, lotofacil, números lotofácil, concurso lotofácil',
+  'quina': 'quina, resultado quina, números quina, concurso quina, loteria quina',
+  'lotomania': 'lotomania, resultado lotomania, números lotomania, concurso lotomania',
+  'mais-milionaria': '+milionária, mais milionária, resultado mais milionária, concurso mais milionária',
+  'dia-de-sorte': 'dia de sorte, resultado dia de sorte, números dia de sorte, mês da sorte',
+  'super-sete': 'super sete, resultado super sete, super 7, concurso super sete',
+  'dupla-sena': 'dupla sena, resultado dupla sena, dupla-sena, concurso dupla sena',
+  'timemania': 'timemania, resultado timemania, time do coração, concurso timemania',
+};
+
 export async function GET() {
   const results = await Promise.allSettled(
     GAME_SLUGS.map((slug) => fetchLatestResult(slug)),
@@ -29,6 +42,7 @@ export async function GET() {
     const isoDate = drawDate.toISOString();
     const url = `${SITE_URL}/${slug}/resultado/${result.concurso}`;
     const title = `Resultado ${game.name} Concurso ${result.concurso} — ${result.data}`;
+    const keywords = GAME_KEYWORDS[slug] || `${game.name.toLowerCase()}, resultado ${game.name.toLowerCase()}`;
 
     newsItems.push(`
     <url>
@@ -40,6 +54,7 @@ export async function GET() {
         </news:publication>
         <news:publication_date>${isoDate}</news:publication_date>
         <news:title>${title}</news:title>
+        <news:keywords>${keywords}</news:keywords>
       </news:news>
     </url>`);
   }

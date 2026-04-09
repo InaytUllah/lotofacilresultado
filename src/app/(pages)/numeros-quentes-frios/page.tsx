@@ -5,14 +5,16 @@ import { SITE_URL, SITE_NAME, GAMES, GAME_SLUGS } from '@/lib/constants';
 import { fetchRecentResults } from '@/lib/api/lottery';
 import LotteryBall from '@/components/ui/LotteryBall';
 import SEOContent from '@/components/ui/SEOContent';
+import ToolContentSections from '@/components/ui/ToolContentSections';
+import { TOOL_CONTENT } from '@/lib/lotteryContent';
 import ResponsibleGamblingBanner from '@/components/ui/ResponsibleGamblingBanner';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300; // ISR: revalidate every 5 minutes
 
 export const metadata: Metadata = {
   title: 'Números Quentes e Frios - Estatísticas das Loterias',
   description:
-    'Descubra os números quentes e frios de todas as loterias da Caixa. Análise de frequência dos números mais e menos sorteados na Mega-Sena, Lotofácil, Quina e mais.',
+    'Números quentes e frios de todas as loterias da Caixa. Frequência dos números mais e menos sorteados na Mega-Sena, Lotofácil e Quina.',
   alternates: {
     canonical: '/numeros-quentes-frios',
     languages: {
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Números Quentes e Frios - Estatísticas das Loterias',
-    description: 'Descubra os números quentes e frios de todas as loterias da Caixa. Análise de frequência dos números mais e menos sorteados na Mega-Sena, Lotofácil, Quina e mais.',
+    description: 'Números quentes e frios de todas as loterias da Caixa. Frequência dos números mais e menos sorteados na Mega-Sena, Lotofácil e Quina.',
     url: `${SITE_URL}/numeros-quentes-frios`,
     siteName: SITE_NAME,
     locale: 'pt_BR',
@@ -140,7 +142,7 @@ export default async function NumerosQuentesFriosPage() {
           </h1>
           <p className="text-lg text-emerald-100 max-w-2xl">
             Análise de frequência dos números mais e menos sorteados nas loterias
-            da Caixa. Baseado nos últimos 50 concursos de cada jogo.
+            da Caixa. Baseado nos últimos concursos de cada jogo.
           </p>
         </div>
       </section>
@@ -254,33 +256,22 @@ export default async function NumerosQuentesFriosPage() {
           </h2>
           <div className="prose prose-gray max-w-none space-y-4">
             <p className="text-gray-600">
-              Na análise estatística das loterias, os{' '}
-              <strong className="text-gray-900">números quentes</strong> são
-              aqueles que foram sorteados com maior frequência em um determinado
-              periodo. Ja os{' '}
-              <strong className="text-gray-900">números frios</strong> são os
-              que apareceram menos vezes nos sorteios recentes.
+              Números quentes são os que saíram mais vezes nos
+              últimos concursos. Números frios são os que apareceram pouco.
             </p>
             <p className="text-gray-600">
-              Muitos apostadores utilizam essa análise para montar suas apostas,
-              seja apostando nos números quentes (acreditando que a tendencia
-              vai continuar) ou nos números frios (acreditando que eles estão
-              &quot;atrasados&quot; e devem sair em breve).
+              Alguns apostadores preferem jogar nos quentes, apostando que a
+              frequência vai continuar. Outros escolhem os frios, achando que
+              estão &quot;atrasados&quot;. Cada um com sua lógica.
             </p>
             <p className="text-gray-600">
-              E importante lembrar que cada sorteio e{' '}
-              <strong className="text-gray-900">independente</strong> dos
-              anteriores. Os números são sorteados aleatoriamente e a frequência
-              passada não garante resultados futuros. No entanto, a análise
-              estatistica pode ser uma ferramenta divertida para quem gosta de
-              estudar padrões.
+              Na prática, cada sorteio é independente dos anteriores. A
+              frequência passada não garante nada sobre o próximo resultado.
+              Mas para quem gosta de estudar padrões, a análise é interessante.
             </p>
             <p className="text-gray-600">
-              Nossa análise é baseada nos{' '}
-              <strong className="text-gray-900">últimos 50 concursos</strong> de
-              cada loteria, oferecendo uma visao recente da distribuicao dos
-              números. Os dados são atualizados automaticamente após cada
-              sorteio.
+              A análise cobre os últimos concursos de cada loteria. Os dados
+              são atualizados após cada sorteio.
             </p>
           </div>
 
@@ -307,6 +298,8 @@ export default async function NumerosQuentesFriosPage() {
             </Link>
           </div>
         </SEOContent>
+
+        <ToolContentSections toolName="Números Quentes e Frios" content={TOOL_CONTENT['numeros-quentes-frios']} />
       </div>
     </>
   );

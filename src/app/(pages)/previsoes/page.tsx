@@ -3,13 +3,15 @@ import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import WarningBox from '@/components/ui/WarningBox';
 import SEOContent from '@/components/ui/SEOContent';
+import ToolContentSections from '@/components/ui/ToolContentSections';
+import { TOOL_CONTENT } from '@/lib/lotteryContent';
 import ResponsibleGamblingBanner from '@/components/ui/ResponsibleGamblingBanner';
 import PredictionCards from '@/components/ui/PredictionCards';
 
 export const metadata: Metadata = {
   title: 'Análise Estatística das Loterias',
   description:
-    'Análise estatística para os próximos sorteios das loterias da Caixa. Tendências da Mega-Sena, Lotofácil, Quina e outras loterias.',
+    'Análise estatística para os próximos sorteios das loterias da Caixa. Tendências e números frequentes da Mega-Sena, Lotofácil, Quina e mais.',
   alternates: {
     canonical: '/previsoes',
     languages: { 'pt-BR': `${SITE_URL}/previsoes` },
@@ -72,12 +74,13 @@ export default function PrevisoesPage() {
         <SEOContent>
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Como Funcionam as Previsões?</h2>
           <p className="text-gray-600 mb-4">
-            Nossas <strong className="text-gray-900">previsões</strong> são geradas através de um algoritmo
-            que combina análise estatística dos resultados anteriores com um gerador de números determinístico.
+            As previsões são geradas por um algoritmo que cruza estatísticas
+            dos resultados anteriores com um gerador de números determinístico.
           </p>
           <p className="text-gray-600 mb-4">
-            É fundamental entender que as loterias são jogos de <strong className="text-gray-900">puro azar</strong>.
-            Cada sorteio é completamente independente dos anteriores. As previsões são apenas sugestões baseadas em padrões estatísticos.
+            Loterias são jogos de azar. Cada sorteio é independente dos
+            anteriores. As previsões são sugestões baseadas em padrões
+            estatísticos, não garantias.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/numeros-quentes-frios" className="text-emerald-600 hover:underline font-medium">Números Quentes e Frios</Link>
@@ -87,6 +90,8 @@ export default function PrevisoesPage() {
             <Link href="/probabilidades" className="text-emerald-600 hover:underline font-medium">Probabilidades</Link>
           </div>
         </SEOContent>
+
+        <ToolContentSections toolName="Análise Estatística" content={TOOL_CONTENT.previsoes} />
       </div>
     </>
   );

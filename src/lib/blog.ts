@@ -1,9 +1,9 @@
 import { GAMES } from './constants';
-import { BlogPost } from './types';
+import { BlogPost, LotteryResult } from './types';
 
-// Generate slug for a result blog post (kept for redirect logic)
-export function getResultBlogSlug(gameSlug: string, concurso: number): string {
-  return `resultado-${gameSlug}-concurso-${concurso}`;
+// Generate slug for a result blog post
+export function getResultBlogSlug(gameSlug: string, concurso: number, dateSlug: string): string {
+  return `resultado-${gameSlug}-concurso-${concurso}-${dateSlug}`;
 }
 
 // Generate slug for a prediction blog post
@@ -11,11 +11,34 @@ export function getPredictionBlogSlug(gameSlug: string, date: string): string {
   return `previsoes-${gameSlug}-${date}`;
 }
 
+// Generate blog post data for a result
+export function generateResultBlogPost(
+  gameSlug: string,
+  result: LotteryResult,
+): BlogPost {
+  const game = GAMES[gameSlug];
+  const dateSlug = result.data.split('/').reverse().join('-'); // DD/MM/YYYY → YYYY-MM-DD
+  const topTier = result.premiacoes?.[0];
+  const winners = topTier?.ganhadores ?? 0;
+  const statusText = winners > 0
+    ? `${winners} ganhador(es)`
+    : 'Acumulou';
+
+  return {
+    slug: getResultBlogSlug(gameSlug, result.concurso, dateSlug),
+    title: `Resultado ${game.name} ${result.data}: Concurso ${result.concurso} — ${statusText}`,
+    description: `Confira o resultado do concurso ${result.concurso} da ${game.name}, realizado em ${result.data}. Números sorteados: ${result.dezenas.join(', ')}. ${winners > 0 ? `${winners} ganhador(es) do prêmio principal.` : 'Prêmio acumulado para o próximo concurso.'}`,
+    date: dateSlug,
+    type: 'resultado',
+    gameSlug,
+    concurso: result.concurso,
+  };
+}
+
 // Generate blog post data for predictions
 export function generatePredictionBlogPost(gameSlug: string, date: string): BlogPost {
   const game = GAMES[gameSlug];
 
-  // Build a unique description per game using its configuration
   const gameDescriptions: Record<string, string> = {
     'mega-sena': `Análise estatística da Mega-Sena para ${formatDatePT(date)}. Escolha ${game.selectNumbers} números de 1 a ${game.maxNumber} com inteligência e concorra a prêmios milionários.`,
     'lotofacil': `Análise estatística da Lotofácil para ${formatDatePT(date)}. Marque ${game.selectNumbers} números de 1 a ${game.maxNumber} na loteria com maior chance de ganhar.`,

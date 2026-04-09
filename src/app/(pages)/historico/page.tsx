@@ -6,8 +6,10 @@ import { fetchRecentResults } from '@/lib/api/lottery';
 import { formatCurrency, formatDate } from '@/lib/utils/format';
 import LotteryBall from '@/components/ui/LotteryBall';
 import SEOContent from '@/components/ui/SEOContent';
+import ToolContentSections from '@/components/ui/ToolContentSections';
+import { TOOL_CONTENT } from '@/lib/lotteryContent';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 600; // ISR: revalidate every 10 minutes
 
 export const metadata: Metadata = {
   title: 'Histórico de Resultados - Todos os Concursos',
@@ -42,7 +44,7 @@ export default async function HistoricoPage({ searchParams }: HistoricoPageProps
   let hasError = false;
 
   try {
-    results = await fetchRecentResults(selectedSlug, 10);
+    results = await fetchRecentResults(selectedSlug, 5);
   } catch {
     hasError = true;
   }
@@ -143,13 +145,13 @@ export default async function HistoricoPage({ searchParams }: HistoricoPageProps
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-900">
+                    <th scope="col" className="text-left py-3 px-2 text-sm font-semibold text-gray-900">
                       Concurso
                     </th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-900">
+                    <th scope="col" className="text-left py-3 px-2 text-sm font-semibold text-gray-900">
                       Data
                     </th>
-                    <th className="text-left py-3 px-2 text-sm font-semibold text-gray-900">
+                    <th scope="col" className="text-left py-3 px-2 text-sm font-semibold text-gray-900">
                       Números
                     </th>
                     <th className="text-right py-3 px-2 text-sm font-semibold text-gray-900">
@@ -269,18 +271,13 @@ export default async function HistoricoPage({ searchParams }: HistoricoPageProps
           </h2>
           <div className="prose prose-gray max-w-none space-y-4">
             <p className="text-gray-600">
-              Consulte o <strong className="text-gray-900">histórico de
-              resultados</strong> de todas as loterias da Caixa Econômica
-              Federal. Nossa base de dados é atualizada automaticamente após
-              cada sorteio, trazendo os números sorteados, informações de
-              premiação e acumulação.
+              Todos os resultados das loterias da Caixa Econômica Federal,
+              atualizados após cada sorteio. Números sorteados, premiação e
+              acumulação.
             </p>
             <p className="text-gray-600">
-              O histórico é uma ferramenta valiosa para quem gosta de estudar{' '}
-              <strong className="text-gray-900">padrões e tendências</strong>{' '}
-              nos resultados. Você pode verificar quais números saíram mais
-              recentemente, identificar sequências e analisar a frequência dos
-              sorteios.
+              Serve para quem quer verificar quais números saíram recentemente,
+              identificar sequências ou analisar a frequência dos sorteios.
             </p>
             <p className="text-gray-600">
               Para uma análise mais detalhada, visite as páginas de{' '}
@@ -324,6 +321,8 @@ export default async function HistoricoPage({ searchParams }: HistoricoPageProps
             </Link>
           </div>
         </SEOContent>
+
+        <ToolContentSections toolName="Histórico de Resultados" content={TOOL_CONTENT.historico} />
       </div>
     </>
   );

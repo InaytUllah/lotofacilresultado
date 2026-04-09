@@ -5,8 +5,8 @@ import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME } from '@/lib/constants';
 import { fetchLatestResult } from '@/lib/api/lottery';
 import SEOContent from '@/components/ui/SEOContent';
 
-// force-dynamic prevents build timeout — API calls happen at request time only
-export const dynamic = 'force-dynamic';
+// ISR: revalidate daily — yearly archives rarely change
+export const revalidate = 86400;
 
 function estimateDrawsPerYear(drawDaysPerWeek: number): number {
   return drawDaysPerWeek * 52;
@@ -24,7 +24,7 @@ export async function generateMetadata({
   if (!game || isNaN(yearNum) || yearNum < 2000 || yearNum > 2030) return {};
 
   const title = `Resultados ${game.name} ${year} - Todos os Concursos`;
-  const description = `Todos os resultados da ${game.name} em ${year}. Confira os números sorteados em cada concurso e a premiação completa.`;
+  const description = `Todos os resultados da ${game.name} em ${year}. Confira os números sorteados, premiação completa e ganhadores de cada concurso do ano.`;
 
   return {
     title,

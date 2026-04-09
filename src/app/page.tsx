@@ -2,23 +2,22 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { SITE_URL, SITE_NAME, GAMES, GAME_SLUGS } from '@/lib/constants';
-import { fetchMultipleLatestResults } from '@/lib/api/lottery';
 import { getNextDrawDate, getDrawDayNames } from '@/lib/utils/format';
 
-import ResultCard from '@/components/ui/ResultCard';
 import CountdownTimer from '@/components/ui/CountdownTimer';
 import SEOContent from '@/components/ui/SEOContent';
 import ChecklistItem from '@/components/ui/ChecklistItem';
 import LiveResultPoller from '@/components/ui/LiveResultPoller';
+import HomepageResults from '@/components/ui/HomepageResults';
 
-// force-dynamic prevents build timeout — API calls happen at request time, not build time
-export const dynamic = 'force-dynamic';
+// ISR: revalidate every 5 minutes — Vercel serves stale cache while rebuilding in background
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title:
-    'Resultado das Loterias da Caixa Hoje — Mega-Sena, Lotofácil, Quina e Mais',
+    'Resultado Lotofácil Hoje — Mega-Sena, Quina e Loterias',
   description:
-    'Confira os resultados atualizados de todas as loterias da Caixa Econômica Federal. Mega-Sena, Lotofácil, Quina, Lotomania e muito mais. Resultados minutos após o sorteio.',
+    'Resultados atualizados de todas as loterias da Caixa. Mega-Sena, Lotofácil, Quina, Lotomania e mais. Confira números sorteados e premiação.',
   alternates: {
     canonical: '/',
     languages: {
@@ -26,8 +25,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Resultado das Loterias da Caixa Hoje — Mega-Sena, Lotofácil, Quina e Mais',
-    description: 'Confira os resultados atualizados de todas as loterias da Caixa Econômica Federal. Mega-Sena, Lotofácil, Quina, Lotomania e muito mais. Resultados minutos após o sorteio.',
+    title: 'Resultado Lotofácil Hoje — Mega-Sena, Quina e Loterias',
+    description: 'Resultados atualizados de todas as loterias da Caixa. Mega-Sena, Lotofácil, Quina, Lotomania e mais. Confira números sorteados e premiação.',
     url: SITE_URL,
     siteName: SITE_NAME,
     locale: 'pt_BR',
@@ -35,31 +34,86 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function HomePage() {
-  let results: Record<string, import('@/lib/types').LotteryResult | null> = {};
+// ---------------------------------------------------------------------------
+// Homepage FAQ items (static)
+// ---------------------------------------------------------------------------
 
-  try {
-    results = await fetchMultipleLatestResults();
-  } catch {
-    // API failed — we'll show placeholders
-  }
+const HOMEPAGE_FAQ = [
+  {
+    question: 'Como são realizados os sorteios da Caixa?',
+    answer: 'A Caixa Econômica Federal faz os sorteios ao vivo. As dezenas saem de globos mecânicos certificados. Os resultados são publicados em loterias.caixa.gov.br e aparecem aqui minutos depois.',
+  },
+  {
+    question: 'Os resultados aqui são oficiais?',
+    answer: 'Os dados vêm da API oficial da Caixa Econômica Federal. Números sorteados, premiação e ganhadores são os mesmos do resultado oficial.',
+  },
+  {
+    question: 'Como conferir se minha aposta foi premiada?',
+    answer: 'Use o Conferidor de Apostas. Informe os números jogados e o concurso. O sistema compara com o resultado oficial e mostra a faixa de premiação.',
+  },
+  {
+    question: 'Qual loteria tem maior chance de ganhar?',
+    answer: 'A Lotofácil, com chance de 1 em 3.268.760 para o prêmio principal. A Mega-Sena paga mais, mas a chance é de 1 em 50.063.860.',
+  },
+  {
+    question: 'Com que frequência os resultados são atualizados?',
+    answer: 'Em geral, dentro de 5 a 10 minutos após o fim de cada sorteio.',
+  },
+  {
+    question: 'O que acontece quando o prêmio acumula?',
+    answer: 'Se ninguém acerta o prêmio principal, o valor acumula para o concurso seguinte. O prêmio estimado do próximo concurso aparece aqui, calculado com base na arrecadação.',
+  },
+  {
+    question: 'Como funciona a divisão do prêmio entre ganhadores?',
+    answer: 'O prêmio bruto de cada faixa é dividido igualmente entre todos os apostadores que acertaram aquela faixa no mesmo concurso. Quanto mais ganhadores, menor o valor individual.',
+  },
+  {
+    question: 'Como resgatar um prêmio de loteria?',
+    answer: 'Até R$ 2.259,20: em qualquer lotérica. Acima disso: em agência da Caixa com documento de identidade. Acima de R$ 10.000,00: com agendamento. Prazo de 90 dias após o sorteio.',
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Page Component — ISR cached, loading.tsx shows skeleton on cold cache
+// ---------------------------------------------------------------------------
+
+export default async function HomePage() {
+  // FAQ schema (static, no API needed)
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: HOMEPAGE_FAQ.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
 
   return (
     <>
-      {/* Live Result Poller - polls every 10s during draw window (21:00 BRT, all draw days) */}
+      {/* FAQPage JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
+      {/* Live Result Poller */}
       <LiveResultPoller
         drawTime="21:00"
         drawDays={[0, 1, 2, 3, 4, 5, 6]}
         pollInterval={10000}
       />
 
-      {/* Hero Section */}
+      {/* Hero Section — renders INSTANTLY (no API needed) */}
       <section className="bg-gradient-to-br from-emerald-600 to-emerald-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">
             Resultados das Loterias da Caixa
           </h1>
-          <p className="text-lg text-emerald-100 max-w-2xl mb-8">
+          <p className="text-lg text-emerald-100 max-w-2xl mb-6">
             Confira os resultados atualizados de todas as loterias da Caixa
             Econômica Federal. Mega-Sena, Lotofácil, Quina e muito mais.
           </p>
@@ -83,97 +137,17 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Jackpot Card */}
-      {(() => {
-        let maxPrize = 0;
-        let jackpotSlug = '';
-        for (const slug of GAME_SLUGS) {
-          const r = results[slug];
-          if (r && r.valorEstimadoProximoConcurso > maxPrize) {
-            maxPrize = r.valorEstimadoProximoConcurso;
-            jackpotSlug = slug;
-          }
-        }
-        if (!jackpotSlug || maxPrize <= 0) return null;
-        const jackpotGame = GAMES[jackpotSlug];
-        const jackpotResult = results[jackpotSlug]!;
-        const formatted = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(maxPrize);
-        return (
-          <section className="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
-            <Link
-              href={`/${jackpotSlug}`}
-              className="block rounded-2xl border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-yellow-50 p-6 sm:p-8 shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-200 rounded-full px-3 py-1 mb-3">
-                    🏆 Maior Prêmio Estimado
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                    {jackpotGame.emoji} {jackpotGame.name} — Concurso {jackpotResult.concurso + 1}
-                  </h2>
-                  <p className="text-gray-600 mt-1">Próximo sorteio estimado em</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-3xl sm:text-4xl font-extrabold text-emerald-600">{formatted}</p>
-                  <p className="text-sm text-emerald-700 font-medium mt-1">Ver detalhes &rarr;</p>
-                </div>
-              </div>
-            </Link>
-          </section>
-        );
-      })()}
+      {/* Results — fetched server-side, cached via ISR. loading.tsx shows skeleton on cold cache */}
+      <div className="pt-8">
+        <HomepageResults />
+      </div>
 
-      {/* Latest Results Grid */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          Últimos Resultados
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {GAME_SLUGS.map((slug) => {
-            const game = GAMES[slug];
-            const result = results[slug];
-
-            if (!result) {
-              return (
-                <div
-                  key={slug}
-                  className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
-                >
-                  <div className="flex items-center gap-2 mb-4">
-                    <span
-                      className="text-xs px-2 py-0.5 rounded-full font-medium text-white"
-                      style={{ backgroundColor: game.color }}
-                    >
-                      {game.emoji} {game.name}
-                    </span>
-                  </div>
-                  <p className="text-gray-500 text-sm">
-                    Resultado indisponível no momento.
-                  </p>
-                </div>
-              );
-            }
-
-            return (
-              <ResultCard
-                key={slug}
-                result={result}
-                game={game}
-                showLink={true}
-              />
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Next Draws Countdown */}
+      {/* Next Draws Countdown — renders INSTANTLY (no API needed) */}
       <section className="bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Próximos Sorteios
           </h2>
-          {/* Mobile: horizontal scroll; Desktop: grid */}
           <div className="flex md:hidden gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
             {GAME_SLUGS.map((slug) => {
               const game = GAMES[slug];
@@ -227,236 +201,103 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* SEO Content Section */}
+      {/* SEO Content — renders INSTANTLY (all static) */}
       <section className="max-w-7xl mx-auto px-4 py-12">
         <SEOContent>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Tudo Sobre as Loterias da Caixa
-          </h2>
+          <p className="text-gray-700 leading-relaxed mb-8">
+            Milhões de brasileiros apostam nas loterias da Caixa Econômica
+            Federal toda semana. Aqui você encontra os resultados de todas as
+            modalidades logo após a apuração oficial.
+          </p>
 
-          <div className="space-y-6 text-gray-700 leading-relaxed">
-            <p>
-              As{' '}
-              <strong className="text-gray-900">
-                loterias da Caixa Econômica Federal
-              </strong>{' '}
-              são os jogos de azar mais populares do Brasil, com milhões de
-              apostadores participando dos sorteios semanais. Nosso site oferece
-              os resultados atualizados de todas as modalidades logo após a
-              apuração oficial.
-            </p>
+          {/* Draw Schedule Table */}
+          <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            Calendário de Sorteios
+          </h3>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-8">
-              Principais Loterias
-            </h3>
+          <div className="overflow-x-auto mb-8">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th scope="col" className="text-left py-3 pr-4 font-semibold text-gray-900">Loteria</th>
+                  <th scope="col" className="text-left py-3 pr-4 font-semibold text-gray-900">Dias de Sorteio</th>
+                  <th scope="col" className="text-left py-3 pr-4 font-semibold text-gray-900">Horário</th>
+                  <th scope="col" className="text-left py-3 font-semibold text-gray-900">Aposta Mínima</th>
+                </tr>
+              </thead>
+              <tbody>
+                {GAME_SLUGS.map((slug) => {
+                  const game = GAMES[slug];
+                  const dayNames = getDrawDayNames(game.drawDays);
+                  return (
+                    <tr key={slug} className="border-b border-gray-100">
+                      <td className="py-3 pr-4">
+                        <Link
+                          href={`/${slug}`}
+                          className="text-emerald-600 hover:underline font-medium"
+                        >
+                          {game.emoji} {game.name}
+                        </Link>
+                      </td>
+                      <td className="py-3 pr-4 text-gray-700">{dayNames.join(', ')}</td>
+                      <td className="py-3 pr-4 text-gray-700">{game.drawTime}h</td>
+                      <td className="py-3 text-gray-700">{game.minBet}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
-            <p>
-              A{' '}
-              <Link
-                href="/mega-sena"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                Mega-Sena
-              </Link>{' '}
-              é a loteria mais famosa do Brasil, com sorteios às terças, quintas
-              e sábados às 21h. O apostador escolhe 6 números de 1 a 60 e pode ganhar
-              acertando 4, 5 ou 6 dezenas. A probabilidade de acertar a Sena com uma aposta
-              simples é de 1 em 50.063.860. A aposta mínima custa R$ 5,00 e os prêmios
-              frequentemente ultrapassam R$ 100 milhões quando acumulados.
-            </p>
+          {/* What you'll find here */}
+          <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            O que você encontra aqui
+          </h3>
 
-            <p>
-              A{' '}
-              <Link
-                href="/lotofacil"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                Lotofácil
-              </Link>{' '}
-              é considerada a loteria mais fácil de ganhar, com sorteios de
-              segunda a sábado. O jogador marca 15 números entre 25, e ganha
-              acertando a partir de 11 dezenas. A chance de acertar os 15 números é de
-              1 em 3.268.760, mas a probabilidade de ganhar qualquer prêmio (11 acertos)
-              é de aproximadamente 1 em 11. A aposta mínima é de apenas R$ 3,00, tornando-a
-              acessível para todos os perfis de apostadores.
-            </p>
-
-            <p>
-              A{' '}
-              <Link
-                href="/quina"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                Quina
-              </Link>{' '}
-              oferece sorteios de segunda a sábado, onde o apostador escolhe 5
-              números de 1 a 80. É possível ganhar acertando de 2 a 5 números, com
-              probabilidade de 1 em 24.040.016 para o prêmio principal. A aposta mínima
-              custa R$ 2,50 e a Quina de São João, realizada no dia 24 de junho, não acumula.
-            </p>
-
-            <p>
-              A{' '}
-              <Link
-                href="/lotomania"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                Lotomania
-              </Link>{' '}
-              é uma modalidade única onde o apostador escolhe 50 números de 00 a 99.
-              São sorteados 20 números por concurso, e quem acertar todos os 20 ou
-              nenhum dos 20 leva o prêmio máximo. Os sorteios acontecem às segundas,
-              quartas e sextas-feiras, com aposta fixa de R$ 3,00.
-            </p>
-
-            <p>
-              A{' '}
-              <Link
-                href="/mais-milionaria"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                +Milionária
-              </Link>{' '}
-              é a loteria com os maiores prêmios do Brasil, com mínimo garantido de
-              R$ 10 milhões. O apostador escolhe 6 números de 1 a 50 mais 2 trevos
-              de 1 a 6. Com sorteios às quartas e sábados, a probabilidade de acertar
-              tudo é de 1 em 238.360.500.
-            </p>
-
-            <p>
-              O{' '}
-              <Link
-                href="/dia-de-sorte"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                Dia de Sorte
-              </Link>{' '}
-              combina números e meses: o apostador escolhe 7 números de 1 a 31 e um
-              mês da sorte. Sorteios às terças, quintas e sábados. A chance de
-              acertar o mês é de 1 em 12, proporcionando um prêmio adicional.
-            </p>
-
-            <p>
-              O{' '}
-              <Link
-                href="/super-sete"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                Super Sete
-              </Link>{' '}
-              funciona com 7 colunas, cada uma com números de 0 a 9. O apostador
-              escolhe um número por coluna e ganha acertando de 3 a 7 colunas.
-              Sorteios às segundas, quartas e sextas, com aposta mínima de R$ 2,50.
-            </p>
-
-            <p>
-              A{' '}
-              <Link
-                href="/dupla-sena"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                Dupla Sena
-              </Link>{' '}
-              oferece duas chances de ganhar no mesmo concurso: são realizados dois
-              sorteios de 6 números (de 1 a 50) por concurso. Sorteios às segundas,
-              quartas e sextas-feiras, com aposta mínima de R$ 2,50.
-            </p>
-
-            <p>
-              A{' '}
-              <Link
-                href="/timemania"
-                className="text-emerald-600 hover:underline font-medium"
-              >
-                Timemania
-              </Link>{' '}
-              une futebol e loteria: o apostador escolhe 10 números de 1 a 80 e um
-              time do coração entre 80 clubes brasileiros. São sorteados 7 números,
-              e acertar o time do coração também garante prêmio. Sorteios às terças,
-              quintas e sábados, com aposta única de R$ 3,50.
-            </p>
-
-            <h3 className="text-xl font-semibold text-gray-900 mt-8">
-              Calendário de Sorteios
-            </h3>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 pr-4 font-semibold text-gray-900">
-                      Loteria
-                    </th>
-                    <th className="text-left py-3 pr-4 font-semibold text-gray-900">
-                      Dias de Sorteio
-                    </th>
-                    <th className="text-left py-3 pr-4 font-semibold text-gray-900">
-                      Horário
-                    </th>
-                    <th className="text-left py-3 font-semibold text-gray-900">
-                      Aposta Mínima
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {GAME_SLUGS.map((slug) => {
-                    const game = GAMES[slug];
-                    const dayNames = getDrawDayNames(game.drawDays);
-                    return (
-                      <tr
-                        key={slug}
-                        className="border-b border-gray-100"
-                      >
-                        <td className="py-3 pr-4">
-                          <Link
-                            href={`/${slug}`}
-                            className="text-emerald-600 hover:underline font-medium"
-                          >
-                            {game.emoji} {game.name}
-                          </Link>
-                        </td>
-                        <td className="py-3 pr-4 text-gray-700">
-                          {dayNames.join(', ')}
-                        </td>
-                        <td className="py-3 pr-4 text-gray-700">
-                          {game.drawTime}h
-                        </td>
-                        <td className="py-3 text-gray-700">{game.minBet}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-
-            <h3 className="text-xl font-semibold text-gray-900 mt-8">
-              O que você encontra aqui
-            </h3>
-
-            <div className="space-y-3">
-              <ChecklistItem>
-                Resultados atualizados de todos os sorteios da Caixa
-              </ChecklistItem>
-              <ChecklistItem>
-                Premiação detalhada com número de ganhadores por faixa
-              </ChecklistItem>
-              <ChecklistItem>
-                Contagem regressiva para os próximos sorteios
-              </ChecklistItem>
-              <ChecklistItem>
-                Estatísticas e análise de números quentes e frios
-              </ChecklistItem>
-              <ChecklistItem>
-                Gerador de números aleatórios para suas apostas
-              </ChecklistItem>
-              <ChecklistItem>
-                Histórico completo de resultados anteriores
-              </ChecklistItem>
-            </div>
+          <div className="space-y-3 mb-6">
+            <ChecklistItem>Resultados atualizados de todos os sorteios da Caixa</ChecklistItem>
+            <ChecklistItem>Premiação detalhada com número de ganhadores por faixa</ChecklistItem>
+            <ChecklistItem>Contagem regressiva para os próximos sorteios</ChecklistItem>
+            <ChecklistItem>Estatísticas e análise de números quentes e frios</ChecklistItem>
+            <ChecklistItem>Gerador de números aleatórios para suas apostas</ChecklistItem>
+            <ChecklistItem>Histórico completo de resultados anteriores</ChecklistItem>
+            <ChecklistItem>Conferidor automático de apostas</ChecklistItem>
+            <ChecklistItem>Simulador para testar seus números em sorteios passados</ChecklistItem>
           </div>
         </SEOContent>
       </section>
 
+      {/* FAQ Section — renders INSTANTLY (all static) */}
+      <section className="bg-gray-50 py-12">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Perguntas Frequentes sobre Loterias
+          </h2>
+          <div className="space-y-3">
+            {HOMEPAGE_FAQ.map((item, index) => (
+              <details
+                key={index}
+                className="group rounded-xl border border-gray-200 bg-white transition-colors hover:border-gray-300"
+              >
+                <summary className="flex cursor-pointer items-center justify-between gap-4 p-5 font-medium text-gray-800 [&::-webkit-details-marker]:hidden list-none">
+                  <span>{item.question}</span>
+                  <svg
+                    className="w-5 h-5 flex-shrink-0 text-gray-400 transition-transform duration-200 group-open:rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <p className="px-5 pb-5 text-gray-600 leading-relaxed">
+                  {item.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 }

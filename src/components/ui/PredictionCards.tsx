@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { GAMES, GAME_SLUGS } from '@/lib/constants';
 import LotteryBall from '@/components/ui/LotteryBall';
@@ -30,10 +30,17 @@ function generateSeededNumbers(seed: string, count: number, max: number): number
 }
 
 export default function PredictionCards() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const dateStr = useMemo(() => {
+    if (!mounted) return '';
     const today = new Date();
     return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  }, []);
+  }, [mounted]);
 
   const predictions = useMemo(() => {
     return GAME_SLUGS.map((slug) => {
@@ -44,6 +51,30 @@ export default function PredictionCards() {
       return { slug, numbers, hotNumbers };
     });
   }, [dateStr]);
+
+  if (!mounted) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {GAME_SLUGS.map((slug) => {
+          const game = GAMES[slug];
+          return (
+            <div key={slug} className="rounded-xl border border-gray-200 bg-white p-6 animate-pulse">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">{game.emoji}</span>
+                <div className="h-6 bg-gray-200 rounded w-32" />
+              </div>
+              <div className="h-4 bg-gray-200 rounded w-40 mb-3" />
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {Array.from({ length: game.selectNumbers }, (_, i) => (
+                  <div key={i} className="w-8 h-8 rounded-full bg-gray-200" />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
