@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { LotteryResult, GameConfig } from '@/lib/types';
 import GameBadge from './GameBadge';
 import LotteryBall from './LotteryBall';
+import ShareResultCard from './ShareResultCard';
 
 interface ResultCardProps {
   result: LotteryResult;
@@ -102,17 +103,32 @@ export default function ResultCard({
         </div>
       )}
 
-      {/* Link */}
-      {showLink && (
-        <div className="mt-4 pt-2 border-t border-gray-100">
+      {/* Share + Link */}
+      <div className="mt-4 pt-2 border-t border-gray-100 flex items-center justify-between">
+        <ShareResultCard
+          gameName={game.name}
+          gameColor={game.color}
+          gameEmoji={game.emoji}
+          concurso={result.concurso}
+          data={result.data}
+          dezenas={result.dezenas}
+          acumulado={result.acumulado}
+          valorEstimado={result.valorEstimadoProximoConcurso}
+          premiacoes={result.premiacoes.map((p) => ({
+            descricao: p.descricao,
+            ganhadores: p.ganhadores,
+            valorPremio: p.valorPremio,
+          }))}
+        />
+        {showLink && (
           <Link
             href={`/${game.slug}/resultado/${result.concurso}`}
             className="text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
           >
             Ver detalhes &rarr;
           </Link>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
