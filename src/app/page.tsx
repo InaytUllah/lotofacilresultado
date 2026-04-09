@@ -92,12 +92,32 @@ export default async function HomePage() {
     })),
   };
 
+  // ItemList schema for lottery results
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Resultados das Loterias da Caixa',
+    description: 'Últimos resultados de todas as loterias da Caixa Econômica Federal',
+    numberOfItems: GAME_SLUGS.length,
+    itemListElement: GAME_SLUGS.map((slug, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: `Resultado ${GAMES[slug].name}`,
+      url: `${SITE_URL}/${slug}`,
+    })),
+  };
+
   return (
     <>
       {/* FAQPage JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      {/* ItemList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
       />
 
       {/* Live Result Poller */}

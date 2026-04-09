@@ -3,6 +3,8 @@ import type { LotteryResult, GameConfig } from '@/lib/types';
 import GameBadge from './GameBadge';
 import LotteryBall from './LotteryBall';
 import ShareResultCard from './ShareResultCard';
+import CopyNumbers from './CopyNumbers';
+import SocialShare from './SocialShare';
 
 interface ResultCardProps {
   result: LotteryResult;
@@ -103,23 +105,36 @@ export default function ResultCard({
         </div>
       )}
 
-      {/* Share + Link */}
-      <div className="mt-4 pt-2 border-t border-gray-100 flex items-center justify-between">
-        <ShareResultCard
-          gameName={game.name}
-          gameColor={game.color}
-          gameEmoji={game.emoji}
-          concurso={result.concurso}
-          data={result.data}
-          dezenas={result.dezenas}
-          acumulado={result.acumulado}
-          valorEstimado={result.valorEstimadoProximoConcurso}
-          premiacoes={result.premiacoes.map((p) => ({
-            descricao: p.descricao,
-            ganhadores: p.ganhadores,
-            valorPremio: p.valorPremio,
-          }))}
-        />
+      {/* Actions */}
+      <div className="mt-4 pt-2 border-t border-gray-100 flex flex-wrap items-center gap-2 justify-between">
+        <div className="flex items-center gap-2">
+          <ShareResultCard
+            gameName={game.name}
+            gameColor={game.color}
+            gameEmoji={game.emoji}
+            concurso={result.concurso}
+            data={result.data}
+            dezenas={result.dezenas}
+            acumulado={result.acumulado}
+            valorEstimado={result.valorEstimadoProximoConcurso}
+            premiacoes={result.premiacoes.map((p) => ({
+              descricao: p.descricao,
+              ganhadores: p.ganhadores,
+              valorPremio: p.valorPremio,
+            }))}
+          />
+          <CopyNumbers
+            numbers={result.dezenas}
+            gameName={game.name}
+            concurso={result.concurso}
+          />
+          <SocialShare
+            gameName={game.name}
+            concurso={result.concurso}
+            numbers={result.dezenas}
+            gameSlug={game.slug}
+          />
+        </div>
         {showLink && (
           <Link
             href={`/${game.slug}/resultado/${result.concurso}`}
