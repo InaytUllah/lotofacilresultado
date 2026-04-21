@@ -189,6 +189,32 @@ export default async function GamePage({
     })),
   };
 
+  // WebPage schema with Speakable + dateModified (E-E-A-T + AEO)
+  const pageUrl = `${SITE_URL}/${game.slug}`;
+  const nowIso = new Date().toISOString();
+  const webPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: `Resultado ${game.name} - ${lastResultDate}`,
+    description: game.description,
+    inLanguage: 'pt-BR',
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    datePublished: '2023-01-01T00:00:00-03:00',
+    dateModified: latestResult ? new Date().toISOString() : nowIso,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.speakable', 'h1'],
+    },
+    breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+    about: {
+      '@type': 'Thing',
+      name: game.name,
+      description: game.description,
+    },
+  };
+
   // Recent results for "mini news" section
   const newsItems = recentResults.slice(0, 3);
 
@@ -201,6 +227,10 @@ export default async function GamePage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
 
       <LiveResultPoller
@@ -229,10 +259,10 @@ export default async function GamePage({
           </ol>
         </nav>
 
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+        <h1 className="speakable text-3xl sm:text-4xl font-bold mb-2 tracking-tight">
           Resultado {game.name} - {lastResultDate}
         </h1>
-        <p className="text-white/90 text-lg">{game.description}</p>
+        <p className="speakable text-white/90 text-lg">{game.description}</p>
 
         <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-white/80">
           <span>Sorteios: {drawDaysText}</span>

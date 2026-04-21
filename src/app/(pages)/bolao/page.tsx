@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import BolaoCalculator from '@/components/BolaoCalculator';
 import SEOContent from '@/components/ui/SEOContent';
+import QuickAnswer from '@/components/ui/QuickAnswer';
 
 const title = 'Calculadora de Bolão - Monte Seu Bolão';
 const description =
@@ -120,6 +121,14 @@ export default function BolaoPage() {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 space-y-8">
+        <QuickAnswer question="Como funciona um bolão de loteria?" icon="👥">
+          Um bolão é uma aposta coletiva onde várias pessoas dividem o custo
+          e o eventual prêmio. Se 10 pessoas apostam R$ 50 cada (R$ 500 total),
+          podem fazer uma aposta 100x maior que uma aposta simples — aumentando
+          as chances proporcionalmente. Bolões podem ser organizados em lotéricas
+          (com 70% de participação mínima) ou entre amigos.
+        </QuickAnswer>
+
         <BolaoCalculator />
 
         {/* SEO Content */}

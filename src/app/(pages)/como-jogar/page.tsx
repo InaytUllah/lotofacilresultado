@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME, DAYS_SHORT_PT } from '@/lib/constants';
+import QuickAnswer from '@/components/ui/QuickAnswer';
 
 export const metadata: Metadata = {
   title: 'Como Jogar nas Loterias da Caixa - Guia Completo',
@@ -266,13 +267,21 @@ export default function ComoJogarPage() {
           </ol>
         </nav>
 
-        <h1 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+        <h1 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl speakable">
           Como Jogar nas Loterias da Caixa
         </h1>
-        <p className="mb-10 text-lg text-gray-600">
+        <p className="mb-6 text-lg text-gray-600 speakable">
           Guia completo com regras, dicas e probabilidades de todas as 9 loterias da Caixa
           Econômica Federal. Aprenda a jogar e aumente suas chances de ganhar.
         </p>
+
+        <QuickAnswer question="Como jogar na loteria da Caixa?" icon="📖">
+          Você pode apostar em <strong>qualquer lotérica credenciada</strong>, pelo{' '}
+          <strong>aplicativo Loterias Caixa</strong> (Android e iOS) ou pelo{' '}
+          <strong>internet banking</strong> da Caixa. É necessário ter 18 anos ou mais.
+          O valor mínimo online é R$ 30,00. Escolha os números ou use a Surpresinha
+          (números aleatórios), confirme e guarde seu bilhete para conferir depois.
+        </QuickAnswer>
 
         {/* Game sections */}
         {GAME_SLUGS.map((slug) => {

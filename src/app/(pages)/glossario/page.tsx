@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import SEOContent from '@/components/ui/SEOContent';
+import QuickAnswer from '@/components/ui/QuickAnswer';
 
 export const metadata: Metadata = {
   title: 'Glossário de Loteria - Termos e Definições',
@@ -213,6 +214,14 @@ export default function GlossarioPage() {
       </section>
 
       <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 space-y-8">
+        <QuickAnswer question="O que é um glossário de loteria?" icon="📚">
+          Um glossário de loteria reúne os termos e definições usados nas loterias
+          da Caixa Econômica Federal. Entenda expressões como <strong>acumulação</strong>,
+          <strong> bolão</strong>, <strong>concurso</strong>, <strong>rateio</strong>,
+          <strong> teimosinha</strong>, <strong>surpresinha</strong> e muito mais.
+          Este glossário cobre os 29 termos mais importantes.
+        </QuickAnswer>
+
         {/* Letter Navigation */}
         <nav className="flex flex-wrap gap-2" aria-label="Navegação alfabética">
           {letters.map((letter) => (

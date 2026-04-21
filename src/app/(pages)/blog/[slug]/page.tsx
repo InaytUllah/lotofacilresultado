@@ -238,11 +238,20 @@ function PredictionBlogPost({
       '@type': 'Organization',
       name: 'Lotofácil Resultado',
       url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/api/icon?size=512`,
+        width: 512,
+        height: 512,
+      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/blog/previsoes-${gameSlug}-${date}`,
     },
+    image: [`${SITE_URL}/api/og?title=${encodeURIComponent(`Previsões ${game.name}`)}&color=${encodeURIComponent(game.color)}`],
+    inLanguage: 'pt-BR',
+    articleSection: 'Análises e Previsões',
     description: `Análise estatística detalhada e previsões para o próximo sorteio da ${game.name}. Tendências, metodologia e combinações sugeridas.`,
   };
 
@@ -592,11 +601,21 @@ async function ResultBlogPost({
       '@type': 'Organization',
       name: 'Lotofácil Resultado',
       url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/api/icon?size=512`,
+        width: 512,
+        height: 512,
+      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/blog/resultado-${gameSlug}-concurso-${concurso}-${isoDate}`,
     },
+    image: [`${SITE_URL}/api/og?title=${encodeURIComponent(`${game.name} Concurso ${concurso}`)}&color=${encodeURIComponent(game.color)}&numbers=${encodeURIComponent(result.dezenas.slice(0, 6).join(','))}`],
+    inLanguage: 'pt-BR',
+    articleSection: 'Resultados',
+    keywords: [`resultado ${game.slug}`, `${game.name} concurso ${concurso}`, 'loteria', 'sorteio'],
     description: `Resultado do concurso ${concurso} da ${game.name} realizado em ${result.data}. Números: ${result.dezenas.join(', ')}.`,
   };
 
