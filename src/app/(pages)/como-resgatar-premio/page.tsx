@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import SEOContent from '@/components/ui/SEOContent';
+import QuickAnswer from '@/components/ui/QuickAnswer';
 
 export const metadata: Metadata = {
   title: 'Como Resgatar Prêmio de Loteria - Guia Completo',
@@ -152,6 +153,14 @@ export default function ComoResgatarPremioPage() {
       </section>
 
       <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 space-y-8">
+        <QuickAnswer question="Onde resgatar prêmios de loteria no Brasil?" icon="🏧">
+          <strong>Prêmios até R$ 2.259,20</strong> podem ser resgatados em
+          qualquer lotérica credenciada. <strong>Valores acima de R$ 2.259,20</strong> só
+          em agências da Caixa, com documento de identidade e CPF.
+          Prêmios <strong>acima de R$ 10.000</strong> exigem agendamento e pagamento em até 2 dias úteis.
+          O <strong>prazo para resgate é de 90 dias</strong> após o sorteio.
+        </QuickAnswer>
+
         {/* Step by Step */}
         <section className="rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import QuickAnswer from '@/components/ui/QuickAnswer';
 
 export const metadata: Metadata = {
   title: 'Perguntas Frequentes sobre Loterias da Caixa',
@@ -162,14 +163,23 @@ export default function FAQPage() {
           </ol>
         </nav>
 
-        <h1 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+        <h1 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl speakable">
           Perguntas Frequentes sobre Loterias da Caixa
         </h1>
-        <p className="mb-10 text-lg text-gray-600">
+        <p className="mb-6 text-lg text-gray-600 speakable">
           Encontre respostas para as dúvidas mais comuns sobre as loterias da Caixa
           Econômica Federal, incluindo como jogar, resgatar prêmios, impostos e muito
           mais.
         </p>
+
+        <QuickAnswer question="Como consultar o resultado da loteria?" icon="🎯">
+          Você pode consultar o resultado de qualquer loteria da Caixa
+          Econômica Federal no site oficial{' '}
+          <a href="https://loterias.caixa.gov.br" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:underline">loterias.caixa.gov.br</a>,
+          no aplicativo Loterias Caixa ou aqui no{' '}
+          <a href="/" className="text-emerald-600 hover:underline">Lotofácil Resultado</a>,
+          onde os resultados aparecem minutos após cada sorteio.
+        </QuickAnswer>
 
         <div className="space-y-4">
           {faqItems.map((item, index) => (
@@ -199,6 +209,37 @@ export default function FAQPage() {
             </details>
           ))}
         </div>
+
+        {/* Related questions / topic cluster */}
+        <section aria-labelledby="related-topics" className="mt-12 rounded-xl border border-gray-200 bg-white p-6 sm:p-8">
+          <h2 id="related-topics" className="mb-4 text-xl font-bold text-gray-900 flex items-center gap-2">
+            <span aria-hidden="true">🔗</span> Tópicos Relacionados
+          </h2>
+          <p className="text-gray-600 text-sm mb-4">
+            Explore guias completos sobre os principais assuntos das loterias:
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {[
+              { href: '/como-jogar', title: 'Como Jogar nas Loterias', desc: 'Guia completo com regras de cada modalidade' },
+              { href: '/como-resgatar-premio', title: 'Como Resgatar Prêmio', desc: 'Prazos, documentos e passo a passo' },
+              { href: '/probabilidades', title: 'Probabilidades de Acerto', desc: 'Chances reais em cada loteria' },
+              { href: '/dicas-para-apostar', title: 'Dicas para Apostar', desc: 'Estratégias e erros comuns' },
+              { href: '/qual-loteria-jogar', title: 'Qual Loteria Jogar?', desc: 'Comparativo completo' },
+              { href: '/glossario', title: 'Glossário de Termos', desc: '29 termos explicados' },
+              { href: '/bolao', title: 'Calculadora de Bolão', desc: 'Custos e chances do bolão' },
+              { href: '/jogo-responsavel', title: 'Jogo Responsável', desc: 'Orientações e ajuda' },
+            ].map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="block rounded-lg border border-gray-200 p-4 hover:border-emerald-400 hover:bg-emerald-50 transition-colors"
+              >
+                <p className="font-semibold text-gray-900 text-sm">{item.title} →</p>
+                <p className="text-gray-600 text-xs mt-1">{item.desc}</p>
+              </a>
+            ))}
+          </div>
+        </section>
 
         {/* SEO content */}
         <section className="mt-12 rounded-xl border border-gray-200 bg-white p-6 sm:p-8">

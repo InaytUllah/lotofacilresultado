@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SITE_URL, SITE_NAME, GAMES, GAME_SLUGS } from '@/lib/constants';
 import SEOContent from '@/components/ui/SEOContent';
+import QuickAnswer from '@/components/ui/QuickAnswer';
 
 export const metadata: Metadata = {
   title: 'Qual Loteria Jogar? Comparativo Completo das Loterias da Caixa',
@@ -167,6 +168,14 @@ export default function QualLoteriaJogarPage() {
       </section>
 
       <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 space-y-8">
+        <QuickAnswer question="Qual a melhor loteria para jogar?" icon="🤔">
+          <strong>Para maior chance de ganhar:</strong> Dia de Sorte (1 em 2,6 milhões)
+          ou Lotofácil (1 em 3,2 milhões). <strong>Para prêmios gigantes:</strong> Mega-Sena
+          (prêmios acima de R$ 100 milhões). <strong>Para apostas baratas:</strong> Quina
+          (R$ 2,50 por aposta) ou Lotofácil (R$ 3,00). <strong>Para sorteios frequentes:</strong>{' '}
+          Lotofácil e Quina sorteiam 6 vezes por semana.
+        </QuickAnswer>
+
         {/* Comparison Table */}
         <section className="rounded-xl border border-gray-200 bg-white overflow-hidden">
           <div className="p-6 border-b border-gray-200">

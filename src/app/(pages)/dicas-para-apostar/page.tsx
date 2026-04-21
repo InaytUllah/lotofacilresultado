@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import SEOContent from '@/components/ui/SEOContent';
+import QuickAnswer from '@/components/ui/QuickAnswer';
 
 export const metadata: Metadata = {
   title: 'Dicas para Apostar na Loteria - Estratégias e Orientações',
@@ -180,6 +181,14 @@ export default function DicasParaApostarPage() {
       </section>
 
       <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 space-y-8">
+        <QuickAnswer question="Qual a melhor estratégia para ganhar na loteria?" icon="🎯">
+          Não existe estratégia garantida — loterias são jogos de azar.
+          Mas você pode <strong>otimizar suas apostas</strong>: jogue em bolões (multiplica
+          chances sem multiplicar custos), diversifique entre números altos e baixos,
+          evite sequências óbvias (como 1-2-3-4-5-6) e defina um <strong>orçamento mensal
+          fixo</strong>. A Lotofácil oferece a melhor relação chance/custo.
+        </QuickAnswer>
+
         {/* Tips Grid */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 mb-6">

@@ -107,6 +107,35 @@ export default async function HomePage() {
     })),
   };
 
+  // WebPage + Speakable schema for AEO (voice search)
+  const now = new Date().toISOString();
+  const webPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${SITE_URL}/#webpage`,
+    url: SITE_URL,
+    name: 'Resultado das Loterias da Caixa — Hoje',
+    description: 'Resultados atualizados das loterias da Caixa Econômica Federal.',
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    inLanguage: 'pt-BR',
+    datePublished: '2023-01-01T00:00:00-03:00',
+    dateModified: now,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.speakable', 'h1', '[data-speakable]'],
+    },
+    primaryImageOfPage: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/api/og`,
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Início', item: SITE_URL },
+      ],
+    },
+  };
+
   // SiteNavigationElement schema
   const siteNavSchema = {
     '@context': 'https://schema.org',
@@ -140,6 +169,11 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavSchema) }}
       />
+      {/* WebPage + Speakable JSON-LD (for voice search / AEO) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
 
       {/* Live Result Poller */}
       <LiveResultPoller
@@ -149,18 +183,60 @@ export default async function HomePage() {
       />
 
       {/* Hero Section — renders INSTANTLY (no API needed) */}
-      <section className="bg-gradient-to-br from-emerald-600 to-emerald-800 text-white py-12 sm:py-16">
+      <section
+        className="bg-gradient-to-br from-emerald-600 to-emerald-800 text-white py-12 sm:py-16"
+        aria-labelledby="hero-title"
+      >
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-            Resultados das Loterias da Caixa
+          {/* Trust strip */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4 text-sm text-emerald-100">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+              </span>
+              Dados oficiais da Caixa
+            </span>
+            <span aria-hidden="true" className="text-emerald-300">•</span>
+            <span>Atualizado a cada 5 minutos</span>
+            <span aria-hidden="true" className="text-emerald-300">•</span>
+            <span>9 loterias cobertas</span>
+          </div>
+
+          <h1
+            id="hero-title"
+            className="speakable text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 tracking-tight"
+          >
+            Resultado das Loterias da Caixa — Hoje
           </h1>
-          <p className="text-lg text-emerald-100 max-w-2xl mb-6">
-            Confira os resultados atualizados de todas as loterias da Caixa
-            Econômica Federal. Mega-Sena, Lotofácil, Quina e muito mais.
+          <p className="speakable text-lg text-emerald-100 max-w-2xl mb-6">
+            Confira os números sorteados, premiação e ganhadores de todas as
+            loterias da Caixa Econômica Federal. Mega-Sena, Lotofácil, Quina,
+            Lotomania, +Milionária e mais — direto da fonte oficial.
           </p>
 
+          {/* Primary CTAs */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            <Link
+              href="/resultados-ao-vivo"
+              className="inline-flex items-center gap-2 bg-white text-emerald-700 px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-50 transition-colors shadow-sm"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+              </span>
+              Ver Ao Vivo
+            </Link>
+            <Link
+              href="/conferidor"
+              className="inline-flex items-center gap-2 bg-emerald-700/50 text-white px-5 py-2.5 rounded-lg font-semibold border border-white/20 hover:bg-emerald-700 transition-colors"
+            >
+              ✅ Conferir Aposta
+            </Link>
+          </div>
+
           {/* Badge pills */}
-          <div className="flex flex-wrap gap-2">
+          <nav aria-label="Loterias disponíveis" className="flex flex-wrap gap-2">
             {GAME_SLUGS.map((slug) => {
               const game = GAMES[slug];
               return (
@@ -169,12 +245,12 @@ export default async function HomePage() {
                   href={`/${slug}`}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-white/15 hover:bg-white/25 transition-colors"
                 >
-                  <span>{game.emoji}</span>
+                  <span aria-hidden="true">{game.emoji}</span>
                   <span>{game.name}</span>
                 </Link>
               );
             })}
-          </div>
+          </nav>
         </div>
       </section>
 

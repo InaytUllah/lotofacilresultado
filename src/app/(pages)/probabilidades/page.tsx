@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME } from '@/lib/constants';
+import QuickAnswer from '@/components/ui/QuickAnswer';
 
 export const metadata: Metadata = {
   title: 'Probabilidades e Prêmios das Loterias da Caixa',
@@ -151,13 +152,23 @@ export default function ProbabilidadesPage() {
           </ol>
         </nav>
 
-        <h1 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
-          Probabilidades e Premios das Loterias da Caixa
+        <h1 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl speakable">
+          Probabilidades e Prêmios das Loterias da Caixa
         </h1>
-        <p className="mb-10 text-lg text-gray-600">
+        <p className="mb-6 text-lg text-gray-600 speakable">
           Tabelas completas com as probabilidades de acerto e faixas de prêmios típicos de
           todas as 9 loterias da Caixa Econômica Federal.
         </p>
+
+        <QuickAnswer question="Qual a probabilidade de ganhar na loteria?" icon="📊">
+          A probabilidade varia por loteria. A <strong>Lotofácil</strong> é a mais
+          fácil com chance de <strong>1 em 3.268.760</strong> no prêmio principal.
+          A <strong>Mega-Sena</strong> paga mais mas tem chance de
+          <strong> 1 em 50.063.860</strong>. O <strong>Dia de Sorte</strong> tem
+          a melhor probabilidade geral: <strong>1 em 2.629.575</strong>.
+          A <strong>+Milionária</strong> tem o prêmio mínimo garantido mas a menor
+          chance: <strong>1 em 238.360.500</strong>.
+        </QuickAnswer>
 
         {/* Game odds tables */}
         {GAME_SLUGS.map((slug) => {

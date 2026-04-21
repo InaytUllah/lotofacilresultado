@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import ServiceWorkerRegistration from '@/components/ui/ServiceWorkerRegistration';
 import NotificationBell from '@/components/ui/NotificationBell';
+import BackToTop from '@/components/ui/BackToTop';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6YPCF13JT5';
 
@@ -29,6 +30,26 @@ export const metadata: Metadata = {
     template: '%s | Lotofácil Resultado',
   },
   description: SITE_DESCRIPTION,
+  keywords: [
+    'resultado lotofácil',
+    'resultado mega-sena',
+    'resultado quina',
+    'resultado lotomania',
+    'resultado dia de sorte',
+    'resultado timemania',
+    'resultado dupla sena',
+    'resultado super sete',
+    'resultado +milionária',
+    'loterias da caixa',
+    'resultado loterias hoje',
+    'concurso loterias',
+    'próximo sorteio',
+    'loterias acumuladas',
+    'conferir aposta',
+  ],
+  authors: [{ name: 'Lotofácil Resultado', url: SITE_URL }],
+  creator: 'Lotofácil Resultado',
+  publisher: 'Lotofácil Resultado',
   alternates: {
     canonical: '/',
     languages: {
@@ -43,10 +64,19 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    creator: '@lotofacilresultado',
+    site: '@lotofacilresultado',
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
   },
   other: {
     'google-site-verification': process.env.GOOGLE_SITE_VERIFICATION || '',
@@ -98,8 +128,40 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'Lotofácil Resultado',
+              alternateName: 'Resultados das Loterias da Caixa',
               url: SITE_URL,
-              logo: `${SITE_URL}/api/icon?size=512`,
+              logo: {
+                '@type': 'ImageObject',
+                url: `${SITE_URL}/api/icon?size=512`,
+                width: 512,
+                height: 512,
+              },
+              description: SITE_DESCRIPTION,
+              foundingDate: '2023',
+              areaServed: {
+                '@type': 'Country',
+                name: 'Brasil',
+              },
+              knowsAbout: [
+                'Loterias da Caixa Econômica Federal',
+                'Mega-Sena',
+                'Lotofácil',
+                'Quina',
+                'Lotomania',
+                'Dia de Sorte',
+                'Timemania',
+                'Dupla Sena',
+                'Super Sete',
+                '+Milionária',
+                'Probabilidades de loteria',
+                'Estatísticas de sorteios',
+              ],
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                url: `${SITE_URL}/contato`,
+                availableLanguage: ['Portuguese', 'pt-BR'],
+              },
               sameAs: [],
             }),
           }}
@@ -133,6 +195,7 @@ export default function RootLayout({
         <Footer />
         <ThemeToggle />
         <NotificationBell />
+        <BackToTop />
         <ServiceWorkerRegistration />
       </body>
     </html>
