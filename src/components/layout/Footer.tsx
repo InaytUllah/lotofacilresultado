@@ -35,6 +35,8 @@ const footerColumns = [
       { href: '/qual-loteria-jogar', label: 'Qual Loteria Jogar?' },
       { href: '/resultados-ao-vivo', label: 'Resultados ao Vivo' },
       { href: '/mega-da-virada', label: 'Mega da Virada' },
+      { href: '/lotofacil-da-independencia', label: 'Lotofácil da Independência' },
+      { href: '/quina-de-sao-joao', label: 'Quina de São João' },
       { href: '/maiores-premios', label: 'Maiores Prêmios' },
       { href: '/quando-e-o-proximo-sorteio', label: 'Próximo Sorteio' },
       { href: '/faq', label: 'Perguntas Frequentes' },
