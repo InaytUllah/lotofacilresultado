@@ -268,6 +268,7 @@ export default async function HomePage() {
           {[
             { href: '/acumulados', emoji: '💰', label: 'Loterias Acumuladas' },
             { href: '/quando-e-o-proximo-sorteio', emoji: '⏰', label: 'Próximo Sorteio' },
+            { href: '/mega-da-virada', emoji: '🎆', label: 'Mega da Virada' },
             { href: '/maiores-premios', emoji: '🏆', label: 'Maiores Prêmios' },
             { href: '/conferidor', emoji: '✅', label: 'Conferidor de Apostas' },
             { href: '/gerador', emoji: '🎰', label: 'Gerador de Números' },

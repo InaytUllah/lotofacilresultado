@@ -330,6 +330,8 @@ export const NAV_CATEGORIES = [
       { href: '/acumulados', emoji: '💰', title: 'Loterias Acumuladas', description: 'Veja todos os prêmios acumulados' },
       { href: '/quando-e-o-proximo-sorteio', emoji: '⏰', title: 'Próximo Sorteio', description: 'Calendário e contagem regressiva' },
       { href: '/maiores-premios', emoji: '🏆', title: 'Maiores Prêmios', description: 'Recordes das loterias brasileiras' },
+      { href: '/mega-da-virada', emoji: '🎆', title: 'Mega da Virada', description: 'O maior prêmio do ano' },
+      { href: '/onde-vai-o-dinheiro', emoji: '💸', title: 'Para Onde Vai o Dinheiro', description: 'Repasses sociais das loterias' },
       { href: '/conferidor', emoji: '✅', title: 'Conferidor de Apostas', description: 'Confira se seus números foram sorteados' },
       { href: '/meus-numeros', emoji: '💾', title: 'Meus Números', description: 'Salve e confira suas apostas' },
       { href: '/simulador', emoji: '🧪', title: 'Simulador', description: 'Teste seus números nos sorteios anteriores' },

@@ -215,6 +215,14 @@ summary:focus-visible,
   background-color: #0d2818;
 }
 
+.dark .bg-yellow-50 {
+  background-color: #292524;
+}
+
+.dark .border-amber-300 {
+  border-color: #b45309;
+}
+
 .dark .border-amber-200 {
   border-color: #92400e;
 }

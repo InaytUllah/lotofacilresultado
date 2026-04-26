@@ -48,6 +48,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/glossario', priority: 0.6, freq: 'monthly' as const },
     { path: '/resultados-ao-vivo', priority: 0.9, freq: 'daily' as const },
     { path: '/qual-loteria-jogar', priority: 0.7, freq: 'monthly' as const },
+    { path: '/mega-da-virada', priority: 0.9, freq: 'weekly' as const },
+    { path: '/onde-vai-o-dinheiro', priority: 0.6, freq: 'monthly' as const },
     { path: '/blog', priority: 0.8, freq: 'weekly' as const },
     { path: '/privacidade', priority: 0.3, freq: 'monthly' as const },
     { path: '/termos', priority: 0.3, freq: 'monthly' as const },

@@ -10,6 +10,8 @@ import CountdownTimer from '@/components/ui/CountdownTimer';
 import SEOContent from '@/components/ui/SEOContent';
 import LotteryBall from '@/components/ui/LotteryBall';
 import LiveResultPoller from '@/components/ui/LiveResultPoller';
+import LastResultsTable from '@/components/ui/LastResultsTable';
+import EstimatedJackpotBanner from '@/components/ui/EstimatedJackpotBanner';
 
 export const revalidate = 300; // ISR: revalidate every 5 minutes
 export const dynamicParams = true;
@@ -99,7 +101,7 @@ export default async function GamePage({
 
   const [latestResult, recentResults] = await Promise.all([
     fetchLatestResult(game.slug),
-    fetchRecentResults(game.slug, 5),
+    fetchRecentResults(game.slug, 10),
   ]);
 
   const now = new Date();
@@ -274,6 +276,11 @@ export default async function GamePage({
         </div>
       </section>
 
+      {/* Estimated Jackpot Banner — competitor parity (above-the-fold conversion) */}
+      {latestResult && (
+        <EstimatedJackpotBanner result={latestResult} game={game} />
+      )}
+
       {/* Latest Result */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -288,6 +295,13 @@ export default async function GamePage({
           </div>
         )}
       </section>
+
+      {/* Últimos 10 Resultados — competitor parity feature */}
+      {recentResults && recentResults.length > 1 && (
+        <div className="mb-8">
+          <LastResultsTable results={recentResults} game={game} limit={10} />
+        </div>
+      )}
 
       {/* ═══ ANÁLISE DO ÚLTIMO RESULTADO ═══ */}
       {latestResult && analysis && (

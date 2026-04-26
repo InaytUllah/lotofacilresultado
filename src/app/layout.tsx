@@ -10,6 +10,7 @@ import ThemeToggle from '@/components/ui/ThemeToggle';
 import ServiceWorkerRegistration from '@/components/ui/ServiceWorkerRegistration';
 import NotificationBell from '@/components/ui/NotificationBell';
 import BackToTop from '@/components/ui/BackToTop';
+import PWAInstallPrompt from '@/components/ui/PWAInstallPrompt';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-6YPCF13JT5';
 
@@ -196,6 +197,7 @@ export default function RootLayout({
         <ThemeToggle />
         <NotificationBell />
         <BackToTop />
+        <PWAInstallPrompt />
         <ServiceWorkerRegistration />
       </body>
     </html>
