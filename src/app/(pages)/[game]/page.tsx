@@ -137,6 +137,7 @@ export default async function GamePage({
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': `${SITE_URL}/${game.slug}#breadcrumb`,
     itemListElement: [
       {
         '@type': 'ListItem',
