@@ -7,7 +7,6 @@ import {
   fetchDrawAnalysis,
   generateMetaDescription,
   generateResultSchemas,
-  scoreResultPage,
 } from '@/lib/analysis';
 import { LOTTERY_CONTENT, PRIZE_REDEMPTION } from '@/lib/lotteryContent';
 import LotteryBall from '@/components/ui/LotteryBall';
@@ -52,10 +51,11 @@ export async function generateMetadata({
     ? generateMetaDescription(result, game)
     : `Confira o resultado do concurso ${concurso} da ${game.name}. Números sorteados, premiação completa e ganhadores.`;
 
-  const score = scoreResultPage(result ?? null);
-  const robotsDirective = score >= 50
-    ? { index: true, follow: true }
-    : { index: false, follow: true };
+  // FIXED 2026-04-30: Removed conditional noindex — was deindexing pages
+  // when the Caixa API timed out (result=null → score=0 → noindex sent
+  // to Google). Caused April 17 traffic cliff (225 → 0 impressions/day).
+  // Result pages should ALWAYS be indexable — they're our most valuable
+  // long-tail SEO asset.
 
   return {
     title,
@@ -71,8 +71,22 @@ export async function generateMetadata({
       siteName: SITE_NAME,
       locale: 'pt_BR',
       type: 'article',
+      images: [{
+        url: `/api/og?title=${encodeURIComponent(`${game.name} Concurso ${concurso}`)}&color=${encodeURIComponent(game.color)}`,
+        width: 1200,
+        height: 630,
+      }],
     },
-    robots: robotsDirective,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     other: {
       ...(concursoNum > 1 && {
         'link-prev': `${SITE_URL}/${game.slug}/resultado/${concursoNum - 1}`,
