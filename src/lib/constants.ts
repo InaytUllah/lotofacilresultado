@@ -1,6 +1,11 @@
 import { GameConfig } from './types';
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lotofacilresultado.com';
+// Defensive trim — env vars sometimes pick up trailing whitespace/newlines
+// from copy-paste or terminal export, which silently corrupts every URL on
+// the site (sitemap, canonical, OG). Always strip before exporting.
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://lotofacilresultado.com')
+  .trim()
+  .replace(/\/+$/, ''); // also strip trailing slashes
 export const SITE_NAME = 'Lotofácil Resultado';
 export const SITE_DESCRIPTION = 'Resultados atualizados de todas as loterias da Caixa: Mega-Sena, Lotofácil, Quina, Lotomania, +Milionária, Dia de Sorte, Super Sete, Dupla Sena e Timemania.';
 
