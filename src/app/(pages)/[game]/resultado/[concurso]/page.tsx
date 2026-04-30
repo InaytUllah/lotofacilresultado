@@ -14,8 +14,31 @@ import LotteryBall from '@/components/ui/LotteryBall';
 export const revalidate = 300; // ISR: revalidate every 5 minutes (result pages change less often)
 export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return [];
+// Pre-render the latest 5 concursos per game at build time. This serves
+// fast static HTML for the most-visited result pages and gives Google
+// strong signals (sub-100ms TTFB, no API delay). Older concursos still
+// build on demand via dynamicParams=true.
+export async function generateStaticParams() {
+  const { fetchLatestResult } = await import('@/lib/api/lottery');
+  const params: { game: string; concurso: string }[] = [];
+
+  const latestResults = await Promise.allSettled(
+    GAME_SLUGS.map((slug) => fetchLatestResult(slug)),
+  );
+
+  for (let i = 0; i < GAME_SLUGS.length; i++) {
+    const slug = GAME_SLUGS[i];
+    const settled = latestResults[i];
+    if (settled.status !== 'fulfilled' || !settled.value) continue;
+
+    const latestConcurso = settled.value.concurso;
+    // Pre-render last 5 concursos per game
+    for (let c = latestConcurso; c >= Math.max(1, latestConcurso - 4); c--) {
+      params.push({ game: slug, concurso: String(c) });
+    }
+  }
+
+  return params;
 }
 
 // ---------------------------------------------------------------------------
