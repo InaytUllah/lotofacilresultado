@@ -140,7 +140,7 @@ async function fetchRawWithLimit(
   try {
     return await Promise.race([
       fetchRaw(apiName, concurso),
-      new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
     ]);
   } catch {
     return null;
@@ -186,7 +186,12 @@ export async function fetchLatestResult(
   const cachedFetch = unstable_cache(
     async () => {
       const raw = await fetchRawWithLimit(config.apiName);
-      return normalizeResult(raw);
+      const normalized = normalizeResult(raw);
+      // Same critical fix as fetchResultByConcurso: don't cache nulls
+      if (!normalized) {
+        throw new Error('Empty result — not caching');
+      }
+      return normalized;
     },
     [`lottery-latest-${gameSlug}`],
     { revalidate: 300, tags: [`lottery-${gameSlug}`, 'lottery-all'] },
@@ -208,7 +213,16 @@ export async function fetchResultByConcurso(
   const cachedFetch = unstable_cache(
     async () => {
       const raw = await fetchRawWithLimit(config.apiName, concurso);
-      return normalizeResult(raw);
+      const normalized = normalizeResult(raw);
+      // CRITICAL: throw on null so unstable_cache does NOT cache the
+      // failure for 24 hours. Without this, a single transient API
+      // timeout (Caixa is sometimes >4s) caches a null result for 24h,
+      // which makes the page return 404 for a full day, and Google
+      // de-indexes the URL. Throwing means the next request retries.
+      if (!normalized) {
+        throw new Error('Empty result — not caching');
+      }
+      return normalized;
     },
     [`lottery-concurso-${gameSlug}-${concurso}`],
     {

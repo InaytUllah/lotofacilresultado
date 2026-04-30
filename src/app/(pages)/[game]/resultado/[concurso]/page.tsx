@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME, DAYS_PT } from '@/lib/constants';
-import { fetchResultByConcurso } from '@/lib/api/lottery';
+import { fetchResultByConcurso, fetchLatestResult } from '@/lib/api/lottery';
 import {
   fetchDrawAnalysis,
   generateMetaDescription,
@@ -129,9 +129,69 @@ export default async function ConcursoPage({
     notFound();
   }
 
-  const result = await fetchResultByConcurso(game.slug, concurso);
-  if (!result) {
+  // Fetch latest first so we can decide: real 404 vs transient API failure.
+  // Without this, a slow Caixa API call returns null → notFound() → 404 →
+  // Google de-indexes valid past results.
+  const [result, latestResult] = await Promise.all([
+    fetchResultByConcurso(game.slug, concurso),
+    fetchLatestResult(game.slug),
+  ]);
+
+  // Genuinely doesn't exist: concurso > latest known concurso = real 404
+  if (!result && latestResult && concurso > latestResult.concurso) {
     notFound();
+  }
+
+  // Result page with no data (API transient failure on a likely-valid past
+  // concurso): render the graceful fallback below. Page stays indexable so
+  // Google doesn't de-index. Next revalidate (5 min) will repopulate.
+  if (!result) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-12">
+        <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
+          <Link href="/" className="hover:text-emerald-600">Início</Link>
+          <span className="mx-1">/</span>
+          <Link href={`/${game.slug}`} className="hover:text-emerald-600">{game.name}</Link>
+          <span className="mx-1">/</span>
+          <span className="text-gray-900">Concurso {concurso}</span>
+        </nav>
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          Resultado {game.name} Concurso {concurso}
+        </h1>
+        <p className="text-lg text-gray-600 mb-6">
+          O resultado do concurso {concurso} da {game.name} estará
+          disponível assim que processado pela Caixa Econômica Federal.
+          Volte em alguns minutos.
+        </p>
+        <div className="rounded-xl border border-gray-200 bg-white p-6">
+          <p className="text-gray-700 mb-4">
+            Enquanto isso, confira:
+          </p>
+          <ul className="space-y-2">
+            <li>
+              <Link href={`/${game.slug}`} className="text-emerald-600 hover:underline">
+                → Último resultado da {game.name}
+              </Link>
+            </li>
+            {concurso > 1 && (
+              <li>
+                <Link
+                  href={`/${game.slug}/resultado/${concurso - 1}`}
+                  className="text-emerald-600 hover:underline"
+                >
+                  → Concurso anterior ({concurso - 1})
+                </Link>
+              </li>
+            )}
+            <li>
+              <Link href="/conferidor" className="text-emerald-600 hover:underline">
+                → Conferir minha aposta
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    );
   }
 
   // Fetch analysis data
