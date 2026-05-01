@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { GAME_SLUGS, GAMES, SITE_URL } from '@/lib/constants';
 import { fetchLatestResult } from '@/lib/api/lottery';
+import { EDITORIAL_POSTS } from '@/lib/editorial';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date().toISOString();
@@ -67,6 +68,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: page.freq,
       priority: page.priority,
+    });
+  }
+
+  // Editorial blog posts — hand-written long-form articles, high priority
+  for (const post of EDITORIAL_POSTS) {
+    entries.push({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified: post.updated ?? post.date,
+      changeFrequency: 'monthly',
+      priority: 0.8,
     });
   }
 

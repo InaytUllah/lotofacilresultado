@@ -4,6 +4,7 @@ import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME } from '@/lib/constants';
 import { generatePredictionBlogPost, generateResultBlogPost } from '@/lib/blog';
 import { fetchRecentResults } from '@/lib/api/lottery';
 import { BlogPost } from '@/lib/types';
+import { getEditorialPostsSorted } from '@/lib/editorial';
 import GameBadge from '@/components/ui/GameBadge';
 import SEOContent from '@/components/ui/SEOContent';
 
@@ -143,8 +144,67 @@ export default async function BlogPage() {
         </p>
       </section>
 
-      {/* Blog Post Grid */}
+      {/* Editorial Articles — hand-written long-form content (priority placement) */}
+      <section className="mb-12" aria-labelledby="editorial-section">
+        <h2 id="editorial-section" className="text-2xl font-bold text-gray-900 mb-2">
+          Artigos em Destaque
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Guias completos, análises e estratégias escritas pela nossa equipe.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {getEditorialPostsSorted().map((post) => (
+            <article
+              key={post.slug}
+              className="rounded-xl border border-gray-200 bg-white p-6 hover:shadow-md hover:border-emerald-300 transition-all flex flex-col"
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <span className="inline-block bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  {post.category}
+                </span>
+                <span className="text-xs text-gray-500">{post.readingTime} min</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 leading-tight">
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="hover:text-emerald-600 transition-colors"
+                >
+                  {post.title}
+                </Link>
+              </h3>
+              <p className="text-sm text-gray-600 mb-4 line-clamp-3 flex-1">
+                {post.excerpt}
+              </p>
+              <div className="flex items-center justify-between text-xs text-gray-500">
+                <time dateTime={post.date}>
+                  {new Date(post.date).toLocaleDateString('pt-BR', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })}
+                </time>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="text-emerald-600 hover:underline font-medium"
+                >
+                  Ler artigo →
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <hr className="border-gray-200 my-8" />
+
+      {/* Auto-generated posts */}
       <section className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          Resultados e Previsões
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Atualizados automaticamente após cada sorteio.
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayPosts.map((post) => {
             const game = post.gameSlug ? GAMES[post.gameSlug] : null;

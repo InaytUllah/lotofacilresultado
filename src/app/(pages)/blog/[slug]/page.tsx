@@ -5,6 +5,11 @@ import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME, DAYS_PT } from '@/lib/constants
 import { getPredictionBlogSlug } from '@/lib/blog';
 import { fetchResultByConcurso } from '@/lib/api/lottery';
 import { fetchDrawAnalysis } from '@/lib/analysis';
+import {
+  getEditorialPost,
+  isEditorialSlug,
+  getRelatedEditorialPosts,
+} from '@/lib/editorial';
 import LotteryBall from '@/components/ui/LotteryBall';
 import GameBadge from '@/components/ui/GameBadge';
 import WarningBox from '@/components/ui/WarningBox';
@@ -98,6 +103,48 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
+  // Editorial post (highest priority — these are hand-written articles)
+  if (isEditorialSlug(slug)) {
+    const post = getEditorialPost(slug)!;
+    return {
+      title: post.title,
+      description: post.description,
+      keywords: post.tags,
+      authors: [{ name: post.author.name }],
+      alternates: {
+        canonical: `${SITE_URL}/blog/${slug}`,
+        languages: { 'pt-BR': `${SITE_URL}/blog/${slug}` },
+      },
+      openGraph: {
+        title: post.title,
+        description: post.description,
+        url: `${SITE_URL}/blog/${slug}`,
+        siteName: SITE_NAME,
+        locale: 'pt_BR',
+        type: 'article',
+        publishedTime: post.date,
+        modifiedTime: post.updated ?? post.date,
+        authors: [post.author.name],
+        tags: post.tags,
+        images: [{
+          url: `/api/og?title=${encodeURIComponent(post.title)}&color=%23059669`,
+          width: 1200,
+          height: 630,
+        }],
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
+      },
+    };
+  }
+
   // Result blog posts
   const resultInfo = parseResultSlug(slug);
   if (resultInfo) {
@@ -161,6 +208,11 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
 
+  // Editorial post (hand-written article)
+  if (isEditorialSlug(slug)) {
+    return <EditorialPostPage slug={slug} />;
+  }
+
   // Result blog posts — render full article
   const resultInfo = parseResultSlug(slug);
   if (resultInfo) {
@@ -174,6 +226,234 @@ export default async function BlogPostPage({
   }
 
   notFound();
+}
+
+// ---------------------------------------------------------------------------
+// Editorial Post (hand-written, long-form article)
+// ---------------------------------------------------------------------------
+
+function EditorialPostPage({ slug }: { slug: string }) {
+  const post = getEditorialPost(slug)!;
+  const related = getRelatedEditorialPosts(slug, 3);
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.updated ?? post.date,
+    author: {
+      '@type': 'Organization',
+      name: post.author.name,
+      url: SITE_URL,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Lotofácil Resultado',
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/api/icon?size=512`,
+        width: 512,
+        height: 512,
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE_URL}/blog/${slug}`,
+    },
+    image: [`${SITE_URL}/api/og?title=${encodeURIComponent(post.title)}&color=%23059669`],
+    inLanguage: 'pt-BR',
+    articleSection: post.category,
+    keywords: post.tags,
+    wordCount: post.content.split(/\s+/).length,
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
+      { '@type': 'ListItem', position: 3, name: post.title, item: `${SITE_URL}/blog/${slug}` },
+    ],
+  };
+
+  const faqSchema = post.faq && post.faq.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: post.faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  } : null;
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+
+      <article className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
+          <ol className="flex flex-wrap items-center gap-1">
+            <li><Link href="/" className="hover:text-emerald-600">Início</Link></li>
+            <li>/</li>
+            <li><Link href="/blog" className="hover:text-emerald-600">Blog</Link></li>
+            <li>/</li>
+            <li className="text-gray-700">{post.category}</li>
+          </ol>
+        </nav>
+
+        {/* Header */}
+        <header className="mb-8 pb-8 border-b border-gray-200">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <span className="inline-block bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">
+              {post.category}
+            </span>
+            <span className="text-xs text-gray-500">•</span>
+            <span className="text-xs text-gray-500">{post.readingTime} min de leitura</span>
+          </div>
+
+          <h1 className="speakable text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 tracking-tight leading-tight">
+            {post.title}
+          </h1>
+
+          <p className="speakable text-lg text-gray-600 leading-relaxed mb-5">
+            {post.excerpt}
+          </p>
+
+          <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div>
+              <span className="text-gray-700 font-medium">{post.author.name}</span>
+              <span className="mx-1">•</span>
+              <span>{post.author.role}</span>
+            </div>
+            <span>•</span>
+            <time dateTime={post.date}>
+              {new Date(post.date).toLocaleDateString('pt-BR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </time>
+            {post.updated && post.updated !== post.date && (
+              <>
+                <span>•</span>
+                <span>Atualizado em {new Date(post.updated).toLocaleDateString('pt-BR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}</span>
+              </>
+            )}
+          </div>
+        </header>
+
+        {/* Body */}
+        <div
+          className="prose prose-gray max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-p:leading-relaxed prose-p:text-gray-700 prose-a:text-emerald-600 prose-a:font-medium hover:prose-a:underline prose-strong:text-gray-900 prose-ul:my-4 prose-li:my-1"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+
+        {/* Tags */}
+        <div className="mt-10 pt-6 border-t border-gray-200">
+          <p className="text-sm font-semibold text-gray-700 mb-2">Tags relacionadas:</p>
+          <div className="flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-block bg-gray-100 text-gray-600 text-xs px-2.5 py-1 rounded-full"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* FAQ */}
+        {post.faq && post.faq.length > 0 && (
+          <section className="mt-10 pt-8 border-t border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-900 mb-5">Perguntas Frequentes</h2>
+            <div className="space-y-3">
+              {post.faq.map((item, i) => (
+                <details
+                  key={i}
+                  className="group rounded-xl border border-gray-200 bg-white"
+                >
+                  <summary className="flex cursor-pointer items-center justify-between gap-4 p-5 font-medium text-gray-800 [&::-webkit-details-marker]:hidden list-none">
+                    <span>{item.q}</span>
+                    <svg
+                      className="w-5 h-5 flex-shrink-0 text-gray-400 transition-transform duration-200 group-open:rotate-180"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+                  <p className="px-5 pb-5 text-gray-600 leading-relaxed">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Related */}
+        {related.length > 0 && (
+          <section className="mt-10 pt-8 border-t border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-900 mb-5">Artigos Relacionados</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {related.map((rel) => (
+                <Link
+                  key={rel.slug}
+                  href={`/blog/${rel.slug}`}
+                  className="block rounded-xl border border-gray-200 bg-white p-5 hover:border-emerald-400 hover:bg-emerald-50 transition-colors"
+                >
+                  <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
+                    {rel.category}
+                  </span>
+                  <h3 className="mt-2 font-semibold text-gray-900 leading-tight">
+                    {rel.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                    {rel.excerpt}
+                  </p>
+                  <span className="mt-3 inline-block text-sm text-emerald-600 font-medium">
+                    Ler artigo →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Back to blog */}
+        <div className="mt-10 pt-6 border-t border-gray-200">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium"
+          >
+            ← Voltar para o blog
+          </Link>
+        </div>
+      </article>
+    </>
+  );
 }
 
 // ---------------------------------------------------------------------------
