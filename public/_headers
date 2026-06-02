@@ -1,0 +1,17 @@
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-DNS-Prefetch-Control: on
+
+# Long-cache immutable Next static assets
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Pinned content types for Next metadata route outputs
+/icon
+  Content-Type: image/png
+/apple-icon
+  Content-Type: image/png

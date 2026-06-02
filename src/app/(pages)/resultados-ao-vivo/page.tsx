@@ -6,7 +6,6 @@ import CountdownTimer from '@/components/ui/CountdownTimer';
 import LiveResultPoller from '@/components/ui/LiveResultPoller';
 import SEOContent from '@/components/ui/SEOContent';
 
-export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: 'Resultados ao Vivo - Sorteios das Loterias da Caixa em Tempo Real',

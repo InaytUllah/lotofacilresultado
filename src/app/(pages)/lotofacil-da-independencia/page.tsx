@@ -5,7 +5,6 @@ import SEOContent from '@/components/ui/SEOContent';
 import QuickAnswer from '@/components/ui/QuickAnswer';
 import CountdownTimer from '@/components/ui/CountdownTimer';
 
-export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: 'Lotofácil da Independência — Resultado, Histórico e Próximo Sorteio',

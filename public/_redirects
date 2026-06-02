@@ -1,0 +1,29 @@
+# Cloudflare Pages redirects.
+
+# Legacy blog result slugs → canonical dated result pages.
+# These used to be Next.js redirects from /blog/resultado-{game}-concurso-{N}
+# to /{game}/resultado/{N}. Generated as static HTML stubs in the old build,
+# but with rolling-window static export + slow Caixa API the build hangs if
+# we try to pre-render them. The redirects below preserve every legacy
+# backlink at zero build cost.
+/blog/resultado-mega-sena-concurso-:n        /mega-sena/resultado/:n        301
+/blog/resultado-lotofacil-concurso-:n        /lotofacil/resultado/:n        301
+/blog/resultado-quina-concurso-:n            /quina/resultado/:n            301
+/blog/resultado-lotomania-concurso-:n        /lotomania/resultado/:n        301
+/blog/resultado-mais-milionaria-concurso-:n  /mais-milionaria/resultado/:n  301
+/blog/resultado-dia-de-sorte-concurso-:n     /dia-de-sorte/resultado/:n     301
+/blog/resultado-super-sete-concurso-:n       /super-sete/resultado/:n       301
+/blog/resultado-dupla-sena-concurso-:n       /dupla-sena/resultado/:n       301
+/blog/resultado-timemania-concurso-:n        /timemania/resultado/:n        301
+
+# Same with the dated-version slug (resultado-{game}-concurso-{N}-{date}) —
+# redirect to the canonical result page (date stripped, same target).
+/blog/resultado-mega-sena-concurso-:n-*        /mega-sena/resultado/:n        301
+/blog/resultado-lotofacil-concurso-:n-*        /lotofacil/resultado/:n        301
+/blog/resultado-quina-concurso-:n-*            /quina/resultado/:n            301
+/blog/resultado-lotomania-concurso-:n-*        /lotomania/resultado/:n        301
+/blog/resultado-mais-milionaria-concurso-:n-*  /mais-milionaria/resultado/:n  301
+/blog/resultado-dia-de-sorte-concurso-:n-*     /dia-de-sorte/resultado/:n     301
+/blog/resultado-super-sete-concurso-:n-*       /super-sete/resultado/:n       301
+/blog/resultado-dupla-sena-concurso-:n-*       /dupla-sena/resultado/:n       301
+/blog/resultado-timemania-concurso-:n-*        /timemania/resultado/:n        301

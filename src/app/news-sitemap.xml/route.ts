@@ -1,7 +1,7 @@
 import { GAME_SLUGS, GAMES, SITE_URL } from '@/lib/constants';
 import { fetchLatestResult } from '@/lib/api/lottery';
 
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 
 // Lottery-specific keywords for Google News sitemap
 const GAME_KEYWORDS: Record<string, string> = {

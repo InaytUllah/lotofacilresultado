@@ -13,12 +13,42 @@ import {
 import LotteryBall from '@/components/ui/LotteryBall';
 import GameBadge from '@/components/ui/GameBadge';
 import WarningBox from '@/components/ui/WarningBox';
+import { EDITORIAL_POSTS } from '@/lib/editorial';
 
-export const revalidate = 3600; // ISR: revalidate every hour
-export const dynamicParams = true;
+export const dynamicParams = false;
 
-export function generateStaticParams() {
-  return [];
+// Static export: enumerate every blog slug that should render.
+// 3 slug families handled here (must mirror sitemap.ts):
+//   1. Hand-written editorial posts.
+//   2. Prediction posts for the last 14 days per game (sitemap lists 7;
+//      generate a wider window so deep-linked older URLs still 200).
+//   3. Result redirect slugs (resultado-{game}-concurso-{N}) — legacy
+//      backlinks hit a real page that redirects to /{game}/resultado/{N}.
+export async function generateStaticParams() {
+  const { fetchLatestResult } = await import('@/lib/api/lottery');
+  const slugs: { slug: string }[] = EDITORIAL_POSTS.map((p) => ({ slug: p.slug }));
+
+  // Prediction slugs (3 days × all games = 27 pages). The original 14-day
+  // window hung the local Turbopack build (likely OOM around ~20 prediction
+  // pages built). Smaller window ships fast; CI rebuilds daily to keep
+  // "today" pages fresh. Older dated prediction URLs will 404.
+  const today = new Date();
+  for (let d = 0; d < 3; d++) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - d);
+    const iso = date.toISOString().split('T')[0];
+    for (const game of GAME_SLUGS) {
+      slugs.push({ slug: `previsoes-${game}-${iso}` });
+    }
+  }
+
+  // Result redirect slugs (resultado-{game}-concurso-{N}) are NOT generated
+  // here — they would each need a Caixa API call at build time and the API
+  // rate-limits us into hangs. Instead, public/_redirects has a pattern
+  // rule that 301s every `resultado-*-concurso-*` to /{game}/resultado/{N}
+  // at the edge — no build cost, same SEO outcome.
+
+  return slugs;
 }
 
 // ---------------------------------------------------------------------------

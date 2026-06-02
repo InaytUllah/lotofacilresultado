@@ -9,7 +9,6 @@ import SEOContent from '@/components/ui/SEOContent';
 import ToolContentSections from '@/components/ui/ToolContentSections';
 import { TOOL_CONTENT } from '@/lib/lotteryContent';
 
-export const revalidate = 600; // ISR: revalidate every 10 minutes
 
 export const metadata: Metadata = {
   title: 'Histórico de Resultados - Todos os Concursos',
@@ -32,13 +31,10 @@ export const metadata: Metadata = {
   },
 };
 
-interface HistoricoPageProps {
-  searchParams: Promise<{ jogo?: string }>;
-}
-
-export default async function HistoricoPage({ searchParams }: HistoricoPageProps) {
-  const params = await searchParams;
-  const selectedSlug = params.jogo && GAMES[params.jogo] ? params.jogo : 'mega-sena';
+// Static export: no runtime ?jogo= switching. Seeds with mega-sena; the
+// game-switch dropdown switches client-side via the /api/results Pages Fn.
+export default async function HistoricoPage() {
+  const selectedSlug = 'mega-sena';
   const game = GAMES[selectedSlug];
 
   let results: Awaited<ReturnType<typeof fetchRecentResults>> = [];

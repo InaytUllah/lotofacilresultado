@@ -8,7 +8,6 @@ import { getEditorialPostsSorted } from '@/lib/editorial';
 import GameBadge from '@/components/ui/GameBadge';
 import SEOContent from '@/components/ui/SEOContent';
 
-export const revalidate = 3600; // ISR: revalidate every hour
 
 export const metadata: Metadata = {
   title: 'Blog - Resultados, Previsões e Análises das Loterias',

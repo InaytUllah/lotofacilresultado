@@ -6,7 +6,6 @@ import { fetchRecentResults } from '@/lib/api/lottery';
 import StatsVisualizer from '@/components/StatsVisualizer';
 import SEOContent from '@/components/ui/SEOContent';
 
-export const revalidate = 300; // ISR: revalidate every 5 minutes
 
 const title = 'Estat\u00EDsticas das Loterias - Dashboard Visual';
 const description =
@@ -30,14 +29,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function EstatisticasPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const { jogo } = await searchParams;
-  const gameSlug =
-    typeof jogo === 'string' && GAME_SLUGS.includes(jogo) ? jogo : 'mega-sena';
+// Static export: no runtime ?jogo= switching. The page seeds with mega-sena
+// data; StatsVisualizer (client) can fetch other games on demand via the
+// /api/results/{game}/recent Pages Function when the user switches games.
+export default async function EstatisticasPage() {
+  const gameSlug = 'mega-sena';
   const game = GAMES[gameSlug];
 
   const results = await fetchRecentResults(gameSlug, 20);

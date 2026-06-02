@@ -5,8 +5,27 @@ import { GAMES, GAME_SLUGS, SITE_URL, SITE_NAME } from '@/lib/constants';
 import { fetchLatestResult } from '@/lib/api/lottery';
 import SEOContent from '@/components/ui/SEOContent';
 
-// ISR: revalidate daily — yearly archives rarely change
-export const revalidate = 86400;
+// Static export: enumerate every game × year combo that should render.
+// Yearly archives go back to 2010 (older lotteries have content from 2000s
+// but truncating at 2010 keeps the build tight while covering all real
+// indexable demand). Past years never change, so each year is built once
+// and persisted via Cloudflare's edge cache.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  // Only the latest 3 years per game. Full 2010..now range hung the build
+  // on Caixa API rate limits (153 routes × 1 fetch each). Past years rarely
+  // get organic traffic; older ?year= URLs 404 (acceptable trade-off).
+  const YEAR_END = new Date().getUTCFullYear();
+  const YEAR_START = YEAR_END - 2;
+  const params: { game: string; year: string }[] = [];
+  for (const game of GAME_SLUGS) {
+    for (let y = YEAR_START; y <= YEAR_END; y++) {
+      params.push({ game, year: String(y) });
+    }
+  }
+  return params;
+}
 
 function estimateDrawsPerYear(drawDaysPerWeek: number): number {
   return drawDaysPerWeek * 52;

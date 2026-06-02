@@ -1,0 +1,95 @@
+name: Build and deploy to Cloudflare Pages
+
+# Bypasses Cloudflare's dashboard build pipeline. GitHub Actions builds
+# locally and uses wrangler to push the `out/` folder to Cloudflare Pages.
+#
+# Triggers:
+#  - Push to main (any code change)
+#  - 4x/day cron: rebuilds to refresh static pages with latest Caixa results
+#    (lottery draws happen evening BRT; 11:00 UTC = 08:00 BRT covers the
+#    early-morning audience after the night's draws)
+#  - Daily indexing nudge after build at 06:30 UTC
+#  - Manual via workflow_dispatch
+#
+# Required GitHub secrets:
+#  - CLOUDFLARE_API_TOKEN  (Pages — Edit)
+#  - CLOUDFLARE_ACCOUNT_ID
+#  - GOOGLE_SERVICE_ACCOUNT_JSON (optional, only for notify-google job)
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Caixa draws are evening BRT (Mon-Sat ~20:00 BRT = 23:00 UTC).
+    # Rebuild several times after to capture fresh result data.
+    - cron: '30 23 * * *'  # 23:30 UTC — right after evening BRT draws
+    - cron: '30 0  * * *'  # 00:30 UTC — backup pass
+    - cron: '30 11 * * *'  # 11:30 UTC — morning audience
+    - cron: '30 6  * * *'  # 06:30 UTC — daily indexing nudge
+  workflow_dispatch:
+
+# Avoid concurrent runs racing the same deploy
+concurrency:
+  group: cloudflare-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export
+        run: npm run build
+
+      - name: Ensure Pages project exists
+        continue-on-error: true
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create lotofacilresultado --production-branch=main
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy --project-name=lotofacilresultado --branch=main --commit-dirty=true
+
+  notify-google:
+    # Only run on the daily 06:30 UTC nudge or manual trigger.
+    if: github.event.schedule == '30 6 * * *' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (produce out/sitemap.xml)
+        run: npm run build
+
+      - name: Submit URLs to Google Indexing API
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: node scripts/notify-google.mjs

@@ -11,13 +11,16 @@ import {
 import { LOTTERY_CONTENT, PRIZE_REDEMPTION } from '@/lib/lotteryContent';
 import LotteryBall from '@/components/ui/LotteryBall';
 
-export const revalidate = 300; // ISR: revalidate every 5 minutes (result pages change less often)
-export const dynamicParams = true;
+export const dynamicParams = false;
 
-// Pre-render the latest 5 concursos per game at build time. This serves
-// fast static HTML for the most-visited result pages and gives Google
-// strong signals (sub-100ms TTFB, no API delay). Older concursos still
-// build on demand via dynamicParams=true.
+// Pre-render the latest 20 concursos per game at build time (~180 routes).
+// Under static export there is no on-demand rendering — anything not in this
+// list 404s. Caixa API rate limits + CI time mean we can't render full
+// history per build; 20 covers ~3 weeks for mega-sena and longer for daily
+// draws, capturing the bulk of fresh-traffic + recently-indexed URLs.
+// If rolling-window 404 churn becomes a SEO problem like it did for uk49s,
+// the long-term fix is a committed results-history.json that the CI scrape
+// step appends to (see uk49s-results/scripts/update-history.mjs).
 export async function generateStaticParams() {
   const { fetchLatestResult } = await import('@/lib/api/lottery');
   const params: { game: string; concurso: string }[] = [];
@@ -32,8 +35,10 @@ export async function generateStaticParams() {
     if (settled.status !== 'fulfilled' || !settled.value) continue;
 
     const latestConcurso = settled.value.concurso;
-    // Pre-render last 5 concursos per game
-    for (let c = latestConcurso; c >= Math.max(1, latestConcurso - 4); c--) {
+    // Reduced from 20 to 5 per game: full build hangs on Caixa API rate
+    // limits. Trade-off accepted; CI rebuilds rolling-window every few hours.
+    const start = Math.max(1, latestConcurso - 4);
+    for (let c = latestConcurso; c >= start; c--) {
       params.push({ game: slug, concurso: String(c) });
     }
   }

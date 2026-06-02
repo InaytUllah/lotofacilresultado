@@ -8,7 +8,6 @@ import CountdownTimer from '@/components/ui/CountdownTimer';
 import SEOContent from '@/components/ui/SEOContent';
 import { getNextDrawDate } from '@/lib/utils/format';
 
-export const revalidate = 300;
 
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);

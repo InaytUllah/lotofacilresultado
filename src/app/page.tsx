@@ -11,7 +11,6 @@ import LiveResultPoller from '@/components/ui/LiveResultPoller';
 import HomepageResults from '@/components/ui/HomepageResults';
 
 // ISR: revalidate every 5 minutes — Vercel serves stale cache while rebuilding in background
-export const revalidate = 300;
 
 export const metadata: Metadata = {
   title:

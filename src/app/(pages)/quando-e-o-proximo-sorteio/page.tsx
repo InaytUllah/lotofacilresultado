@@ -5,7 +5,6 @@ import { getNextDrawDate, getDrawDayNames } from '@/lib/utils/format';
 import CountdownTimer from '@/components/ui/CountdownTimer';
 import SEOContent from '@/components/ui/SEOContent';
 
-export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: 'Quando é o Próximo Sorteio? - Calendário das Loterias da Caixa',

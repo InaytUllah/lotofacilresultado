@@ -13,8 +13,7 @@ import LiveResultPoller from '@/components/ui/LiveResultPoller';
 import LastResultsTable from '@/components/ui/LastResultsTable';
 import EstimatedJackpotBanner from '@/components/ui/EstimatedJackpotBanner';
 
-export const revalidate = 300; // ISR: revalidate every 5 minutes
-export const dynamicParams = true;
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return GAME_SLUGS.map((slug) => ({ game: slug }));

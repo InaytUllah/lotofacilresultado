@@ -9,7 +9,6 @@ import ToolContentSections from '@/components/ui/ToolContentSections';
 import { TOOL_CONTENT } from '@/lib/lotteryContent';
 import ResponsibleGamblingBanner from '@/components/ui/ResponsibleGamblingBanner';
 
-export const revalidate = 300; // ISR: revalidate every 5 minutes
 
 export const metadata: Metadata = {
   title: 'Números Quentes e Frios - Estatísticas das Loterias',

@@ -3,6 +3,9 @@ import { GAME_SLUGS, GAMES, SITE_URL } from '@/lib/constants';
 import { fetchLatestResult } from '@/lib/api/lottery';
 import { EDITORIAL_POSTS } from '@/lib/editorial';
 
+// Required under output: 'export' so sitemap.xml is emitted as a static file.
+export const dynamic = 'force-static';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date().toISOString();
   const entries: MetadataRoute.Sitemap = [];

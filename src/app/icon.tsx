@@ -1,5 +1,7 @@
 import { ImageResponse } from 'next/og';
 
+// Required under output: 'export' so /icon is emitted as a static file.
+export const dynamic = 'force-static';
 export const size = { width: 32, height: 32 };
 export const contentType = 'image/png';
 
