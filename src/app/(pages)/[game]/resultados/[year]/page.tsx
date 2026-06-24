@@ -13,18 +13,11 @@ import SEOContent from '@/components/ui/SEOContent';
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  // Only the latest 3 years per game. Full 2010..now range hung the build
-  // on Caixa API rate limits (153 routes × 1 fetch each). Past years rarely
-  // get organic traffic; older ?year= URLs 404 (acceptable trade-off).
-  const YEAR_END = new Date().getUTCFullYear();
-  const YEAR_START = YEAR_END - 2;
-  const params: { game: string; year: string }[] = [];
-  for (const game of GAME_SLUGS) {
-    for (let y = YEAR_START; y <= YEAR_END; y++) {
-      params.push({ game, year: String(y) });
-    }
-  }
-  return params;
+  // Current year only per game (9 routes). Each route fetches the latest
+  // result from Caixa, and the 3-year version (27 routes) tipped the CI
+  // build over the 15-min timeout. Past-year URLs 404 — low-traffic anyway.
+  const year = String(new Date().getUTCFullYear());
+  return GAME_SLUGS.map((game) => ({ game, year }));
 }
 
 function estimateDrawsPerYear(drawDaysPerWeek: number): number {

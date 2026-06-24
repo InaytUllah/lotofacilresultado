@@ -36,7 +36,9 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # 30 min — Brazil build fetches from Caixa API per dated route, hits ~15 min
+    # easily. Public-repo Actions minutes are unlimited so this is free.
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
