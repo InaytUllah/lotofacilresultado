@@ -35,12 +35,13 @@ export async function generateStaticParams() {
     if (settled.status !== 'fulfilled' || !settled.value) continue;
 
     const latestConcurso = settled.value.concurso;
-    // Reduced from 20 to 5 per game: full build hangs on Caixa API rate
-    // limits. Trade-off accepted; CI rebuilds rolling-window every few hours.
-    const start = Math.max(1, latestConcurso - 4);
-    for (let c = latestConcurso; c >= start; c--) {
-      params.push({ game: slug, concurso: String(c) });
-    }
+    // Just the latest 1 concurso per game (9 routes total). 5 per game
+    // (45 routes) overran the 30-min CI timeout; the Caixa API gives ~1
+    // req/sec sustained and parallel workers don't dedupe across processes.
+    // Older concurso URLs 404 — CI cron rebuilds every 6h keeps "latest"
+    // current; this is the lowest-risk choice until we pre-fetch + commit
+    // a results-history.json file like uk49s does.
+    params.push({ game: slug, concurso: String(latestConcurso) });
   }
 
   return params;

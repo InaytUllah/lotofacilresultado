@@ -28,18 +28,11 @@ export async function generateStaticParams() {
   const { fetchLatestResult } = await import('@/lib/api/lottery');
   const slugs: { slug: string }[] = EDITORIAL_POSTS.map((p) => ({ slug: p.slug }));
 
-  // Prediction slugs (3 days × all games = 27 pages). The original 14-day
-  // window hung the local Turbopack build (likely OOM around ~20 prediction
-  // pages built). Smaller window ships fast; CI rebuilds daily to keep
-  // "today" pages fresh. Older dated prediction URLs will 404.
-  const today = new Date();
-  for (let d = 0; d < 3; d++) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - d);
-    const iso = date.toISOString().split('T')[0];
-    for (const game of GAME_SLUGS) {
-      slugs.push({ slug: `previsoes-${game}-${iso}` });
-    }
+  // Prediction slugs: just today × all games = 9 pages. Cron rebuilds
+  // daily so "today" stays fresh. Older dated prediction URLs will 404.
+  const today = new Date().toISOString().split('T')[0];
+  for (const game of GAME_SLUGS) {
+    slugs.push({ slug: `previsoes-${game}-${today}` });
   }
 
   // Result redirect slugs (resultado-{game}-concurso-{N}) are NOT generated
