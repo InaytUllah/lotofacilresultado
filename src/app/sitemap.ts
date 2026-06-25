@@ -1,6 +1,5 @@
 import { MetadataRoute } from 'next';
 import { GAME_SLUGS, GAMES, SITE_URL } from '@/lib/constants';
-import { fetchLatestResult } from '@/lib/api/lottery';
 import { EDITORIAL_POSTS } from '@/lib/editorial';
 
 // Required under output: 'export' so sitemap.xml is emitted as a static file.
@@ -107,48 +106,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Dynamic result pages — last 100 concursos per lottery
-  // Fetch latest concurso number for each lottery (9 API calls, cached)
-  const latestResults = await Promise.allSettled(
-    GAME_SLUGS.map((slug) => fetchLatestResult(slug)),
-  );
+  // Dated result pages — the route only generates 1 concurso per game
+  // (see [game]/resultado/[concurso]/page.tsx). The sitemap previously
+  // listed 100 URLs per game but only 1 of them was actually a 200 — 900
+  // sitemap orphans = SEO penalty. Skip these from the sitemap entirely;
+  // the game hub at /{game} already exists and lists recent results.
 
   const today = new Date();
 
-  for (let i = 0; i < GAME_SLUGS.length; i++) {
-    const slug = GAME_SLUGS[i];
-    const settled = latestResults[i];
-    if (settled.status !== 'fulfilled' || !settled.value) continue;
-
-    const latestConcurso = settled.value.concurso;
-    const startConcurso = Math.max(1, latestConcurso - 99);
-
-    for (let c = latestConcurso; c >= startConcurso; c--) {
-      // Calculate age-based priority
-      const drawsFromLatest = latestConcurso - c;
-      let priority: number;
-      if (drawsFromLatest <= 3) {
-        // Very recent draws (≈ last week) — high priority
-        priority = 0.8;
-      } else if (drawsFromLatest <= 15) {
-        // Last ~30 days — medium priority
-        priority = 0.6;
-      } else {
-        // Older draws — low priority
-        priority = 0.4;
-      }
-
-      entries.push({
-        url: `${SITE_URL}/${slug}/resultado/${c}`,
-        lastModified: c === latestConcurso ? now : undefined,
-        changeFrequency: 'never',
-        priority,
-      });
-    }
-  }
-
-  // Generate prediction blog post URLs for recent dates (7 days only)
-  for (let d = 0; d < 7; d++) {
+  // Generate prediction blog post URLs for recent dates (1 day — matches the
+  // blog/[slug] generateStaticParams window).
+  for (let d = 0; d < 1; d++) {
     const date = new Date(today);
     date.setDate(date.getDate() - d);
     const dateStr = date.toISOString().split('T')[0];
