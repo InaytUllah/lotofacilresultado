@@ -1,4 +1,24 @@
-import { unstable_cache } from 'next/cache';
+// Simple module-level in-process Map cache. We previously used
+// next/cache `unstable_cache` here, but under `output: 'export'` it
+// caused every CI build to time out at 30-60 min, ALWAYS for hours,
+// while sibling sites (au-lotto, eurolotto) using a plain Map cache
+// build in ~3 min. The unstable_cache disk I/O appears to compound
+// with Turbopack worker IPC and never settles. Map dedupe is enough
+// because the build runs in a single short-lived process anyway.
+type CachedEntry<T> = { value: T; expiresAt: number };
+const _resultCache = new Map<string, CachedEntry<LotteryResult | null>>();
+function _getCached(key: string): LotteryResult | null | undefined {
+  const e = _resultCache.get(key);
+  if (!e) return undefined;
+  if (Date.now() > e.expiresAt) {
+    _resultCache.delete(key);
+    return undefined;
+  }
+  return e.value;
+}
+function _setCached(key: string, value: LotteryResult, ttlSec: number) {
+  _resultCache.set(key, { value, expiresAt: Date.now() + ttlSec * 1000 });
+}
 import { LotteryResult, Prize } from '../types';
 import { GAMES, GAME_SLUGS } from '../constants';
 
@@ -182,26 +202,16 @@ export async function fetchLatestResult(
   gameSlug: string,
 ): Promise<LotteryResult | null> {
   const config = getGameConfig(gameSlug);
+  const key = `latest:${gameSlug}`;
+  const cached = _getCached(key);
+  if (cached !== undefined) return cached;
 
-  const cachedFetch = unstable_cache(
-    async () => {
-      const raw = await fetchRawWithLimit(config.apiName);
-      const normalized = normalizeResult(raw);
-      // Same critical fix as fetchResultByConcurso: don't cache nulls
-      if (!normalized) {
-        throw new Error('Empty result — not caching');
-      }
-      return normalized;
-    },
-    [`lottery-latest-${gameSlug}`],
-    { revalidate: 300, tags: [`lottery-${gameSlug}`, 'lottery-all'] },
-  );
-
-  try {
-    return await cachedFetch();
-  } catch {
-    return null;
-  }
+  const normalized = normalizeResult(await fetchRawWithLimit(config.apiName));
+  if (normalized) _setCached(key, normalized, 300);
+  // Don't cache nulls — same reason as the old throw-on-null logic: a
+  // transient API timeout should retry on the next call rather than
+  // serving a stale 404 to the user.
+  return normalized;
 }
 
 export async function fetchResultByConcurso(
@@ -209,33 +219,17 @@ export async function fetchResultByConcurso(
   concurso: number,
 ): Promise<LotteryResult | null> {
   const config = getGameConfig(gameSlug);
+  const key = `concurso:${gameSlug}:${concurso}`;
+  const cached = _getCached(key);
+  if (cached !== undefined) return cached;
 
-  const cachedFetch = unstable_cache(
-    async () => {
-      const raw = await fetchRawWithLimit(config.apiName, concurso);
-      const normalized = normalizeResult(raw);
-      // CRITICAL: throw on null so unstable_cache does NOT cache the
-      // failure for 24 hours. Without this, a single transient API
-      // timeout (Caixa is sometimes >4s) caches a null result for 24h,
-      // which makes the page return 404 for a full day, and Google
-      // de-indexes the URL. Throwing means the next request retries.
-      if (!normalized) {
-        throw new Error('Empty result — not caching');
-      }
-      return normalized;
-    },
-    [`lottery-concurso-${gameSlug}-${concurso}`],
-    {
-      revalidate: 86400, // 24 hours — past results never change
-      tags: [`lottery-${gameSlug}`, `lottery-concurso-${concurso}`],
-    },
+  const normalized = normalizeResult(
+    await fetchRawWithLimit(config.apiName, concurso),
   );
-
-  try {
-    return await cachedFetch();
-  } catch {
-    return null;
-  }
+  // Past results never change, so cache for the lifetime of this build
+  // (24h TTL on the off chance the same process is reused across runs).
+  if (normalized) _setCached(key, normalized, 86400);
+  return normalized;
 }
 
 export async function fetchMultipleLatestResults(): Promise<
